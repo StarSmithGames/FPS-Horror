@@ -1,13 +1,31 @@
 {
   "dependencies": {
+    "appsflyer-unity-plugin": "https://github.com/AppsFlyerSDK/appsflyer-unity-plugin.git#v6.15.3",
+    "com.amplitude.unityplugin": "2.8.0",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.puzzlescapegames.amplitude_adapter": "1.0.3",
+    "com.puzzlescapegames.analytics": "1.0.2",
+    "com.puzzlescapegames.analytics_events": "1.0.4",
+    "com.puzzlescapegames.appsflyer_adapter": "1.1.0",
+    "com.puzzlescapegames.dotween": "1.0.0",
+    "com.puzzlescapegames.extensions": "1.2.2",
+    "com.puzzlescapegames.ioc_zenject": "1.0.2",
+    "com.puzzlescapegames.localization": "1.3.3",
+    "com.puzzlescapegames.services": "1.3.6",
+    "com.puzzlescapegames.storage": "1.0.3",
+    "com.puzzlescapegames.unity_adapter": "1.0.3",
+    "com.puzzlescapegames.vvm": "1.1.6",
+    "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.8.2",
     "com.unity.ext.nunit": "1.0.6",
     "com.unity.ide.rider": "3.0.36",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.14.0",
+    "com.unity.localization": "1.5.5",
     "com.unity.postprocessing": "3.4.0",
     "com.unity.render-pipelines.universal": "14.0.12",
+    "com.unity.services.analytics": "6.0.3",
     "com.unity.test-framework": "1.1.33",
     "com.unity.textmeshpro": "3.0.7",
     "com.unity.timeline": "1.7.7",
@@ -44,5 +62,34 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "npmjs",
+      "url": "https://registry.npmjs.org/",
+      "scopes": [
+        "com.puzzlescapegames.extensions",
+        "com.puzzlescapegames.ioc_zenject",
+        "com.puzzlescapegames.vvm",
+        "com.puzzlescapegames.dotween",
+        "com.puzzlescapegames.storage",
+        "com.puzzlescapegames.services",
+        "com.puzzlescapegames.dialogues",
+        "com.puzzlescapegames.localization",
+        "com.puzzlescapegames.analytics",
+        "com.puzzlescapegames.analytics_events",
+        "com.puzzlescapegames.appsflyer_adapter",
+        "com.puzzlescapegames.amplitude_adapter",
+        "com.puzzlescapegames.unity_adapter",
+        "com.puzzlescapegames.build_pipeline"
+      ]
+    },
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.amplitude.unityplugin"
+      ]
+    }
+  ]
 }
