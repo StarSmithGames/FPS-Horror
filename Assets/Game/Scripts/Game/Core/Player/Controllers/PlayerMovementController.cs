@@ -9,6 +9,9 @@ namespace Game.Core.Player
         public event Action OnLanded;
         
         private readonly float FrictionThreshold = 0.1f;
+
+        private Transform Root => _view.transform;
+        private Transform Head => _view.FirstPersonCamera.transform;
         
         private Vector3 _localScale;
         private Vector3 _moveDirection;
@@ -60,7 +63,7 @@ namespace Game.Core.Player
             //Counteract sliding and sloppy movement
             FrictionForce( moveInput.x, moveInput.y, relativeVelocity );
             //If speed is larger than maxspeed, clamp the velocity so you don't go over max speed
-            // ClampToCurrentSpeed();
+            ClampToCurrentSpeed();
 
             if ( _view.Rigidbody.velocity.sqrMagnitude < .02f ) _view.Rigidbody.velocity = Vector3.zero;
 
@@ -83,7 +86,7 @@ namespace Game.Core.Player
             }
             else
             {
-                _moveDirection = ( _view.transform.rotation.Forward() * moveInput.y + _view.transform.rotation.Right() * moveInput.x ).normalized;
+                _moveDirection = ( Root.rotation.Forward() * moveInput.y + Root.rotation.Right() * moveInput.x ).normalized;
             }
 
             // if(_moveDirection.magnitude > .1f) userEvents.OnMove.Invoke();
@@ -101,26 +104,34 @@ namespace Game.Core.Player
                 // Prevent from sliding not on purpose
                 if ( Math.Abs( mag.x ) > FrictionThreshold && Math.Abs( x ) < 0.5f || ( mag.x < -FrictionThreshold && x > 0 ) || ( mag.x > FrictionThreshold && x < 0 ) )
                 {
-                    _view.Rigidbody.AddForce( _config.Acceleration * _view.transform.rotation.Right() * Time.deltaTime * -mag.x * friction );
+                    _view.Rigidbody.AddForce( _config.Acceleration * Root.rotation.Right() * Time.deltaTime * -mag.x * friction );
                 }
 
                 if ( Math.Abs( mag.y ) > FrictionThreshold && Math.Abs( y ) < 0.05f || ( mag.y < -FrictionThreshold && y > 0 ) || ( mag.y > FrictionThreshold && y < 0 ) )
                 {
-                    _view.Rigidbody.AddForce( _config.Acceleration * _view.transform.rotation.Forward() * Time.deltaTime * -mag.y * friction );
+                    _view.Rigidbody.AddForce( _config.Acceleration * Root.rotation.Forward() * Time.deltaTime * -mag.y * friction );
                 }
             }
-        }
+            
+            Vector2 FindVelRelativeToLook()
+            {
+                /// Find the velocity relative to where the player is looking
+                /// Useful for vectors calculations regarding movement and limiting movement
+                // Convert velocity to local space relative to the player's look direction
+                Vector3 localVel = Quaternion.Euler( 0, -Root.rotation.Yaw(), 0 ) * _view.Rigidbody.velocity;
+                return new Vector2( localVel.x, localVel.z );
+            }
 
-        /// <summary>
-        /// Find the velocity relative to where the player is looking
-        /// Useful for vectors calculations regarding movement and limiting movement
-        /// </summary>
-        /// <returns></returns>
-        private Vector2 FindVelRelativeToLook()
-        {
-            // Convert velocity to local space relative to the player's look direction
-            Vector3 localVel = Quaternion.Euler( 0, -_view.transform.rotation.Yaw(), 0 ) * _view.Rigidbody.velocity;
-            return new Vector2( localVel.x, localVel.z );
+            void ClampToCurrentSpeed()
+            {
+                Vector3 horizontalVelocity = new Vector3( _view.Rigidbody.velocity.x, 0, _view.Rigidbody.velocity.z );
+                float currentWeightedSpeed = _currentSpeed;// * playerMultipliers.playerWeightMultiplier;
+                if ( horizontalVelocity.magnitude > currentWeightedSpeed )
+                {
+                    horizontalVelocity = horizontalVelocity.normalized * currentWeightedSpeed;
+                    _view.Rigidbody.velocity = new Vector3( horizontalVelocity.x, _view.Rigidbody.velocity.y, horizontalVelocity.z );
+                }
+            }
         }
 
         /// <summary>
@@ -172,7 +183,7 @@ namespace Game.Core.Player
         /// Get the direction of movement in a slope
         /// </summary>
         /// <returns></returns>
-        private Vector3 GetSlopeDirection( Vector3 moveInput ) => Vector3.ProjectOnPlane( _view.transform.rotation.Forward() * moveInput.y + _view.transform.rotation.Right() * moveInput.x, _slopeHit.normal ).normalized;
+        private Vector3 GetSlopeDirection( Vector3 moveInput ) => Vector3.ProjectOnPlane( Root.rotation.Forward() * moveInput.y + Root.rotation.Right() * moveInput.x, _slopeHit.normal ).normalized;
         
         /// <summary>
         /// Determine wether this is determined as slope or not

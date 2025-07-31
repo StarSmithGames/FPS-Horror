@@ -6,6 +6,9 @@ namespace Game.Core.Player
 {
     public sealed class PlayerLookController
     {
+        private Transform Root => _view.transform;
+        private Transform Head => _view.FirstPersonCamera.transform;
+        
         private float _cameraPitch;
         private float _cameraYaw;
         private float _cameraRoll;
@@ -14,6 +17,9 @@ namespace Game.Core.Player
         private float _currentSensY = 4f;
         private float _currentControllerSensX = 35f;
         private float _currentControllerSensY = 35f;
+
+        private float YawOffset => 0;
+        private float PitchOffset => 0;
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
@@ -42,21 +48,18 @@ namespace Game.Core.Player
             float mouseX = rawMouseX * sensitivityMultiplier;
             float mouseY = rawMouseY * sensitivityMultiplier;
 
-            // Calculate new yaw rotation ( around the y axis )
-            // _cameraYaw = playerCam.transform.localRotation.eulerAngles.y + mouseX + weaponRecoil.RecoilYawOffset * Time.deltaTime;
-            _cameraYaw = _view.FirstPersonCamera.transform.localRotation.eulerAngles.y + mouseX + Time.deltaTime;
-            //Rotate Camera Pitch ( around x axis )
-            // _cameraPitch -= mouseY - weaponRecoil.RecoilPitchOffset * Time.deltaTime;
-            _cameraPitch -= mouseY - Time.deltaTime;
+            _cameraYaw = Head.localRotation.eulerAngles.y + mouseX + YawOffset * Time.deltaTime;//YawOffset = weaponRecoil.RecoilYawOffset
+            _cameraPitch -= mouseY - PitchOffset * Time.deltaTime;//PitchOffset = weaponRecoil.RecoilPitchOffset 
+            
             // Make sure we dont over- or under-rotate.
             // The reason why the value is 89.7 instead of 90 is to prevent errors with the wallrun
             _cameraPitch = Mathf.Clamp( _cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle );
 
             CalculateCameraRoll();
-
+            
             // Handle camera rotation
-            _view.FirstPersonCamera.transform.localRotation = Quaternion.Euler( _cameraPitch, _cameraYaw, _cameraRoll );
-            _view.transform.rotation = Quaternion.Euler( 0, _cameraYaw, 0 );
+            Head.localRotation = Quaternion.Euler( _cameraPitch, _cameraYaw, _cameraRoll );
+            Root.rotation = Quaternion.Euler( 0, _cameraYaw, 0 );
 
             // HandleAimAssist();
         }
@@ -87,6 +90,7 @@ namespace Game.Core.Player
             // if (wallRunning && canWallRun) cameraRoll = wallLeft ? Mathf.Lerp(cameraRoll, -wallrunCameraTiltAmount, Time.deltaTime * cameraTiltTransitionSpeed) : Mathf.Lerp(cameraRoll, wallrunCameraTiltAmount, Time.deltaTime * cameraTiltTransitionSpeed);
             // else if (isCrouching && rb.velocity.magnitude >= walkSpeed && allowSliding && !hasJumped) cameraRoll = Mathf.Lerp(cameraRoll, slidingCameraTiltAmount, Time.deltaTime * cameraTiltTransitionSpeed);
             // else cameraRoll = Mathf.Lerp(cameraRoll, 0, Time.deltaTime * cameraTiltTransitionSpeed);
+            _cameraRoll = Mathf.Lerp( _cameraRoll, 0, Time.deltaTime * _config.LookSettings.CameraTiltTransitionSpeed );
         }
     }
 }

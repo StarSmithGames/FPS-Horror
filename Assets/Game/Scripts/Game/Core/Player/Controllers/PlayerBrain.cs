@@ -57,9 +57,6 @@ namespace Game.Core.Player
             {
                 _moveInput = InputManager.Inputs.Player.Movement.ReadValue< Vector2 >();
                 
-                // _position = _view.transform.position;
-                // _rotation = Quaternion.Euler(0, 90, 0);
-                
                 _movementController.CheckGrounded();
 
                 // if (canWallBounce) CheckOppositeWall();
@@ -78,10 +75,9 @@ namespace Game.Core.Player
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
-                bool isPlayerOnSlope = _movementController.IsOnSlope();
                 // Added Gravity
                 // Gravity is added only if we are not on a slope or climbing to prevent unvoluntary sliding
-                if ( !isPlayerOnSlope && !_states.IsClimbing ) _view.Rigidbody.AddForce( Vector3.down * 30.19f, ForceMode.Acceleration );
+                if ( !_movementController.IsOnSlope() && !_states.IsClimbing ) _view.Rigidbody.AddForce( Vector3.down * 30.19f, ForceMode.Acceleration );
 
                 _movementController.Movement( _moveInput );
                 

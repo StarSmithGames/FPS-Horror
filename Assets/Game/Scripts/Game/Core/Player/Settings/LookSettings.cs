@@ -36,6 +36,8 @@ namespace Game.Core.Player
         [SerializeField, Range(-30, 30), Tooltip("Rotation of the camera when sliding. The rotation direction is defined by the sign of the value.")]
         private float slidingCameraTiltAmount;
 
-        [SerializeField, Tooltip("Speed of the tilt camera movement. This is essentially used for wall running")] private float cameraTiltTransitionSpeed;
+        [ field: Header( "Camera" ) ]
+        [ field: Tooltip( "Speed of the tilt camera movement. This is essentially used for wall running" ) ]
+        [ field: SerializeField ] public float CameraTiltTransitionSpeed { get; private set; } = 5f;
     }
 }

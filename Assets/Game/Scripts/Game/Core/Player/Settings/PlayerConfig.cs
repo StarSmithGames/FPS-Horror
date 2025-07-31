@@ -6,7 +6,8 @@ namespace Game.Core.Player
     public sealed class PlayerConfig : ScriptableObject
     {
         [ field: SerializeField ] public LookSettings LookSettings { get; private set; }
-        
+
+        #region Ground
         [ field: Header( "Ground" ) ]
         [ field: Tooltip( "Every object with this layer will be detected as ground, so you will be able to walk on it" ) ]
         [ field: SerializeField ] public LayerMask GroundLayer { get; private set; }
@@ -14,6 +15,7 @@ namespace Game.Core.Player
         [ field: Tooltip( "Distance from the bottom of the player to detect ground" ) ]
         [ field: Min( 0 ) ]
         [ field: SerializeField ] public float GroundCheckDistance { get; private set; } = 1.2f;
+        #endregion
 
         #region Sliding
         [ field: Header( "Sliding" ) ]
