@@ -12,10 +12,12 @@ namespace Game.Core.Player
         {
             Container.BindInstance( _config );
             Container.BindInstance( _view );
+            Container.Bind< PlayerLookController >().AsSingle();
             Container.Bind< PlayerMovementController >().AsSingle();
-            
+
             Container.Bind< PlayerFacade >().AsSingle();
             Container.Bind< PlayerStates >().AsSingle();
+            Container.Bind< PlayerBrain >().AsSingle();
             Container.Bind< PlayerController >().AsSingle().NonLazy();
         }
     }

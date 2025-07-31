@@ -1,7 +1,4 @@
-using Cysharp.Threading.Tasks;
-using Game.Managers.InputManager;
 using System;
-using System.Threading;
 using UnityEngine;
 
 namespace Game.Core.Player
@@ -9,17 +6,8 @@ namespace Game.Core.Player
     public sealed class PlayerMovementController
     {
         public event Action OnLanded;
-
-        public Vector3 Forward => _rotation * Vector3.forward;
-        public Vector3 Right => _rotation * Vector3.right;
-        public Vector3 Up => _rotation * Vector3.up;
-        private Vector3 _position;
-        
-        public float Yaw => _rotation.eulerAngles.y;
-        private Quaternion _rotation;
         
         private Vector3 _localScale;
-        private Vector2 _moveInput;
         private Vector3 _moveDirection;
         private float _currentSpeed;
         
@@ -27,8 +15,6 @@ namespace Game.Core.Player
         private bool _hasJumped = false;
         
         private RaycastHit _slopeHit;
-        
-        private CancellationTokenSource _cancellationTokenSource;
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
@@ -48,64 +34,17 @@ namespace Game.Core.Player
         public void Initialize()
         {
             _localScale = _view.transform.localScale;
-            
-            _cancellationTokenSource = new();
-            Tick( _cancellationTokenSource.Token ).Forget();
-            FixedTick( _cancellationTokenSource.Token ).Forget();
         }
 
         public void Dispose()
         {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
-            _cancellationTokenSource = null;
-        }
-
-        private async UniTask Tick( CancellationToken cancellationToken = default )
-        {
-            while ( !cancellationToken.IsCancellationRequested )
-            {
-                _moveInput = InputManager.Inputs.Player.Movement.ReadValue< Vector2 >();
-
-                _position = _view.transform.position;
-                // _rotation = Quaternion.Euler(0, 90, 0);
-                
-                CheckGrounded();
-
-                // if (canWallBounce) CheckOppositeWall();
-
-                // if (InputManager.jumping && wallOpposite && canWallBounce && playerControl.IsControllable && CheckHeight()) WallBounce();
-
-                // HandleStairs( _moveDirection );
-                
-                await UniTask.Yield( PlayerLoopTiming.Update );
-            }
-        }
-
-        private async UniTask FixedTick( CancellationToken cancellationToken = default )
-        {
-            while ( !cancellationToken.IsCancellationRequested )
-            {
-                bool isPlayerOnSlope = IsOnSlope();
-                // Added Gravity
-                // Gravity is added only if we are not on a slope or climbing to prevent unvoluntary sliding
-                if ( !isPlayerOnSlope && !_states.IsClimbing ) _view.Rigidbody.AddForce( Vector3.down * 30.19f, ForceMode.Acceleration );
-
-                if ( _view.Rigidbody.velocity.magnitude > _config.MaxSpeedAllowed )
-                {
-                    _view.Rigidbody.velocity = Vector3.ClampMagnitude( _view.Rigidbody.velocity, _config.MaxSpeedAllowed );
-                }
-
-                Movement();
-                
-                await UniTask.Yield( PlayerLoopTiming.FixedUpdate );
-            }
+            
         }
 
         /// <summary>
         /// Handle all the basics related to the movement of the player.
         /// </summary>
-        public void Movement()
+        public void Movement( Vector2 moveInput )
         {
             //Extra gravity
             _view.Rigidbody.AddForce( Vector3.down * Time.fixedDeltaTime * 10 );
@@ -134,13 +73,13 @@ namespace Game.Core.Player
 
             if ( IsOnSlope() )
             {
-                _moveDirection = GetSlopeDirection();
+                _moveDirection = GetSlopeDirection( moveInput );
                 _view.Rigidbody.useGravity = false;
                 if ( _view.Rigidbody.velocity.y > 0 ) _view.Rigidbody.AddForce( Vector3.down * 150 );
             }
             else
             {
-                _moveDirection = ( Forward * _moveInput.y + Right * _moveInput.x ).normalized;
+                _moveDirection = ( _states.Forward * moveInput.y + _states.Right * moveInput.x ).normalized;
             }
 
             // if(_moveDirection.magnitude > .1f) userEvents.OnMove.Invoke();
@@ -156,14 +95,14 @@ namespace Game.Core.Player
         private Vector2 FindVelRelativeToLook()
         {
             // Convert velocity to local space relative to the player's look direction
-            Vector3 localVel = Quaternion.Euler( 0, -Yaw, 0 ) * _view.Rigidbody.velocity;
+            Vector3 localVel = Quaternion.Euler( 0, -_states.Yaw, 0 ) * _view.Rigidbody.velocity;
             return new Vector2( localVel.x, localVel.z );
         }
 
         /// <summary>
         /// Handle ground detection. Contributed by Chris Can. Thank you!
         /// </summary>
-        private void CheckGrounded()
+        public void CheckGrounded()
         {
             if ( _states.IsSteppingStairs )
             {
@@ -209,12 +148,12 @@ namespace Game.Core.Player
         /// Get the direction of movement in a slope
         /// </summary>
         /// <returns></returns>
-        private Vector3 GetSlopeDirection() => Vector3.ProjectOnPlane( Forward * _moveInput.y + Right * _moveInput.x, _slopeHit.normal ).normalized;
+        private Vector3 GetSlopeDirection( Vector3 moveInput ) => Vector3.ProjectOnPlane( _states.Forward * moveInput.y + _states.Right * moveInput.x, _slopeHit.normal ).normalized;
         
         /// <summary>
         /// Determine wether this is determined as slope or not
         /// </summary>
-        private bool IsOnSlope()
+        public bool IsOnSlope()
         {
             if ( Physics.Raycast( _view.transform.position, Vector3.down, out _slopeHit, _localScale.y + _config.GroundCheckDistance ) && _states.IsGrounded )
             {
@@ -225,11 +164,11 @@ namespace Game.Core.Player
             return false;
         }
         
-        private bool IsSliding() => _states.IsCrouching && _view.Rigidbody.velocity.magnitude >= _config.CrouchSpeed;
+        public bool IsSliding() => _states.IsCrouching && _view.Rigidbody.velocity.magnitude >= _config.CrouchSpeed;
 
         /// <summary>
         /// Determine wether this is determined as floor or not
         /// </summary>
-        private bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
+        public bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
     }
 }

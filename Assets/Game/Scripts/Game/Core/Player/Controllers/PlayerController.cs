@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace Game.Core.Player
@@ -10,15 +11,20 @@ namespace Game.Core.Player
         
         public PlayerFacade Facade { get; }
         
+
+        private readonly PlayerBrain _brain;
+        
         public PlayerController(
             PlayerObject view,
             PlayerConfig config,
-            PlayerFacade facade
+            PlayerFacade facade,
+            PlayerBrain brain
             )
         {
             View = view ?? throw new ArgumentNullException( nameof(view) );
             Config = config ?? throw new ArgumentNullException( nameof(config) );
             Facade = facade ?? throw new ArgumentNullException( nameof(facade) );
+            _brain = brain ?? throw new ArgumentNullException( nameof(brain) );
             
             View.SetController( this );
         }
@@ -28,12 +34,12 @@ namespace Game.Core.Player
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             
-            Facade.MovementController.Initialize();
+            _brain.Initialize();
         }
 
         public void Dispose()
         {
-            Facade.MovementController.Dispose();
+            _brain.Dispose();
         }
     }
 }

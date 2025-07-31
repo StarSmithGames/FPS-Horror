@@ -5,6 +5,8 @@ namespace Game.Core.Player
     [ CreateAssetMenu( fileName = "PlayerConfig", menuName = "Game/PlayerConfig" ) ]
     public sealed class PlayerConfig : ScriptableObject
     {
+        [ field: SerializeField ] public LookSettings LookSettings { get; private set; }
+        
         [ field: Header( "Ground" ) ]
         [ field: Tooltip( "Every object with this layer will be detected as ground, so you will be able to walk on it" ) ]
         [ field: SerializeField ] public LayerMask GroundLayer { get; private set; }

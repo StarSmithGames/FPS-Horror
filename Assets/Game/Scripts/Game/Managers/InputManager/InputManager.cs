@@ -67,13 +67,7 @@ namespace Game.Managers.InputManager
             else Inputs.UI.Disable();
         }
 
-        public static float GatherRawMouseX(float currentSensX, float currentControllerSensX)
-        {
-            return (MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.deltaTime * currentControllerSensX); 
-        }
-        public static float GatherRawMouseY(int sensYInverted, int sensYInvertedController, float currentSensY, float currentControllerSensY)
-        {
-            return (MouseY * currentSensY * sensYInverted * Time.fixedDeltaTime + ControllerY * sensYInvertedController * Time.deltaTime * currentControllerSensY);
-        }
+        public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.deltaTime * currentControllerSensX );
+        public static float GatherRawMouseY( int sensYInverted, int sensYInvertedController, float currentSensY, float currentControllerSensY ) => ( MouseY * currentSensY * sensYInverted * Time.fixedDeltaTime + ControllerY * sensYInvertedController * Time.deltaTime * currentControllerSensY );
     }
 }

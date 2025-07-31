@@ -6,6 +6,8 @@ namespace Game.Core.Player
     {
         [ field: SerializeField ] public Rigidbody Rigidbody { get; private set; }
         [ field: SerializeField ] public CapsuleCollider CapsuleCollider { get; private set; }
+        [ field: Space ]
+        [ field: SerializeField ] public Camera FirstPersonCamera { get; private set; }
 
         public PlayerController Controller { get; private set; }
         
