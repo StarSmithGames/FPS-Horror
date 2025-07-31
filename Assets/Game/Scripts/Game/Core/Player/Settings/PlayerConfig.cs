@@ -15,6 +15,7 @@ namespace Game.Core.Player
         [ field: Min( 0 ) ]
         [ field: SerializeField ] public float GroundCheckDistance { get; private set; } = 1.2f;
 
+        #region Sliding
         [ field: Header( "Sliding" ) ]
         [ field: Tooltip( "When true, player will be allowed to slide." ) ]
         [ field: SerializeField ] public bool AllowSliding { get; private set; }
@@ -22,8 +23,11 @@ namespace Game.Core.Player
         private float slideForce = 400;
         [ field: Tooltip( "If true, the player will be able to move while sliding." ) ]
         [ field: SerializeField ] public bool AllowMoveWhileSliding { get; private set; }
-        [Range(0, 1f), SerializeField, Tooltip("Force applied to counter movement when sliding")] private float slideFrictionForceAmount;
-        
+        [ field: Range( 0, 1f ) ]
+        [ field: Tooltip( "Force applied to counter movement when sliding" ) ]
+        [ field: SerializeField ] public float SlideFrictionForceAmount { get; private set; } = 0.05f;
+        #endregion
+
         [ field: Header( "Movement") ]
         [ field: Min( 0.01f ) ]
         [ field: Tooltip( "Max speed the player can reach. Velocity is clamped by this value." ) ]
@@ -36,6 +40,11 @@ namespace Game.Core.Player
         [ field: SerializeField ] public float CrouchSpeed { get; private set; } = 3f;
         [ field: Tooltip( "Capacity to gain speed." ) ]
         [ field: SerializeField ] public float Acceleration { get; private set; } = 4500;
+
+        [ field: Range( 0, 1f ) ]
+        [ field: Tooltip( "Controls the snappiness of the character. The higher, the more responsive." ) ]
+        [ field: SerializeField ] public float ControlsResponsiveness { get; private set; } = 0.175f;
+
         
         
         [ field: Tooltip("Maximum slope angle that you can walk through.") ]

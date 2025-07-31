@@ -5,25 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fe0e433-bcb8-4294-9709-c4ec95d03e79" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerLookController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerLookController.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Settings/LookSettings.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Settings/LookSettings.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Extensions.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Extensions/QuaternionExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Extensions/QuaternionExtensions.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Floor.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Floor.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerFacade.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerFacade.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerInstaller.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerMovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerMovementController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerMovementController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerMovementController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerLookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerLookController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerMovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerMovementController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerStates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerStates.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Settings/PlayerConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Settings/PlayerConfig.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +113,7 @@
       <workItem from="1753772075465" duration="831000" />
       <workItem from="1753794447583" duration="732000" />
       <workItem from="1753880404261" duration="12037000" />
-      <workItem from="1753957772982" duration="4493000" />
+      <workItem from="1753957772982" duration="6503000" />
     </task>
     <servers />
   </component>

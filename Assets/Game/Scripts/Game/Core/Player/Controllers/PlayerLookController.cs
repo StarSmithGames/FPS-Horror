@@ -17,14 +17,17 @@ namespace Game.Core.Player
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
+        private readonly PlayerStates _states;
         
         public PlayerLookController(
             PlayerObject view,
-            PlayerConfig config
+            PlayerConfig config,
+            PlayerStates states
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
+            _states = states ?? throw new ArgumentNullException( nameof(states) );
         }
 
         public void Look()

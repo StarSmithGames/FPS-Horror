@@ -83,11 +83,6 @@ namespace Game.Core.Player
                 // Gravity is added only if we are not on a slope or climbing to prevent unvoluntary sliding
                 if ( !isPlayerOnSlope && !_states.IsClimbing ) _view.Rigidbody.AddForce( Vector3.down * 30.19f, ForceMode.Acceleration );
 
-                if ( _view.Rigidbody.velocity.magnitude > _config.MaxSpeedAllowed )
-                {
-                    _view.Rigidbody.velocity = Vector3.ClampMagnitude( _view.Rigidbody.velocity, _config.MaxSpeedAllowed );
-                }
-
                 _movementController.Movement( _moveInput );
                 
                 await UniTask.Yield( PlayerLoopTiming.FixedUpdate );
