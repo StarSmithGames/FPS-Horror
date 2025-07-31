@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,8 @@ namespace Game.Managers.InputManager
 {
     public static class InputManager
     {
+        public static event Action OnJump;
+        
         public static GameplayInputs Inputs { get; private set; }
 
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
@@ -18,6 +21,8 @@ namespace Game.Managers.InputManager
             Inputs = new GameplayInputs();
             Inputs.Enable();
 
+            Inputs.Player.Jump.started += JumStartedHandler;
+            
             ToggleGameControls( true );
             ToggleUIControls( false );
 
@@ -27,11 +32,16 @@ namespace Game.Managers.InputManager
 
         public static void Dispose()
         {
-            Inputs?.Disable();
-            
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
+            
+            if ( Inputs != null )
+            {
+                Inputs.Disable();
+                Inputs.Player.Jump.started -= JumStartedHandler;
+            }
+            OnJump = null;
         }
 
         private static async UniTask Tick( CancellationToken cancellationToken = default )
@@ -69,5 +79,10 @@ namespace Game.Managers.InputManager
 
         public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.deltaTime * currentControllerSensX );
         public static float GatherRawMouseY( int sensYInverted, int sensYInvertedController, float currentSensY, float currentControllerSensY ) => ( MouseY * currentSensY * sensYInverted * Time.fixedDeltaTime + ControllerY * sensYInvertedController * Time.deltaTime * currentControllerSensY );
+
+        private static void JumStartedHandler( InputAction.CallbackContext callbackContext )
+        {
+            OnJump?.Invoke();
+        }
     }
 }

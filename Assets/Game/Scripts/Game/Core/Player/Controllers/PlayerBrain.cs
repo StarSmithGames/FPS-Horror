@@ -8,6 +8,8 @@ namespace Game.Core.Player
 {
     public sealed class PlayerBrain
     {
+        public event Action OnLanded;
+        
         private CancellationTokenSource _cancellationTokenSource;
         private Vector2 _moveInput;
         
@@ -16,13 +18,15 @@ namespace Game.Core.Player
         private readonly PlayerStates _states;
         private readonly PlayerLookController _lookController;
         private readonly PlayerMovementController _movementController;
+        private readonly PlayerJumpController _jumpController;
         
         public PlayerBrain(
             PlayerObject view,
             PlayerConfig config,
             PlayerStates states,
             PlayerLookController lookController,
-            PlayerMovementController movementController
+            PlayerMovementController movementController,
+            PlayerJumpController jumpController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -30,11 +34,15 @@ namespace Game.Core.Player
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _lookController = lookController ?? throw new ArgumentNullException( nameof(lookController) );
             _movementController = movementController ?? throw new ArgumentNullException( nameof(movementController) );
+            _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
         }
 
         public void Initialize()
         {
             _movementController.Initialize();
+            _jumpController.Initialize();
+
+            InputManager.OnJump += JumpClickedHandler;
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
@@ -47,9 +55,8 @@ namespace Game.Core.Player
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
             
-            _movementController.Dispose();
+            InputManager.OnJump -= JumpClickedHandler;
         }
-
 
         private async UniTask Tick( CancellationToken cancellationToken = default )
         {
@@ -57,7 +64,7 @@ namespace Game.Core.Player
             {
                 _moveInput = InputManager.Inputs.Player.Movement.ReadValue< Vector2 >();
                 
-                _movementController.CheckGrounded();
+                CheckGrounded();
 
                 // if (canWallBounce) CheckOppositeWall();
 
@@ -83,6 +90,52 @@ namespace Game.Core.Player
                 
                 await UniTask.Yield( PlayerLoopTiming.FixedUpdate );
             }
+        }
+
+        private void CheckGrounded()
+        {
+            if ( _states.IsSteppingStairs )
+            {
+                _states.IsGrounded = true;
+                return;
+            }
+
+            Vector3 origin = _view.CapsuleCollider.bounds.center;
+
+            bool foundGround = false;
+            if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundCheckDistance, _config.GroundLayer ) )
+            {
+                if ( IsFloor( hit.normal ) )
+                {
+                    foundGround = true;
+                }
+            }
+
+            if ( foundGround )
+            {
+                if ( !_states.IsGrounded )
+                {
+                    // SoundManager.Instance.PlaySound(sounds.landSFX, 0, 0, false);
+                    _jumpController.OnLanded();
+                    OnLanded?.Invoke();
+                }
+
+                _states.IsGrounded = true;
+            }
+            else
+            {
+                if ( _states.IsGrounded )
+                {
+                    _states.IsGrounded = false;
+                }
+            }
+        }
+        
+        private bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
+
+        private void JumpClickedHandler()
+        {
+            _jumpController.Jump( _moveInput );
         }
     }
 }

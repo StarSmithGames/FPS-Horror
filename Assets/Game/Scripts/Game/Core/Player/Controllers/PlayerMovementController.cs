@@ -6,8 +6,6 @@ namespace Game.Core.Player
 {
     public sealed class PlayerMovementController
     {
-        public event Action OnLanded;
-        
         private readonly float FrictionThreshold = 0.1f;
 
         private Transform Root => _view.transform;
@@ -16,9 +14,6 @@ namespace Game.Core.Player
         private Vector3 _localScale;
         private Vector3 _moveDirection;
         private float _currentSpeed;
-        
-        public int jumpCount;
-        private bool _hasJumped = false;
         
         private RaycastHit _slopeHit;
         
@@ -42,16 +37,11 @@ namespace Game.Core.Player
             _localScale = _view.transform.localScale;
         }
 
-        public void Dispose()
-        {
-            
-        }
-
         public void Movement( Vector2 moveInput )
         {
-            if ( _view.Rigidbody.velocity.magnitude > _config.MaxSpeedAllowed )
+            if ( _view.Rigidbody.velocity.magnitude > _config.MovementSettings.MaxSpeedAllowed )
             {
-                _view.Rigidbody.velocity = Vector3.ClampMagnitude( _view.Rigidbody.velocity, _config.MaxSpeedAllowed );
+                _view.Rigidbody.velocity = Vector3.ClampMagnitude( _view.Rigidbody.velocity, _config.MovementSettings.MaxSpeedAllowed );
             }
             
             //Extra gravity
@@ -75,8 +65,8 @@ namespace Game.Core.Player
 
             if ( IsSliding() && !_config.AllowMoveWhileSliding ) return;
 
-            float airborneMultiplier = !_states.IsGrounded ? _config.ControlAirborne : 1;
-            float movementMultipliers = _config.Acceleration * Time.deltaTime * airborneMultiplier;
+            float airborneMultiplier = !_states.IsGrounded ? _config.JumpSettings.ControlAirborne : 1;
+            float movementMultipliers = _config.MovementSettings.Acceleration * Time.deltaTime * airborneMultiplier;
 
             if ( IsOnSlope() )
             {
@@ -98,18 +88,18 @@ namespace Game.Core.Player
                 // Prevent from adding friction on an airborne body
                 if ( !_states.IsGrounded ) return; //|| InputManager.jumping || hasJumped) return;
 
-                float friction = IsSliding() ? _config.SlideFrictionForceAmount : _config.ControlsResponsiveness;
+                float friction = IsSliding() ? _config.SlideFrictionForceAmount : _config.MovementSettings.ControlsResponsiveness;
 
                 // Counter movement ( Friction while moving )
                 // Prevent from sliding not on purpose
                 if ( Math.Abs( mag.x ) > FrictionThreshold && Math.Abs( x ) < 0.5f || ( mag.x < -FrictionThreshold && x > 0 ) || ( mag.x > FrictionThreshold && x < 0 ) )
                 {
-                    _view.Rigidbody.AddForce( _config.Acceleration * Root.rotation.Right() * Time.deltaTime * -mag.x * friction );
+                    _view.Rigidbody.AddForce( _config.MovementSettings.Acceleration * Root.rotation.Right() * Time.deltaTime * -mag.x * friction );
                 }
 
                 if ( Math.Abs( mag.y ) > FrictionThreshold && Math.Abs( y ) < 0.05f || ( mag.y < -FrictionThreshold && y > 0 ) || ( mag.y > FrictionThreshold && y < 0 ) )
                 {
-                    _view.Rigidbody.AddForce( _config.Acceleration * Root.rotation.Forward() * Time.deltaTime * -mag.y * friction );
+                    _view.Rigidbody.AddForce( _config.MovementSettings.Acceleration * Root.rotation.Forward() * Time.deltaTime * -mag.y * friction );
                 }
             }
             
@@ -135,51 +125,6 @@ namespace Game.Core.Player
         }
 
         /// <summary>
-        /// Handle ground detection. Contributed by Chris Can. Thank you!
-        /// </summary>
-        public void CheckGrounded()
-        {
-            if ( _states.IsSteppingStairs )
-            {
-                _states.IsGrounded = true;
-                return;
-            }
-
-            Vector3 origin = _view.CapsuleCollider.bounds.center;
-
-            bool foundGround = false;
-            if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundCheckDistance, _config.GroundLayer ) )
-            {
-                if ( IsFloor( hit.normal ) )
-                {
-                    foundGround = true;
-                }
-            }
-
-            if ( foundGround )
-            {
-                if ( !_states.IsGrounded )
-                {
-                    jumpCount = _config.MaxJumps;
-                    _hasJumped = false;
-
-                    // SoundManager.Instance.PlaySound(sounds.landSFX, 0, 0, false);
-                    OnLanded?.Invoke();
-                }
-
-                _states.IsGrounded = true;
-            }
-            else
-            {
-                if ( _states.IsGrounded )
-                {
-                    _states.IsGrounded = false;
-                    // coyoteTimer = coyoteJumpTime;
-                }
-            }
-        }
-
-        /// <summary>
         /// Get the direction of movement in a slope
         /// </summary>
         /// <returns></returns>
@@ -199,11 +144,6 @@ namespace Game.Core.Player
             return false;
         }
         
-        public bool IsSliding() => _states.IsCrouching && _view.Rigidbody.velocity.magnitude >= _config.CrouchSpeed;
-
-        /// <summary>
-        /// Determine wether this is determined as floor or not
-        /// </summary>
-        public bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
+        public bool IsSliding() => _states.IsCrouching && _view.Rigidbody.velocity.magnitude >= _config.MovementSettings.CrouchSpeed;
     }
 }
