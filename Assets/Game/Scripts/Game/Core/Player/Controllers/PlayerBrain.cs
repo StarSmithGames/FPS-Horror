@@ -23,6 +23,7 @@ namespace Game.Core.Player
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerCrouchController _crouchController;
         private readonly CameraFOVController _cameraFOVController;
+        private readonly CameraVisionController _cameraVisionController;
         
         public PlayerBrain(
             PlayerObject view,
@@ -32,7 +33,8 @@ namespace Game.Core.Player
             PlayerMovementController movementController,
             PlayerJumpController jumpController,
             PlayerCrouchController crouchController,
-            CameraFOVController cameraFOVController
+            CameraFOVController cameraFOVController,
+            CameraVisionController cameraVisionController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -43,6 +45,7 @@ namespace Game.Core.Player
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
+            _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
         }
 
         public void Initialize()
@@ -51,6 +54,7 @@ namespace Game.Core.Player
             _jumpController.Initialize();
             _crouchController.Initialize();
             _cameraFOVController.Initialize();
+            _cameraVisionController.Initialize();
 
             InputManager.OnJump += JumpClickedHandler;
             _inputHolders.Add( new( InputManager.Inputs.Player.Crouch, onStartHold: _crouchController.StartCrouch, onEndHold: _crouchController.StopCrouch ) );
@@ -75,6 +79,7 @@ namespace Game.Core.Player
             _inputHolders.Clear();
             
             _cameraFOVController.Dispose();
+            _cameraVisionController.Dispose();
         }
 
         private async UniTask Tick( CancellationToken cancellationToken = default )

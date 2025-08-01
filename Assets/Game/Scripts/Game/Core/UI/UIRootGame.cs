@@ -1,3 +1,4 @@
+using Game.UISystem;
 using PuzzlescapeGames.VVM;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,8 @@ namespace Game.Core.UI
         {
             ScreenAggregator = ViewModelAggregator.Create( diContainer, transform, Array.Empty< View >() );
             DialogAggregator = ViewModelAggregator.Create( diContainer, DynamicScreen.DialogsRoot, uiSettings.Dialogs );
+
+            Initialize();
         }
         
         public void Initialize()

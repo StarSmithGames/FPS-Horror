@@ -8,7 +8,9 @@ namespace Game.Core.Player
         [ field: SerializeField ] public LookSettings LookSettings { get; private set; }
         [ field: SerializeField ] public MovementSettings MovementSettings { get; private set; }
         [ field: SerializeField ] public JumpSettings JumpSettings { get; private set; }
-        
+        [ field: SerializeField ] public CrouchSettings CrouchSettings { get; private set; }
+        [ field: SerializeField ] public SlidingSettings SlidingSettings { get; private set; }
+        [ field: Space ]
         #region Ground
         [ field: Header( "Ground" ) ]
         [ field: Tooltip( "Every object with this layer will be detected as ground, so you will be able to walk on it" ) ]
@@ -18,14 +20,8 @@ namespace Game.Core.Player
         [ field: Min( 0 ) ]
         [ field: SerializeField ] public float GroundCheckDistance { get; private set; } = 1.2f;
         #endregion
-
-        [ field: SerializeField ] public CrouchSettings CrouchSettings { get; private set; }
-        [ field: SerializeField ] public SlidingSettings SlidingSettings { get; private set; }
-        
-        [ field: Tooltip("Maximum slope angle that you can walk through.") ]
-        [ field: Range(10, 80) ]
-        [ field: SerializeField ] public float MaxSlopeAngle { get; private set; } = 35f;
-
+        [ field: Space ]
         [ field: SerializeField ] public CameraFOVSettings CameraFOVSettings { get; private set; }
+        [ field: SerializeField ] public CameraVisionSettings CameraVisionSettings { get; private set; } 
     }
 }

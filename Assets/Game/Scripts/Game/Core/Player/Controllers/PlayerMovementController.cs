@@ -203,12 +203,12 @@ namespace Game.Core.Player
             if ( Physics.Raycast( _view.transform.position, Vector3.down, out _slopeHit, _localScale.y + _config.GroundCheckDistance ) && _states.IsGrounded )
             {
                 float angle = Vector3.Angle( Vector3.up, _slopeHit.normal );
-                return angle < _config.MaxSlopeAngle && angle != 0;
+                return angle < _config.MovementSettings.MaxSlopeAngle && angle != 0;
             }
 
             return false;
         }
         
-        public bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
+        public bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MovementSettings.MaxSlopeAngle;
     }
 }
