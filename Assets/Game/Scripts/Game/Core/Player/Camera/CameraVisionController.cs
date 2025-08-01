@@ -84,7 +84,7 @@ namespace Game.Core.Player
                         }
                     }
                     
-                    _gameScreenViewModel.EnableTargetPoint( collidersIntersects.Length > 0 );
+                    _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( collidersIntersects.Length > 0 );
 
                     //каст для интерактивных объектов
                     if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.RayDistance, _config.CameraVisionSettings.InteractLayers ) )
@@ -99,8 +99,9 @@ namespace Game.Core.Player
                 else
                 {
                     CurrentObservable = null;
-                    _gameScreenViewModel.EnableTargetPoint( false );
+                    _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( false );
                 }
+                _gameScreenViewModel.SetObservable( CurrentObservable );
 
                 Debug.DrawLine( _head.position, _head.position + ( _head.forward * _config.CameraVisionSettings.RayDistance ), Color.blue );
 

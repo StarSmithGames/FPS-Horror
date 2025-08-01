@@ -18,6 +18,7 @@ namespace Game.Core.Player
             Container.Bind< PlayerCrouchController >().AsSingle();
             Container.Bind< CameraFOVController >().AsSingle();
             Container.Bind< CameraVisionController >().AsSingle();
+            Container.Bind< PlayerInteractionController >().AsSingle();
             
             Container.Bind< PlayerFacade >().AsSingle();
             Container.Bind< PlayerStates >().AsSingle();

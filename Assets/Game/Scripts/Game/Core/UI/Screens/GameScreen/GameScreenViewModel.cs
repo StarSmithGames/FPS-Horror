@@ -1,5 +1,5 @@
-using DG.Tweening;
-using PuzzlescapeGames.Extensions;
+using Game.Core.Entity;
+using Game.Core.World.InteractionSystem;
 using PuzzlescapeGames.VVM;
 using System;
 
@@ -7,8 +7,9 @@ namespace Game.Core.UI
 {
     public sealed class GameScreenViewModel : ViewModel< UIGameScreen >
     {
-        private bool _isTargetPointShowing;
-        private Tween _targetPointTween;
+        private bool _isShowingInformer;
+
+        private IObservable _currentObservable;
         
         private readonly UIRootGame _uiRootGame;
         
@@ -17,37 +18,43 @@ namespace Game.Core.UI
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             
             CreateView();
-            ModelView.TargetPoint.SetAlpha( 0f );
+            ModelView.TargetPoint.Disable();
+            ModelView.TargetInformer.Enable( false );
         }
-
-        public void EnableTargetPoint( bool trigger ) 
+        
+        public void SetObservable( IObservable observable )
         {
-            if ( trigger )
+            if ( _currentObservable == observable ) return;
+            _currentObservable = observable;
+
+            ModelView.TargetInformer.Button1.SetFillAmount( 0f );
+            ModelView.TargetInformer.Button1.gameObject.SetActive( false );
+            ModelView.TargetInformer.Button2.SetFillAmount( 0f );
+            ModelView.TargetInformer.Button2.gameObject.SetActive( false );
+            
+            if ( _currentObservable == null )
             {
-                ShowTargetPoint();
+                if ( _isShowingInformer )
+                {
+                    _isShowingInformer = false;
+                    ModelView.TargetInformer.Hide();
+                }
             }
             else
             {
-                HideTargetPoint();
+                if ( _currentObservable is PickableEntityObject pickable )
+                {
+                    ModelView.TargetInformer.Name.text = "Pickable";
+                    ModelView.TargetInformer.Button1.gameObject.SetActive( true );
+                    ModelView.TargetInformer.Button2.gameObject.SetActive( false );
+
+                    if ( !_isShowingInformer )
+                    {
+                        _isShowingInformer = true;
+                        ModelView.TargetInformer.Show();
+                    }
+                }   
             }
-        }
-
-        private void ShowTargetPoint()
-        {
-            if ( _isTargetPointShowing ) return;
-            _isTargetPointShowing = true;
-            
-            _targetPointTween?.Kill();
-            _targetPointTween = ModelView.TargetPoint.DOFade( 1f, 0.48f ).SetEase( Ease.OutQuad );
-        }
-
-        private void HideTargetPoint()
-        {
-            if ( !_isTargetPointShowing ) return;
-            _isTargetPointShowing = false;
-            
-            _targetPointTween?.Kill();
-            _targetPointTween = ModelView.TargetPoint.DOFade( 0f, 0.24f ).SetEase( Ease.OutQuad );
         }
         
         protected override UIGameScreen GetView() => _uiRootGame.GameScreen;

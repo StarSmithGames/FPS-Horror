@@ -85,6 +85,7 @@ namespace Game.Core.Player
 
         public void OnLanded()
         {
+            Debug.LogError( "Landed" );
             _jumpCount = _config.JumpSettings.MaxJumps;
             _states.IsJumping = false;
         }

@@ -24,6 +24,7 @@ namespace Game.Core.Player
         private readonly PlayerCrouchController _crouchController;
         private readonly CameraFOVController _cameraFOVController;
         private readonly CameraVisionController _cameraVisionController;
+        private readonly PlayerInteractionController _interactionController;
         
         public PlayerBrain(
             PlayerObject view,
@@ -34,7 +35,8 @@ namespace Game.Core.Player
             PlayerJumpController jumpController,
             PlayerCrouchController crouchController,
             CameraFOVController cameraFOVController,
-            CameraVisionController cameraVisionController
+            CameraVisionController cameraVisionController,
+            PlayerInteractionController interactionController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -46,6 +48,7 @@ namespace Game.Core.Player
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
+            _interactionController = interactionController ?? throw new ArgumentNullException( nameof(interactionController) );
         }
 
         public void Initialize()
@@ -58,6 +61,7 @@ namespace Game.Core.Player
 
             InputManager.OnJump += JumpClickedHandler;
             _inputHolders.Add( new( InputManager.Inputs.Player.Crouch, onStartHold: _crouchController.StartCrouch, onEndHold: _crouchController.StopCrouch ) );
+            _inputHolders.Add( new( InputManager.Inputs.Player.Interact, onStartHold: _interactionController.StartInteract, onEndHold: _interactionController.StopInteract ) );
             InputManager.AddInputHolders( _inputHolders );
             
             _cancellationTokenSource = new();
@@ -124,7 +128,7 @@ namespace Game.Core.Player
             Vector3 origin = _view.CapsuleCollider.bounds.center;
 
             bool foundGround = false;
-            if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundCheckDistance, _config.GroundLayer ) )
+            if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundSettings.GroundCheckDistance, _config.GroundSettings.GroundLayer ) )
             {
                 if ( _movementController.IsFloor( hit.normal ) )
                 {

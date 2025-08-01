@@ -1,11 +1,11 @@
 using PuzzlescapeGames.VVM.UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Core.UI
 {
     public sealed class UIGameScreen : UIViewFade
     {
-        [ field: SerializeField ] public Image TargetPoint { get; private set; }
+        [ field: SerializeField ] public UITargetPoint TargetPoint { get; private set; }
+        [ field: SerializeField ] public UITargetInformer TargetInformer { get; private set; }
     }
 }
