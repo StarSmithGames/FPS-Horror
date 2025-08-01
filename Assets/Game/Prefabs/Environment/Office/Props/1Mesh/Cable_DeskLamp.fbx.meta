@@ -1,35 +1,15 @@
 fileFormatVersion: 2
-guid: 1b15e507ec2c3784d8d34167fd09c9ff
-timeCreated: 1557950937
+guid: 202573aca5902bc418663da7807a0a87
+timeCreated: 1530606749
 licenseType: Store
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Drawer_01
-    100004: Drawer_02
-    100006: Drawer_03
-    100008: Drawer_04
     400000: //RootNode
-    400002: Drawer_01
-    400004: Drawer_02
-    400006: Drawer_03
-    400008: Drawer_04
     2300000: //RootNode
-    2300002: Drawer_01
-    2300004: Drawer_02
-    2300006: Drawer_03
-    2300008: Drawer_04
     3300000: //RootNode
-    3300002: Drawer_01
-    3300004: Drawer_02
-    3300006: Drawer_03
-    3300008: Drawer_04
-    4300000: Desk
-    4300002: Drawer_01
-    4300004: Drawer_02
-    4300006: Drawer_03
-    4300008: Drawer_04
+    4300000: Cable_DeskLamp
   materials:
     importMaterials: 1
     materialName: 1

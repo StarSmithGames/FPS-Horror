@@ -1,25 +1,15 @@
 fileFormatVersion: 2
-guid: 3951a70bf26b5314c9d7f4548f042ea3
-timeCreated: 1530555244
+guid: 550a2c70e22025641beef86489f52081
+timeCreated: 1557950937
 licenseType: Store
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Button_Off
-    100004: Button_On
     400000: //RootNode
-    400002: Button_Off
-    400004: Button_On
     2300000: //RootNode
-    2300002: Button_Off
-    2300004: Button_On
     3300000: //RootNode
-    3300002: Button_Off
-    3300004: Button_On
-    4300000: DeskLamp
-    4300002: Button_Off
-    4300004: Button_On
+    4300000: DeskB
   materials:
     importMaterials: 1
     materialName: 1

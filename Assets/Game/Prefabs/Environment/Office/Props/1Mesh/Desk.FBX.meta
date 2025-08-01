@@ -1,15 +1,35 @@
 fileFormatVersion: 2
-guid: 45686e3cc0cea804a83c5e68569f23fe
+guid: 19d64f1218c08ce4fa4be235dae67c38
 timeCreated: 1557950937
 licenseType: Store
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Drawer_01
+    100004: Drawer_02
+    100006: Drawer_03
+    100008: Drawer_04
     400000: //RootNode
+    400002: Drawer_01
+    400004: Drawer_02
+    400006: Drawer_03
+    400008: Drawer_04
     2300000: //RootNode
+    2300002: Drawer_01
+    2300004: Drawer_02
+    2300006: Drawer_03
+    2300008: Drawer_04
     3300000: //RootNode
-    4300000: DeskB
+    3300002: Drawer_01
+    3300004: Drawer_02
+    3300006: Drawer_03
+    3300008: Drawer_04
+    4300000: Desk
+    4300002: Drawer_01
+    4300004: Drawer_02
+    4300006: Drawer_03
+    4300008: Drawer_04
   materials:
     importMaterials: 1
     materialName: 1
