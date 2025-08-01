@@ -19,18 +19,8 @@ namespace Game.Core.Player
         [ field: SerializeField ] public float GroundCheckDistance { get; private set; } = 1.2f;
         #endregion
 
-        #region Sliding
-        [ field: Header( "Sliding" ) ]
-        [ field: Tooltip( "When true, player will be allowed to slide." ) ]
-        [ field: SerializeField ] public bool AllowSliding { get; private set; }
-        [Tooltip("Force added on sliding."), SerializeField]
-        private float slideForce = 400;
-        [ field: Tooltip( "If true, the player will be able to move while sliding." ) ]
-        [ field: SerializeField ] public bool AllowMoveWhileSliding { get; private set; }
-        [ field: Range( 0, 1f ) ]
-        [ field: Tooltip( "Force applied to counter movement when sliding" ) ]
-        [ field: SerializeField ] public float SlideFrictionForceAmount { get; private set; } = 0.05f;
-        #endregion
+        [ field: SerializeField ] public CrouchSettings CrouchSettings { get; private set; }
+        [ field: SerializeField ] public SlidingSettings SlidingSettings { get; private set; }
         
         [ field: Tooltip("Maximum slope angle that you can walk through.") ]
         [ field: Range(10, 80) ]

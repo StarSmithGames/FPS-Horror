@@ -15,6 +15,7 @@ namespace Game.Core.Player
             Container.Bind< PlayerLookController >().AsSingle();
             Container.Bind< PlayerMovementController >().AsSingle();
             Container.Bind< PlayerJumpController >().AsSingle();
+            Container.Bind< PlayerCrouchController >().AsSingle();
             Container.Bind< CameraFOVController >().AsSingle();
 
             Container.Bind< PlayerFacade >().AsSingle();

@@ -6,6 +6,8 @@ namespace Game.Core.Player
         
         public bool IsGrounded { get; set; }
         
+        public bool IsJumping { get; set; }
+        
         public bool IsCrouching { get; set; }
         
         public bool IsClimbing { get; set; }

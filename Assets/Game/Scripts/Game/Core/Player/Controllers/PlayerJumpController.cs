@@ -9,8 +9,6 @@ namespace Game.Core.Player
     {
         public event Action OnJumped;
         
-        public bool IsJumping { get; private set; }
-        
         private Transform Root => _view.transform;
         private Transform Head => _view.FirstPersonCamera.transform;
         
@@ -18,10 +16,6 @@ namespace Game.Core.Player
         private bool readyToJump = true;
         
         private int _jumpCount;
-        private bool _hasJumped = false;
-
-        public bool canCoyote;
-        private float coyoteTimer;
 
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
@@ -51,7 +45,7 @@ namespace Game.Core.Player
 
             _jumpCount--;
             readyToJump = false;
-            _hasJumped = true;
+            _states.IsJumping = true;
 
             Vector3 velocity = _view.Rigidbody.velocity;
             velocity.y = 0f;
@@ -59,18 +53,8 @@ namespace Game.Core.Player
 
             // if (doubleJumpResetsFallDamage) fallHeightProvider?.SetFallHeight(transform.position.y);
 
-            //Add jump forces
-            // if (wallRunning)
-            // {
-            //     // When we wallrun, we want to add extra side forces
-            //     _view.Rigidbody.AddForce(transform.up * upwardsWallJumpForce);
-            //     _view.Rigidbody.AddForce(wallNormal * normalWallJumpForce, ForceMode.Impulse);
-            // }
-            // else
-            {
-                _view.Rigidbody.AddForce( Vector3.up * _config.JumpSettings.JumpForce, ForceMode.Impulse );
-                HandleDirectionalJumping();
-            }
+            _view.Rigidbody.AddForce( Vector3.up * _config.JumpSettings.JumpForce, ForceMode.Impulse );
+            HandleDirectionalJumping();
 
             //staminaLoss
             // if (usesStamina) stamina -= staminaLossOnJump;
@@ -102,7 +86,7 @@ namespace Game.Core.Player
         public void OnLanded()
         {
             _jumpCount = _config.JumpSettings.MaxJumps;
-            _hasJumped = false;
+            _states.IsJumping = false;
         }
 
         private void ResetJump() => readyToJump = true;

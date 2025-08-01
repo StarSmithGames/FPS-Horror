@@ -40,8 +40,15 @@ namespace Game.Core.Player
             _localScale = _view.transform.localScale;
         }
 
-        public void Movement( Vector2 moveInput )
+        public void Movement( bool isSliding, Vector2 moveInput )
         {
+            // Added Gravity
+            // Gravity is added only if we are not on a slope or climbing to prevent unvoluntary sliding
+            if ( !IsOnSlope() && !_states.IsClimbing )
+            {
+                _view.Rigidbody.AddForce( Vector3.down * 30.19f, ForceMode.Acceleration );
+            }
+            
             if ( _view.Rigidbody.velocity.magnitude > _config.MovementSettings.MaxSpeedAllowed )
             {
                 _view.Rigidbody.velocity = Vector3.ClampMagnitude( _view.Rigidbody.velocity, _config.MovementSettings.MaxSpeedAllowed );
@@ -65,8 +72,7 @@ namespace Game.Core.Player
                 if ( _states.IsGrounded ) _view.Rigidbody.velocity = Vector3.zero;
                 return;
             }
-
-            if ( IsSliding() && !_config.AllowMoveWhileSliding ) return;
+            if ( isSliding && !_config.SlidingSettings.AllowMoveWhileSliding ) return;
 
             float airborneMultiplier = !_states.IsGrounded ? _config.JumpSettings.ControlAirborne : 1;
             float movementMultipliers = _config.MovementSettings.Acceleration * Time.deltaTime * airborneMultiplier;
@@ -89,7 +95,7 @@ namespace Game.Core.Player
                 // Prevent from adding friction on an airborne body
                 if ( !_states.IsGrounded ) return; //|| InputManager.jumping || hasJumped) return;
 
-                float friction = IsSliding() ? _config.SlideFrictionForceAmount : _config.MovementSettings.ControlsResponsiveness;
+                float friction = isSliding ? _config.SlidingSettings.SlideFrictionForceAmount : _config.MovementSettings.ControlsResponsiveness;
 
                 // Counter movement ( Friction while moving )
                 // Prevent from sliding not on purpose
@@ -203,6 +209,6 @@ namespace Game.Core.Player
             return false;
         }
         
-        public bool IsSliding() => _states.IsCrouching && _view.Rigidbody.velocity.magnitude >= _config.MovementSettings.CrouchSpeed;
+        public bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
     }
 }

@@ -17,18 +17,18 @@ namespace Game.Core.Player
         
         private PlayerObject _view;
         private PlayerConfig _config;
-        private PlayerJumpController _playerJumpController;
+        private PlayerStates _states;
         
         [ Inject ]
         private void Construct(
             PlayerObject view,
             PlayerConfig config,
-            PlayerJumpController playerJumpController
+            PlayerStates states
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
-            _playerJumpController = playerJumpController ?? throw new ArgumentNullException( nameof(playerJumpController) );
+            _states = states ?? throw new ArgumentNullException( nameof(states) );
             
             _origPos = transform.localPosition;
             _origRot = transform.localRotation;
@@ -36,7 +36,7 @@ namespace Game.Core.Player
         
         private void Update()
         {
-            if ( _view.Rigidbody.velocity.magnitude < _config.MovementSettings.WalkSpeed || _playerJumpController.IsJumping )
+            if ( _view.Rigidbody.velocity.magnitude < _config.MovementSettings.WalkSpeed || _states.IsJumping )
             {
                 transform.localPosition = Vector3.Lerp( transform.localPosition, _origPos, Time.deltaTime * 2f );
                 transform.localRotation = Quaternion.Lerp( transform.localRotation, _origRot, Time.deltaTime * 2f );
