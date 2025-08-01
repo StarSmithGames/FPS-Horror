@@ -9,6 +9,8 @@ namespace Game.Core.Player
     {
         public event Action OnJumped;
         
+        public bool IsJumping { get; private set; }
+        
         private Transform Root => _view.transform;
         private Transform Head => _view.FirstPersonCamera.transform;
         

@@ -10,7 +10,7 @@ namespace Game.Core.Player
 
         private Transform Root => _view.transform;
         private Transform Head => _view.FirstPersonCamera.transform;
-        
+
         private Vector3 _localScale;
         private Vector3 _moveDirection;
         private float _currentSpeed;
@@ -20,16 +20,19 @@ namespace Game.Core.Player
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
         private readonly PlayerStates _states;
+        private readonly CameraFOVController _cameraFOVController;
         
         public PlayerMovementController(
             PlayerObject view,
             PlayerConfig config,
-            PlayerStates states
+            PlayerStates states,
+            CameraFOVController cameraFOVController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
+            _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
         }
 
         public void Initialize()
@@ -57,11 +60,11 @@ namespace Game.Core.Player
 
             if ( _view.Rigidbody.velocity.sqrMagnitude < .02f ) _view.Rigidbody.velocity = Vector3.zero;
 
-            // if (!playerControl.IsControllable)
-            // {
-            //     if (_states.IsGrounded) _view.Rigidbody.velocity = Vector3.zero;
-            //     return;
-            // }
+            if ( _states.IsBlocked )
+            {
+                if ( _states.IsGrounded ) _view.Rigidbody.velocity = Vector3.zero;
+                return;
+            }
 
             if ( IsSliding() && !_config.AllowMoveWhileSliding ) return;
 
@@ -78,8 +81,6 @@ namespace Game.Core.Player
             {
                 _moveDirection = ( Root.rotation.Forward() * moveInput.y + Root.rotation.Right() * moveInput.x ).normalized;
             }
-
-            // if(_moveDirection.magnitude > .1f) userEvents.OnMove.Invoke();
 
             _view.Rigidbody.AddForce( _moveDirection * movementMultipliers );
             
@@ -121,6 +122,64 @@ namespace Game.Core.Player
                     horizontalVelocity = horizontalVelocity.normalized * currentWeightedSpeed;
                     _view.Rigidbody.velocity = new Vector3( horizontalVelocity.x, _view.Rigidbody.velocity.y, horizontalVelocity.z );
                 }
+            }
+        }
+        
+        public void HandleVelocities( bool isSprinting, bool isShooting, Vector2 moveInput )
+        {
+            // if (weaponReference.Weapon != null && weaponController.IsAiming && weaponReference.Weapon.setMovementSpeedWhileAiming)
+            // {
+            //     currentSpeed = weaponReference.Weapon.movementSpeedWhileAiming;
+            //     return;
+            // }
+
+            bool enoughStaminaToRun = true;
+            
+            if ( ( isSprinting || _config.MovementSettings.AutoRun ) && enoughStaminaToRun )
+            {
+                bool movingBackward = moveInput.y < 0;
+                bool shootingWhileDisallowed = isShooting && !_config.MovementSettings.CanRunWhileShooting;;//&& weaponReference.Weapon != null
+                bool onlyStrafing = moveInput.x != 0 && moveInput.y == 0 && !_config.MovementSettings.CanRunSideways;
+
+                bool canRun = !( ( !_config.MovementSettings.CanRunBackwards && movingBackward ) || shootingWhileDisallowed || onlyStrafing );
+
+                if ( canRun )
+                {
+                    bool movingForward = Vector3.Dot( Root.rotation.Forward(), _view.Rigidbody.velocity ) > 0;
+                    bool forwardAllowed = _config.MovementSettings.CanRunBackwards || movingForward;
+                    bool sidewaysAllowed = _config.MovementSettings.CanRunSideways || ( moveInput.x == 0 && moveInput.y != 0 );
+                    bool shootingAllowed = _config.MovementSettings.CanRunWhileShooting || !isShooting;
+
+                    if ( forwardAllowed && sidewaysAllowed && shootingAllowed )
+                    {
+
+                        if ( _currentSpeed != _config.MovementSettings.RunSpeed && _view.Rigidbody.velocity.magnitude > .1f )// && !wallRunning
+                        {
+                            _cameraFOVController.SetFOV( _config.CameraFOVSettings.RunningFOV );
+                        }
+                        _currentSpeed = _config.MovementSettings.RunSpeed;
+                        return;
+                    }
+                }
+
+                _currentSpeed = Mathf.MoveTowards( _currentSpeed, _config.MovementSettings.WalkSpeed, Time.deltaTime * _config.MovementSettings.LoseSpeedDeceleration );
+            }
+            else
+            {
+                if ( _currentSpeed != _config.MovementSettings.WalkSpeed ) //&& !wallRunning
+                {
+                    _cameraFOVController.SetFOV( _config.CameraFOVSettings.NormalFOV );
+                }
+                _currentSpeed = _config.MovementSettings.WalkSpeed;
+            }
+
+            if ( _view.Rigidbody.velocity.sqrMagnitude < 0.0001f )
+            {
+                if ( _currentSpeed != _config.MovementSettings.WalkSpeed )
+                {
+                    _cameraFOVController.SetFOV( _config.CameraFOVSettings.NormalFOV );
+                }
+                _currentSpeed = _config.MovementSettings.WalkSpeed;
             }
         }
 

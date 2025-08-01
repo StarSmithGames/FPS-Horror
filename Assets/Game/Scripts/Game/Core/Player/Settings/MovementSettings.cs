@@ -16,8 +16,15 @@ namespace Game.Core.Player
         [ field: SerializeField ] public float CrouchSpeed { get; private set; } = 3f;
         [ field: Tooltip( "Capacity to gain speed." ) ]
         [ field: SerializeField ] public float Acceleration { get; private set; } = 4500;
+        [ field: Tooltip( "Player deceleration from running speed to walking" ) ]
+        [ field: SerializeField ] public float LoseSpeedDeceleration { get; private set; } = 500;
         [ field: Range( 0, 1f ) ]
         [ field: Tooltip( "Controls the snappiness of the character. The higher, the more responsive." ) ]
         [ field: SerializeField ] public float ControlsResponsiveness { get; private set; } = 0.175f;
+        [ field: Space ]
+        [ field: SerializeField ] public bool AutoRun { get; private set; } = false;
+        [ field: SerializeField ] public bool CanRunSideways { get; private set; } = true;
+        [ field: SerializeField ] public bool CanRunBackwards { get; private set; } = false;
+        [ field: SerializeField ] public bool CanRunWhileShooting { get; private set; } = false;
     }
 }

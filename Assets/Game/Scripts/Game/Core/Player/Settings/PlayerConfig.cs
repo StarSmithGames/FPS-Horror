@@ -35,5 +35,7 @@ namespace Game.Core.Player
         [ field: Tooltip("Maximum slope angle that you can walk through.") ]
         [ field: Range(10, 80) ]
         [ field: SerializeField ] public float MaxSlopeAngle { get; private set; } = 35f;
+
+        [ field: SerializeField ] public CameraFOVSettings CameraFOVSettings { get; private set; }
     }
 }

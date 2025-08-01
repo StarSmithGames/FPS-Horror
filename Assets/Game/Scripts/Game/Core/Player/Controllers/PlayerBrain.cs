@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Game.Managers.InputManager;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -9,9 +10,11 @@ namespace Game.Core.Player
     public sealed class PlayerBrain
     {
         public event Action OnLanded;
-        
+
+        private List< InputHolder > _inputHolders = new();
         private CancellationTokenSource _cancellationTokenSource;
         private Vector2 _moveInput;
+        private bool _isSprinting;
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
@@ -19,6 +22,7 @@ namespace Game.Core.Player
         private readonly PlayerLookController _lookController;
         private readonly PlayerMovementController _movementController;
         private readonly PlayerJumpController _jumpController;
+        private readonly CameraFOVController _cameraFOVController;
         
         public PlayerBrain(
             PlayerObject view,
@@ -26,7 +30,8 @@ namespace Game.Core.Player
             PlayerStates states,
             PlayerLookController lookController,
             PlayerMovementController movementController,
-            PlayerJumpController jumpController
+            PlayerJumpController jumpController,
+            CameraFOVController cameraFOVController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -35,14 +40,18 @@ namespace Game.Core.Player
             _lookController = lookController ?? throw new ArgumentNullException( nameof(lookController) );
             _movementController = movementController ?? throw new ArgumentNullException( nameof(movementController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
+            _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
         }
 
         public void Initialize()
         {
             _movementController.Initialize();
             _jumpController.Initialize();
+            _cameraFOVController.Initialize();
 
             InputManager.OnJump += JumpClickedHandler;
+            _inputHolders.Add( new( InputManager.Inputs.Player.Sprint, onStartHold: SprintStartedHandler, onEndHold: SprintEndedHandler ) );
+            InputManager.AddInputHolders( _inputHolders );
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
@@ -56,6 +65,13 @@ namespace Game.Core.Player
             _cancellationTokenSource = null;
             
             InputManager.OnJump -= JumpClickedHandler;
+            for ( int i = 0; i < _inputHolders.Count; i++ )
+            {
+                InputManager.RemoveInputHolder( _inputHolders[ i ] );
+            }
+            _inputHolders.Clear();
+            
+            _cameraFOVController.Dispose();
         }
 
         private async UniTask Tick( CancellationToken cancellationToken = default )
@@ -73,7 +89,8 @@ namespace Game.Core.Player
                 // HandleStairs( _moveDirection );
                 
                 _lookController.Look();
-                
+                _movementController.HandleVelocities( _isSprinting, false, _moveInput );
+
                 await UniTask.Yield( PlayerLoopTiming.Update );
             }
         }
@@ -136,6 +153,16 @@ namespace Game.Core.Player
         private void JumpClickedHandler()
         {
             _jumpController.Jump( _moveInput );
+        }
+
+        private void SprintStartedHandler()
+        {
+            _isSprinting = true;
+        }
+        
+        private void SprintEndedHandler()
+        {
+            _isSprinting = false;
         }
     }
 }
