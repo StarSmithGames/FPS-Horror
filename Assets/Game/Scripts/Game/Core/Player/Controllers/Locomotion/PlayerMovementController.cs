@@ -6,7 +6,7 @@ namespace Game.Core.Player
 {
     public sealed class PlayerMovementController
     {
-        private readonly float FrictionThreshold = 0.1f;
+        private readonly float FRICTION_THRESHOLD = 0.1f;
 
         private Transform Root => _view.transform;
         private Transform Head => _view.FirstPersonCamera.transform;
@@ -38,6 +38,11 @@ namespace Game.Core.Player
         public void Initialize()
         {
             _localScale = _view.transform.localScale;
+        }
+
+        public void SetSpeed( float speed )
+        {
+            _currentSpeed = speed;
         }
 
         public void Movement( bool isSliding, Vector2 moveInput )
@@ -99,12 +104,12 @@ namespace Game.Core.Player
 
                 // Counter movement ( Friction while moving )
                 // Prevent from sliding not on purpose
-                if ( Math.Abs( mag.x ) > FrictionThreshold && Math.Abs( x ) < 0.5f || ( mag.x < -FrictionThreshold && x > 0 ) || ( mag.x > FrictionThreshold && x < 0 ) )
+                if ( Math.Abs( mag.x ) > FRICTION_THRESHOLD && Math.Abs( x ) < 0.5f || ( mag.x < -FRICTION_THRESHOLD && x > 0 ) || ( mag.x > FRICTION_THRESHOLD && x < 0 ) )
                 {
                     _view.Rigidbody.AddForce( _config.MovementSettings.Acceleration * Root.rotation.Right() * Time.deltaTime * -mag.x * friction );
                 }
 
-                if ( Math.Abs( mag.y ) > FrictionThreshold && Math.Abs( y ) < 0.05f || ( mag.y < -FrictionThreshold && y > 0 ) || ( mag.y > FrictionThreshold && y < 0 ) )
+                if ( Math.Abs( mag.y ) > FRICTION_THRESHOLD && Math.Abs( y ) < 0.05f || ( mag.y < -FRICTION_THRESHOLD && y > 0 ) || ( mag.y > FRICTION_THRESHOLD && y < 0 ) )
                 {
                     _view.Rigidbody.AddForce( _config.MovementSettings.Acceleration * Root.rotation.Forward() * Time.deltaTime * -mag.y * friction );
                 }
@@ -131,7 +136,7 @@ namespace Game.Core.Player
             }
         }
         
-        public void HandleVelocities( bool isSprinting, bool isShooting, Vector2 moveInput )
+        public void HandleVelocities( bool isShooting, Vector2 moveInput )
         {
             // if (weaponReference.Weapon != null && weaponController.IsAiming && weaponReference.Weapon.setMovementSpeedWhileAiming)
             // {
@@ -141,7 +146,7 @@ namespace Game.Core.Player
 
             bool enoughStaminaToRun = true;
             
-            if ( ( isSprinting || _config.MovementSettings.AutoRun ) && enoughStaminaToRun )
+            if ( ( _states.IsSprinting || _config.MovementSettings.AutoRun ) && enoughStaminaToRun )
             {
                 bool movingBackward = moveInput.y < 0;
                 bool shootingWhileDisallowed = isShooting && !_config.MovementSettings.CanRunWhileShooting;;//&& weaponReference.Weapon != null
@@ -169,6 +174,10 @@ namespace Game.Core.Player
                 }
 
                 _currentSpeed = Mathf.MoveTowards( _currentSpeed, _config.MovementSettings.WalkSpeed, Time.deltaTime * _config.MovementSettings.LoseSpeedDeceleration );
+            }
+            else if ( _states.IsCrouching )
+            {
+                _currentSpeed = _config.MovementSettings.CrouchSpeed;
             }
             else
             {

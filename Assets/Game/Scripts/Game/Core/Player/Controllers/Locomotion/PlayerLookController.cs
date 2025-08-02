@@ -87,13 +87,13 @@ namespace Game.Core.Player
 
         private void CalculateCameraRoll()
         {
-            if ( _states.IsCrouching &&
-                 _view.Rigidbody.velocity.magnitude >= _config.MovementSettings.WalkSpeed &&
-                 _config.SlidingSettings.AllowSliding && !_states.IsJumping )
-            {
-                _cameraRoll = Mathf.Lerp( _cameraRoll, _config.LookSettings.SlidingCameraTiltAmount, Time.deltaTime * _config.LookSettings.CameraTiltTransitionSpeed );
-            }
-            else
+            // if ( _states.IsCrouching &&
+            //      _view.Rigidbody.velocity.magnitude >= _config.MovementSettings.WalkSpeed &&
+            //      _config.SlidingSettings.AllowSliding && !_states.IsJumping )
+            // {
+            //     _cameraRoll = Mathf.Lerp( _cameraRoll, _config.LookSettings.SlidingCameraTiltAmount, Time.deltaTime * _config.LookSettings.CameraTiltTransitionSpeed );
+            // }
+            // else
             {
                 _cameraRoll = Mathf.Lerp( _cameraRoll, 0, Time.deltaTime * _config.LookSettings.CameraTiltTransitionSpeed );
             }

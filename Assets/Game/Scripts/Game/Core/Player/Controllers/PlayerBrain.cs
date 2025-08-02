@@ -93,6 +93,7 @@ namespace Game.Core.Player
             while ( !cancellationToken.IsCancellationRequested )
             {
                 _moveInput = InputManager.Inputs.Player.Movement.ReadValue< Vector2 >();
+                _states.IsSprinting = InputManager.Inputs.Player.Sprint.IsPressed();
                 
                 CheckGrounded();
 
@@ -103,7 +104,7 @@ namespace Game.Core.Player
                 // HandleStairs( _moveDirection );
                 
                 _lookController.Look();
-                _movementController.HandleVelocities( InputManager.Inputs.Player.Sprint.IsPressed(), false, _moveInput );
+                _movementController.HandleVelocities( false, _moveInput );
 
                 await UniTask.Yield( PlayerLoopTiming.Update );
             }
