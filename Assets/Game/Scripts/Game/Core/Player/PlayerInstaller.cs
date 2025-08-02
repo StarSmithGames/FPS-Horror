@@ -12,18 +12,23 @@ namespace Game.Core.Player
         {
             Container.BindInstance( _config );
             Container.BindInstance( _view );
-            Container.Bind< PlayerLookController >().AsSingle();
-            Container.Bind< PlayerMovementController >().AsSingle();
-            Container.Bind< PlayerJumpController >().AsSingle();
-            Container.Bind< PlayerCrouchController >().AsSingle();
+            BindLocomotion();
             Container.Bind< CameraFOVController >().AsSingle();
             Container.Bind< CameraVisionController >().AsSingle();
-            Container.Bind< PlayerInteractionController >().AsSingle();
+            Container.Bind< PlayerTargetingController >().AsSingle();
             
             Container.Bind< PlayerFacade >().AsSingle();
             Container.Bind< PlayerStates >().AsSingle();
             Container.Bind< PlayerBrain >().AsSingle();
             Container.Bind< PlayerController >().AsSingle().NonLazy();
+        }
+
+        private void BindLocomotion()
+        {
+            Container.Bind< PlayerLookController >().AsSingle();
+            Container.Bind< PlayerMovementController >().AsSingle();
+            Container.Bind< PlayerJumpController >().AsSingle();
+            Container.Bind< PlayerCrouchController >().AsSingle();
         }
     }
 }

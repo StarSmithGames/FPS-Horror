@@ -12,7 +12,7 @@ namespace Game.Managers.InputManager
         private readonly Action _onHold;
         private readonly Action _onEndHold;
         
-        public InputHolder( InputAction input, Action onStartHold = null, Action onHold = null, Action onEndHold = null )
+        public InputHolder( InputAction input, Action onStartHold = null, Action onEndHold = null, Action onHold = null )
         {
             _input = input ?? throw new ArgumentNullException( nameof(input) );
             _onStartHold = onStartHold;
@@ -20,14 +20,14 @@ namespace Game.Managers.InputManager
             _onEndHold = onEndHold;
         }
 
-        public void Initialize()
+        public void Enable()
         {
             _input.performed += InputPerformedHandler;
             _input.canceled += InputCanceledHandler;
             _input.Enable();
         }
 
-        public void Dispose()
+        public void Disable()
         {
             _input.performed -= InputPerformedHandler;
             _input.canceled -= InputCanceledHandler;

@@ -100,14 +100,14 @@ namespace Game.Managers.InputManager
         
         public static void AddInputHolder( InputHolder inputHolder )
         {
-            inputHolder.Initialize();
+            inputHolder.Enable();
             _inputHolders.Add( inputHolder );
         }
 
         public static void RemoveInputHolder( InputHolder inputHolder )
         {
             _inputHolders.Remove( inputHolder );
-            inputHolder.Dispose();
+            inputHolder.Disable();
         }
 
         public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.deltaTime * currentControllerSensX );

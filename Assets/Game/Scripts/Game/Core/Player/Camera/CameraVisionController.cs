@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Game.Core.UI;
 using Game.Core.World.InteractionSystem;
 using System;
 using System.Threading;
@@ -9,6 +8,9 @@ namespace Game.Core.Player
 {
     public sealed class CameraVisionController
     {
+        public event Action< IObservable > OnCurrentObservableChanged;
+        public event Action< bool > OnObservablesChanged;
+   
         public IObservable CurrentObservable
         {
             get => _currentObservable;
@@ -19,6 +21,8 @@ namespace Game.Core.Player
                     _currentObservable?.EndObserve();
                     _currentObservable = value;
                     _currentObservable?.StartObserve();
+                    
+                    OnCurrentObservableChanged?.Invoke( _currentObservable );
                 }
                 else
                 {
@@ -29,30 +33,24 @@ namespace Game.Core.Player
         private IObservable _currentObservable;
 
         private Transform _head;
-        private GameScreenViewModel _gameScreenViewModel;
         private CancellationTokenSource _cancellationTokenSource;
-
         private Vector3 _lastHitPoint;
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
-        private readonly UIRootGame _uiRootGame;
         
         public CameraVisionController(
             PlayerObject view,
-            PlayerConfig config,
-            UIRootGame uiRootGame
+            PlayerConfig config
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
-            _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
         }
         
         public void Initialize()
         {
             _head = _view.FirstPersonCamera.transform;
-            _gameScreenViewModel = _uiRootGame.ScreenAggregator.GetAs< GameScreenViewModel >();
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
@@ -76,16 +74,14 @@ namespace Game.Core.Player
                     _lastHitPoint = hit.point;
 
                     Collider[] collidersIntersects = Physics.OverlapSphere( _lastHitPoint, _config.CameraVisionSettings.SphereRadius, _config.CameraVisionSettings.InteractLayers );
-                    for ( int i = 0; i < collidersIntersects.Length; i++ )
-                    {
-                        if ( collidersIntersects[ i ] != null )
-                        {
-                            Debug.DrawLine( _lastHitPoint, collidersIntersects[ i ].transform.position );
-                        }
-                    }
+                    // for ( int i = 0; i < collidersIntersects.Length; i++ )
+                    // {
+                    //     if ( collidersIntersects[ i ] != null )
+                    //     {
+                    //         Debug.DrawLine( _lastHitPoint, collidersIntersects[ i ].transform.position );
+                    //     }
+                    // }
                     
-                    _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( collidersIntersects.Length > 0 );
-
                     //каст для интерактивных объектов
                     if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.RayDistance, _config.CameraVisionSettings.InteractLayers ) )
                     {
@@ -95,15 +91,15 @@ namespace Game.Core.Player
                     {
                         CurrentObservable = null;
                     }
+                    OnObservablesChanged?.Invoke( collidersIntersects.Length > 0 );
                 }
                 else
                 {
                     CurrentObservable = null;
-                    _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( false );
+                    OnObservablesChanged?.Invoke( false );
                 }
-                _gameScreenViewModel.SetObservable( CurrentObservable );
 
-                Debug.DrawLine( _head.position, _head.position + ( _head.forward * _config.CameraVisionSettings.RayDistance ), Color.blue );
+                // Debug.DrawLine( _head.position, _head.position + ( _head.forward * _config.CameraVisionSettings.RayDistance ), Color.blue );
 
                 await UniTask.Yield();
             }
