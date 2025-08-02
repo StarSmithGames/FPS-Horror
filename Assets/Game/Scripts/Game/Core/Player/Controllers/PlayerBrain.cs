@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Game.Managers.InputManager;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ namespace Game.Core.Player
     public sealed class PlayerBrain
     {
         public event Action OnLanded;
-        
+
+        private List< InputHolder > _inputHolders = new();
         private CancellationTokenSource _cancellationTokenSource;
         private Vector2 _moveInput;
         
@@ -19,6 +21,10 @@ namespace Game.Core.Player
         private readonly PlayerLookController _lookController;
         private readonly PlayerMovementController _movementController;
         private readonly PlayerJumpController _jumpController;
+        private readonly PlayerCrouchController _crouchController;
+        private readonly CameraFOVController _cameraFOVController;
+        private readonly CameraVisionController _cameraVisionController;
+        private readonly PlayerInteractionController _interactionController;
         
         public PlayerBrain(
             PlayerObject view,
@@ -26,7 +32,11 @@ namespace Game.Core.Player
             PlayerStates states,
             PlayerLookController lookController,
             PlayerMovementController movementController,
-            PlayerJumpController jumpController
+            PlayerJumpController jumpController,
+            PlayerCrouchController crouchController,
+            CameraFOVController cameraFOVController,
+            CameraVisionController cameraVisionController,
+            PlayerInteractionController interactionController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -35,14 +45,24 @@ namespace Game.Core.Player
             _lookController = lookController ?? throw new ArgumentNullException( nameof(lookController) );
             _movementController = movementController ?? throw new ArgumentNullException( nameof(movementController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
+            _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
+            _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
+            _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
+            _interactionController = interactionController ?? throw new ArgumentNullException( nameof(interactionController) );
         }
 
         public void Initialize()
         {
             _movementController.Initialize();
             _jumpController.Initialize();
+            _crouchController.Initialize();
+            _cameraFOVController.Initialize();
+            _cameraVisionController.Initialize();
 
             InputManager.OnJump += JumpClickedHandler;
+            _inputHolders.Add( new( InputManager.Inputs.Player.Crouch, onStartHold: _crouchController.StartCrouch, onEndHold: _crouchController.StopCrouch ) );
+            _inputHolders.Add( new( InputManager.Inputs.Player.Interact, onStartHold: _interactionController.StartInteract, onEndHold: _interactionController.StopInteract ) );
+            InputManager.AddInputHolders( _inputHolders );
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
@@ -56,6 +76,14 @@ namespace Game.Core.Player
             _cancellationTokenSource = null;
             
             InputManager.OnJump -= JumpClickedHandler;
+            for ( int i = 0; i < _inputHolders.Count; i++ )
+            {
+                InputManager.RemoveInputHolder( _inputHolders[ i ] );
+            }
+            _inputHolders.Clear();
+            
+            _cameraFOVController.Dispose();
+            _cameraVisionController.Dispose();
         }
 
         private async UniTask Tick( CancellationToken cancellationToken = default )
@@ -73,7 +101,8 @@ namespace Game.Core.Player
                 // HandleStairs( _moveDirection );
                 
                 _lookController.Look();
-                
+                _movementController.HandleVelocities( InputManager.Inputs.Player.Sprint.IsPressed(), false, _moveInput );
+
                 await UniTask.Yield( PlayerLoopTiming.Update );
             }
         }
@@ -82,11 +111,7 @@ namespace Game.Core.Player
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
-                // Added Gravity
-                // Gravity is added only if we are not on a slope or climbing to prevent unvoluntary sliding
-                if ( !_movementController.IsOnSlope() && !_states.IsClimbing ) _view.Rigidbody.AddForce( Vector3.down * 30.19f, ForceMode.Acceleration );
-
-                _movementController.Movement( _moveInput );
+                _movementController.Movement( _crouchController.IsSliding(), _moveInput );
                 
                 await UniTask.Yield( PlayerLoopTiming.FixedUpdate );
             }
@@ -103,9 +128,9 @@ namespace Game.Core.Player
             Vector3 origin = _view.CapsuleCollider.bounds.center;
 
             bool foundGround = false;
-            if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundCheckDistance, _config.GroundLayer ) )
+            if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundSettings.GroundCheckDistance, _config.GroundSettings.GroundLayer ) )
             {
-                if ( IsFloor( hit.normal ) )
+                if ( _movementController.IsFloor( hit.normal ) )
                 {
                     foundGround = true;
                 }
@@ -131,8 +156,11 @@ namespace Game.Core.Player
             }
         }
         
-        private bool IsFloor( Vector3 v ) => Vector3.Angle( Vector3.up, v ) < _config.MaxSlopeAngle;
-
+        //FootSteps
+        //AimAssist
+        //Climbing Ladders
+        //Stamina
+        
         private void JumpClickedHandler()
         {
             _jumpController.Jump( _moveInput );

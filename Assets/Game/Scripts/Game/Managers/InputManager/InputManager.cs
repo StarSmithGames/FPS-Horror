@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,6 +16,7 @@ namespace Game.Managers.InputManager
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
 
         private static CancellationTokenSource _cancellationTokenSource;
+        private static List< InputHolder > _inputHolders = new();
         
         public static void Initialize()
         {
@@ -28,6 +30,18 @@ namespace Game.Managers.InputManager
 
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
+            
+            void ToggleGameControls( bool enable )
+            {
+                if ( enable ) Inputs.Player.Enable();
+                else Inputs.Player.Disable();
+            }
+
+            void ToggleUIControls( bool enable )
+            {
+                if ( enable ) Inputs.UI.Enable();
+                else Inputs.UI.Disable();
+            }
         }
 
         public static void Dispose()
@@ -42,6 +56,12 @@ namespace Game.Managers.InputManager
                 Inputs.Player.Jump.started -= JumStartedHandler;
             }
             OnJump = null;
+
+            for ( int i = _inputHolders.Count - 1; i >= 0; i-- )
+            {
+                RemoveInputHolder( _inputHolders[ i ] );
+            }
+            _inputHolders.Clear();
         }
 
         private static async UniTask Tick( CancellationToken cancellationToken = default )
@@ -61,20 +81,33 @@ namespace Game.Managers.InputManager
                     ControllerY = -Gamepad.current.rightStick.y.ReadValue();
                 }
 
+                for ( int i = 0; i < _inputHolders.Count; i++ )
+                {
+                    _inputHolders[ i ].Tick();
+                }
+
                 await UniTask.Yield();
             }
         }
 
-        private static void ToggleGameControls( bool enable )
+        public static void AddInputHolders( List< InputHolder > inputHolders )
         {
-            if ( enable ) Inputs.Player.Enable();
-            else Inputs.Player.Disable();
+            for ( int i = 0; i < inputHolders.Count; i++ )
+            {
+                AddInputHolder( inputHolders[ i ] );
+            }
+        }
+        
+        public static void AddInputHolder( InputHolder inputHolder )
+        {
+            inputHolder.Initialize();
+            _inputHolders.Add( inputHolder );
         }
 
-        private static void ToggleUIControls( bool enable )
+        public static void RemoveInputHolder( InputHolder inputHolder )
         {
-            if ( enable ) Inputs.UI.Enable();
-            else Inputs.UI.Disable();
+            _inputHolders.Remove( inputHolder );
+            inputHolder.Dispose();
         }
 
         public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.deltaTime * currentControllerSensX );

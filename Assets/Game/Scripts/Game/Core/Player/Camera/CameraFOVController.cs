@@ -1,0 +1,58 @@
+using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
+using UnityEngine;
+
+namespace Game.Core.Player
+{
+    public sealed class CameraFOVController
+    {
+        private CancellationTokenSource _cancellationTokenSource;
+        private float _targetFOV;
+        private float _lerpSpeed;
+        
+        private readonly PlayerObject _view;
+        private readonly PlayerConfig _config;
+        
+        public CameraFOVController(
+            PlayerObject view,
+            PlayerConfig config
+            )
+        {
+            _view = view ?? throw new ArgumentNullException( nameof(view) );
+            _config = config ?? throw new ArgumentNullException( nameof(config) );
+        }
+
+        public void Initialize()
+        {
+            _lerpSpeed = _config.CameraFOVSettings.FadeFOVAmount; 
+            _targetFOV = _config.CameraFOVSettings.NormalFOV;
+            _view.FirstPersonCamera.fieldOfView = _targetFOV;
+            
+            _cancellationTokenSource = new();
+            Tick( _cancellationTokenSource.Token ).Forget();
+        }
+
+        public void Dispose()
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+        }
+
+        private async UniTask Tick( CancellationToken cancellationToken = default )
+        {
+            while ( !cancellationToken.IsCancellationRequested )
+            {
+                _view.FirstPersonCamera.fieldOfView = Mathf.Lerp( _view.FirstPersonCamera.fieldOfView, _targetFOV, _lerpSpeed * Time.deltaTime );
+                
+                await UniTask.Yield();
+            }
+        }
+
+        public void SetFOV( float fov )
+        {
+            _targetFOV = fov;
+        }
+    }
+}

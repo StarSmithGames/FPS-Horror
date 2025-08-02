@@ -3,18 +3,13 @@ using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class CameraEffects : MonoBehaviour
+    public sealed class CameraTiltEffect : MonoBehaviour
     {
-        [ Header( "TILT" ) ]
+        [ Header( "TILT EFFECT" ) ]
         [ SerializeField ] private float _tiltSpeed;
         [ SerializeField ] private float _tiltAmount;
         
         private void Update()
-        {
-            // UpdateTilt();
-        }
-
-        private void UpdateTilt()
         {
             // if (player.CurrentSpeed == 0) return;
 
