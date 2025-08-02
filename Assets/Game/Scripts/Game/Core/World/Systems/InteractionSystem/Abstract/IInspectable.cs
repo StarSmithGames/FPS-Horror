@@ -1,6 +1,6 @@
 namespace Game.Core.World.InteractionSystem
 {
-    public interface IInspectable
+    public interface IInspectable : IInteractable
     {
         
     }

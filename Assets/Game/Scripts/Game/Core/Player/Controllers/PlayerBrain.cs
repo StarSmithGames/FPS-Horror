@@ -114,7 +114,10 @@ namespace Game.Core.Player
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
-                _lookController.Look();
+                if ( !_states.IsBlocked )
+                {
+                    _lookController.Look();
+                }
 
                 await UniTask.Yield( PlayerLoopTiming.LastUpdate );
             }
@@ -176,6 +179,8 @@ namespace Game.Core.Player
         
         private void JumpClickedHandler()
         {
+            if ( _states.IsBlocked ) return;
+            
             _jumpController.Jump( _moveInput );
         }
     }

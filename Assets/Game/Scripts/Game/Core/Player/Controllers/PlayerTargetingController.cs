@@ -1,9 +1,12 @@
 using Game.Core.Entity;
 using Game.Core.Player.InputActionProcesses;
 using Game.Core.UI;
+using Game.Core.UI.GameScreen;
+using Game.Core.UI.InspectDialog;
 using Game.Core.World.InteractionSystem;
 using Game.Core.World.Systems.InteractionSystem;
 using System;
+using UnityEngine;
 
 namespace Game.Core.Player
 {
@@ -16,26 +19,32 @@ namespace Game.Core.Player
         private IObservable _currentObservable;
         private InteractionProcess _interactionProcess;
         private InspectionProcess _inspectionProcess;
+
+        private InspectDialogViewModel _inspectDialogViewModel;
         
         private readonly InteractionsSettings _interactionsSettings;
         private readonly UIRootGame _uiRootGame;
+        private readonly PlayerStates _states;
         private readonly CameraVisionController _cameraVisionController;
         
         public PlayerTargetingController(
             InteractionsSettings interactionsSettings,
             UIRootGame uiRootGame,
+            PlayerStates states,
             CameraVisionController cameraVisionController
             )
         {
             _interactionsSettings = interactionsSettings ?? throw new ArgumentNullException( nameof(interactionsSettings) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _states = states ?? throw new ArgumentNullException( nameof(states) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
         }
 
         public void Initialize()
         {
             _interactionProcess = new( () => _currentObservable != _cameraVisionController.CurrentObservable );
-            _inspectionProcess = new( () => _currentObservable != _cameraVisionController.CurrentObservable );
+            _inspectionProcess = new();
+            _inspectionProcess.OnCompleted += InspectionCompletedHandler;
 
             _gameScreenViewModel = _uiRootGame.ScreenAggregator.GetAs< GameScreenViewModel >();
             _gameScreenViewModel.ModelView.TargetPoint.Disable();
@@ -51,6 +60,8 @@ namespace Game.Core.Player
         {
             _cameraVisionController.OnObservablesChanged -= ObservablesChangedHandler;
             _cameraVisionController.OnCurrentObservableChanged -= CurrentObservableChangedHandler;
+            
+            _inspectionProcess.OnCompleted -= InspectionCompletedHandler;
         }
 
         private void ObservablesChangedHandler( bool trigger )
@@ -115,6 +126,24 @@ namespace Game.Core.Player
                     _targetInformer.Show();
                 }
             }
+        }
+
+        private void InspectionCompletedHandler( IInspectable inspectable )
+        {
+            _states.IsBlocked = true;
+
+            _inspectDialogViewModel = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< InspectDialogViewModel >();
+            _inspectDialogViewModel.Set( inspectable );
+            _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
+            _inspectDialogViewModel.ShowView();
+        }
+
+        private void InspectCompletedHandler()
+        {
+            _inspectDialogViewModel.OnCancelButtonClicked -= InspectCompletedHandler;
+            _inspectDialogViewModel = null;
+            
+            _states.IsBlocked = false;
         }
     }
 }

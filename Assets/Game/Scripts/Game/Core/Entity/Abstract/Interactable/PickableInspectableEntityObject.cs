@@ -2,8 +2,13 @@ using Game.Core.World.InteractionSystem;
 
 namespace Game.Core.Entity
 {
-    public abstract class InspectableEntityObject : EntityObject, IInspectable, IObservable
+    public sealed class PickableInspectableEntityObject : InteractableEntityObject, IPickable, IInspectable
     {
+        public void Interact()
+        {
+            
+        }
+
         public void StartObserve()
         {
             

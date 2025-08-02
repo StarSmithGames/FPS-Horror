@@ -3,7 +3,7 @@ using PuzzlescapeGames.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Core.UI
+namespace Game.Core.UI.GameScreen
 {
     public sealed class UITargetPoint : MonoBehaviour
     {

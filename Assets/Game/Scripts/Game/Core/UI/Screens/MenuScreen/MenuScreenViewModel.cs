@@ -1,7 +1,7 @@
 using PuzzlescapeGames.VVM;
 using System;
 
-namespace Game.Core.UI
+namespace Game.Core.UI.MenuScreen
 {
     public sealed class MenuScreenViewModel : ViewModel< UIMenuScreen >
     {

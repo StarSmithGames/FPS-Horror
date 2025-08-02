@@ -1,7 +1,7 @@
 using PuzzlescapeGames.VVM.UI;
 using UnityEngine;
 
-namespace Game.Core.UI
+namespace Game.Core.UI.GameScreen
 {
     public sealed class UIGameScreen : UIViewFade
     {

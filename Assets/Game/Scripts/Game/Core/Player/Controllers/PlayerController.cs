@@ -31,9 +31,6 @@ namespace Game.Core.Player
         
         public void Initialize()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            
             _brain.Initialize();
         }
 

@@ -1,6 +1,6 @@
 namespace Game.Core.World.InteractionSystem
 {
-    public interface IInteractable
+    public interface IInteractable : IObservable
     {
         void Interact();
     }
