@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Game.Core.Entity;
 using Game.Core.World.InteractionSystem;
 using Game.Core.World.Systems.InteractionSystem;
 using Game.Managers.CursorManager;
@@ -43,7 +44,6 @@ namespace Game.Core.UI.InspectDialog
             ModelView.CancelButton1.OnButtonClicked += CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked += CancelButtonClickedHandler;
             
-            _inputRead.Enable();
             _inputCancel.Enable();
         }
 
@@ -64,16 +64,28 @@ namespace Game.Core.UI.InspectDialog
         protected override void OnViewShowingChanged()
         {
             if ( !ModelView.IsShowing ) return;
-
             
             _isExamine = false;
             
             ModelView.ControlButtons.SetActive( true );
             ModelView.ExamineCanvasGroup.Enable( false );
 
+            ModelView.ReadButton.gameObject.SetActive( false );
             ModelView.ReadButton.Set( _interactionsSettings.ReadAction.GetDisplayKey(), _interactionsSettings.ReadAction.NameId );
             ModelView.CancelButton1.Set( _interactionsSettings.BackAction.GetDisplayKey(), _interactionsSettings.BackAction.NameId );
             ModelView.CancelButton2.Set( _interactionsSettings.BackAction.GetDisplayKey(), _interactionsSettings.BackAction.NameId );
+
+            ModelView.ExamineName.text = string.Empty;
+            ModelView.ExamineText.text = string.Empty;
+            
+            if ( _inspectable is ExamineItemObject examineItem )
+            {
+                ModelView.ExamineName.text = examineItem.NameId;
+                ModelView.ExamineText.text = examineItem.TextId;
+                
+                _inputRead.Enable();
+                ModelView.ReadButton.gameObject.SetActive( true );
+            }
         }
 
         private void ReadButtonClickedHandler()
