@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Game.Core.Player
@@ -7,7 +8,9 @@ namespace Game.Core.Player
         [ field: SerializeField ] public Rigidbody Rigidbody { get; private set; }
         [ field: SerializeField ] public CapsuleCollider CapsuleCollider { get; private set; }
         [ field: Space ]
-        [ field: SerializeField ] public Camera FirstPersonCamera { get; private set; }
+        [ field: SerializeField ] public Camera CameraFPS { get; private set; }
+        // [ field: SerializeField ] public CinemachineBrain CameraBrain { get; private set; }
+        // [ field: SerializeField ] public CinemachineCamera CameraFPS { get; private set; }
 
         public PlayerController Controller { get; private set; }
         

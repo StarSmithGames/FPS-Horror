@@ -7,7 +7,7 @@ namespace Game.Core.Player
     public sealed class PlayerLookController
     {
         private Transform Root => _view.transform;
-        private Transform Head => _view.FirstPersonCamera.transform;
+        private Transform Head => _view.CameraFPS.transform;
         
         private float _cameraPitch;
         private float _cameraYaw;

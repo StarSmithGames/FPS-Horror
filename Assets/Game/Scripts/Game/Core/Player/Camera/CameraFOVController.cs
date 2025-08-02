@@ -27,7 +27,7 @@ namespace Game.Core.Player
         {
             _lerpSpeed = _config.CameraFOVSettings.FadeFOVAmount; 
             _targetFOV = _config.CameraFOVSettings.NormalFOV;
-            _view.FirstPersonCamera.fieldOfView = _targetFOV;
+            _view.CameraFPS.fieldOfView = _targetFOV;
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
@@ -44,7 +44,7 @@ namespace Game.Core.Player
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
-                _view.FirstPersonCamera.fieldOfView = Mathf.Lerp( _view.FirstPersonCamera.fieldOfView, _targetFOV, _lerpSpeed * Time.deltaTime );
+                _view.CameraFPS.fieldOfView = Mathf.Lerp( _view.CameraFPS.fieldOfView, _targetFOV, _lerpSpeed * Time.deltaTime );
                 
                 await UniTask.Yield();
             }

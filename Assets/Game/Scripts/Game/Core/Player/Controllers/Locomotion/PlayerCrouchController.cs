@@ -8,7 +8,6 @@ namespace Game.Core.Player
     public sealed class PlayerCrouchController
     {
         private Transform Root => _view.transform;
-        private Transform Head => _view.FirstPersonCamera.transform;
         
         private Vector3 _localScale;
         private Tween _crouchTween;

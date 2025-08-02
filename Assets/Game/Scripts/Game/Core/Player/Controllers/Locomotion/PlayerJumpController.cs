@@ -10,7 +10,6 @@ namespace Game.Core.Player
         public event Action OnJumped;
         
         private Transform Root => _view.transform;
-        private Transform Head => _view.FirstPersonCamera.transform;
         
         private bool enoughStaminaToJump = true;
         private bool readyToJump = true;

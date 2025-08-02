@@ -9,7 +9,6 @@ namespace Game.Core.Player
         private readonly float FRICTION_THRESHOLD = 0.1f;
 
         private Transform Root => _view.transform;
-        private Transform Head => _view.FirstPersonCamera.transform;
 
         private Vector3 _localScale;
         private Vector3 _moveDirection;

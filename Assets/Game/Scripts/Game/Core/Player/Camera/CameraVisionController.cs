@@ -50,7 +50,7 @@ namespace Game.Core.Player
         
         public void Initialize()
         {
-            _head = _view.FirstPersonCamera.transform;
+            _head = _view.CameraFPS.transform;
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();

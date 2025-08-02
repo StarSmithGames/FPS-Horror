@@ -67,6 +67,7 @@ namespace Game.Core.Player
             
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
+            LastTick( _cancellationTokenSource.Token ).Forget();
             FixedTick( _cancellationTokenSource.Token ).Forget();
         }
 
@@ -103,10 +104,19 @@ namespace Game.Core.Player
 
                 // HandleStairs( _moveDirection );
                 
-                _lookController.Look();
                 _movementController.HandleVelocities( false, _moveInput );
 
                 await UniTask.Yield( PlayerLoopTiming.Update );
+            }
+        }
+        
+        private async UniTask LastTick( CancellationToken cancellationToken = default )
+        {
+            while ( !cancellationToken.IsCancellationRequested )
+            {
+                _lookController.Look();
+
+                await UniTask.Yield( PlayerLoopTiming.LastUpdate );
             }
         }
 

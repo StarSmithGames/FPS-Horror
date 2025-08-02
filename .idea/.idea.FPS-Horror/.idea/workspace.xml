@@ -6,20 +6,32 @@
   <component name="ChangeListManager">
     <list default="true" id="4fe0e433-bcb8-4294-9709-c4ec95d03e79" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Assets/Player/Player.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Assets/Player/Player.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Fonts/NataSans-SemiBold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Fonts/NataSans-SemiBold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Floor.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Floor.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/PlayerInstaller.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/PlayerInstaller.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinetC.FBX" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinetC.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_ao.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_ao.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_bc.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_bc.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_m_g.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_m_g.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_n.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_n.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Level.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Level.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/PlayerInstaller.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/PlayerInstaller.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scenes/Level_1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scenes/Level_1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scenes/SampleScene.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scenes/SampleScene.unity.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraFOVController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraFOVController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraVisionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraVisionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerCrouchController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerCrouchController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerJumpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerJumpController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerLookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerLookController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMovementController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerStates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerStates.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,10 +42,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.cysharp.unitask@f213ff497e/Runtime/PlayerLoopHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.cysharp.unitask@f213ff497e/Runtime/UniTask.Delay.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/Contexts/GameObjectContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/MonoInstaller.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.vvm@1.1.6/Runtime/View/UI/UIViewFade.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Behaviours/CinemachineCamera.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/CinemachineVirtualCameraBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/InputAxisControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/LensSettings.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Helpers/CinemachineInputAxisController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.14.0/InputSystem/Actions/InputAction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.14.0/InputSystem/Actions/InputActionRebindingExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.14.0/InputSystem/Actions/InputBinding.cs" root0="SKIP_HIGHLIGHTING" />
@@ -125,7 +143,7 @@
       <workItem from="1753957772982" duration="15095000" />
       <workItem from="1754031267415" duration="25423000" />
       <workItem from="1754106838009" duration="15464000" />
-      <workItem from="1754130064334" duration="1115000" />
+      <workItem from="1754130064334" duration="4053000" />
     </task>
     <servers />
   </component>
