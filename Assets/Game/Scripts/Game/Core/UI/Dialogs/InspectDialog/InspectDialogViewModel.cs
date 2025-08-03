@@ -1,6 +1,6 @@
 using DG.Tweening;
 using Game.Core.Entity;
-using Game.Core.World.InteractionSystem;
+using Game.Core.World.InspectionSystem;
 using Game.Core.World.Systems.InteractionSystem;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
@@ -8,13 +8,15 @@ using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
 using System;
+using UnityEngine;
 
 namespace Game.Core.UI.InspectDialog
 {
     public sealed class InspectDialogViewModel : ViewModel< InspectDialog >
     {
         public event Action OnCancelButtonClicked;
-        
+
+        private InspectionSystem _inspectionSystem;
         private IInspectable _inspectable;
         private bool _isExamine;
 
@@ -34,9 +36,10 @@ namespace Game.Core.UI.InspectDialog
             _inputCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
-        public void Set( IInspectable inspectable )
+        public void Set( IInspectable inspectable, Camera camera )
         {
             _inspectable = inspectable ?? throw new ArgumentNullException( nameof(inspectable) );
+            _inspectionSystem = new( camera );
         }
 
         protected override void SubscribeView()
@@ -83,14 +86,16 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;
             
-            if ( _inspectable is ExamineItemObject examineItem )
+            if ( _inspectable is ReadableItemObject item )
             {
-                ModelView.ExamineName.text = _localizationSystem.Translate( examineItem.NameId );
-                ModelView.ExamineText.text = _localizationSystem.Translate( examineItem.TextId );
+                ModelView.ExamineName.text = _localizationSystem.Translate( item.NameId );
+                ModelView.ExamineText.text = _localizationSystem.Translate( item.TextId );
                 
                 _inputRead.Enable();
                 ModelView.ReadButton.gameObject.SetActive( true );
             }
+            
+            _inspectionSystem.StartInspection( _inspectable );
         }
 
         private void ReadButtonClickedHandler()
@@ -114,6 +119,8 @@ namespace Game.Core.UI.InspectDialog
 
                 return;
             }
+            
+            _inspectionSystem.StopInspection();
             
             OnCancelButtonClicked?.Invoke();
             

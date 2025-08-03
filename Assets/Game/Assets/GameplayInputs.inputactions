@@ -436,6 +436,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Inspection",
+                    "type": "Value",
+                    "id": "c18a09b0-7a14-428c-bd4b-5314dd102d91",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Read",
                     "type": "Button",
                     "id": "789a669c-c751-4591-9d47-6125a3b22f2f",
@@ -833,6 +842,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Read",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9fbb570f-98f5-4e3c-95a1-5b9325835e12",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inspection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e459de67-5f98-471f-9f96-e49c6ed58a77",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inspection",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

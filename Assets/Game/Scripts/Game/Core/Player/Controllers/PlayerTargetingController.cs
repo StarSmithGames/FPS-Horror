@@ -3,11 +3,11 @@ using Game.Core.Player.InputActionProcesses;
 using Game.Core.UI;
 using Game.Core.UI.GameScreen;
 using Game.Core.UI.InspectDialog;
+using Game.Core.World.InspectionSystem;
 using Game.Core.World.InteractionSystem;
 using Game.Core.World.Systems.InteractionSystem;
 using PuzzlescapeGames.Localization;
 using System;
-using UnityEngine;
 
 namespace Game.Core.Player
 {
@@ -25,6 +25,7 @@ namespace Game.Core.Player
         
         private readonly InteractionsSettings _interactionsSettings;
         private readonly UIRootGame _uiRootGame;
+        private readonly PlayerObject _view;
         private readonly PlayerStates _states;
         private readonly CameraVisionController _cameraVisionController;
         private readonly ILocalizationSystem _localizationSystem;
@@ -32,6 +33,7 @@ namespace Game.Core.Player
         public PlayerTargetingController(
             InteractionsSettings interactionsSettings,
             UIRootGame uiRootGame,
+            PlayerObject view,
             PlayerStates states,
             CameraVisionController cameraVisionController,
             ILocalizationSystem localizationSystem
@@ -39,6 +41,7 @@ namespace Game.Core.Player
         {
             _interactionsSettings = interactionsSettings ?? throw new ArgumentNullException( nameof(interactionsSettings) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _view = view ?? throw new ArgumentNullException( nameof(view) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
@@ -137,7 +140,7 @@ namespace Game.Core.Player
             _states.IsBlocked = true;
 
             _inspectDialogViewModel = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< InspectDialogViewModel >();
-            _inspectDialogViewModel.Set( inspectable );
+            _inspectDialogViewModel.Set( inspectable, _view.CameraFPS );
             _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
             _inspectDialogViewModel.ShowView();
         }

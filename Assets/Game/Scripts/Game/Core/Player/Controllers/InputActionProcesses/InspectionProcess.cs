@@ -1,6 +1,5 @@
 using Game.Core.UI;
-using Game.Core.UI.GameScreen;
-using Game.Core.World.InteractionSystem;
+using Game.Core.World.InspectionSystem;
 using Game.Managers.InputManager;
 using System;
 
