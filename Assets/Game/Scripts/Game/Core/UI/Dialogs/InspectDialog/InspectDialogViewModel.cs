@@ -5,9 +5,9 @@ using Game.Core.World.Systems.InteractionSystem;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Extensions;
+using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
 using System;
-using UnityEngine;
 
 namespace Game.Core.UI.InspectDialog
 {
@@ -21,10 +21,15 @@ namespace Game.Core.UI.InspectDialog
         private readonly InputHolder _inputRead;
         private readonly InputHolder _inputCancel;
         private readonly InteractionsSettings _interactionsSettings;
+        private readonly ILocalizationSystem _localizationSystem;
         
-        public InspectDialogViewModel( InteractionsSettings interactionsSettings )
+        public InspectDialogViewModel(
+            InteractionsSettings interactionsSettings,
+            ILocalizationSystem localizationSystem
+            )
         {
             _interactionsSettings = interactionsSettings ?? throw new ArgumentNullException( nameof(interactionsSettings) );
+            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
             _inputRead = new( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
             _inputCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
@@ -71,17 +76,17 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ExamineCanvasGroup.Enable( false );
 
             ModelView.ReadButton.gameObject.SetActive( false );
-            ModelView.ReadButton.Set( _interactionsSettings.ReadAction.GetDisplayKey(), _interactionsSettings.ReadAction.NameId );
-            ModelView.CancelButton1.Set( _interactionsSettings.BackAction.GetDisplayKey(), _interactionsSettings.BackAction.NameId );
-            ModelView.CancelButton2.Set( _interactionsSettings.BackAction.GetDisplayKey(), _interactionsSettings.BackAction.NameId );
+            ModelView.ReadButton.Set( _interactionsSettings.ReadAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.ReadAction.NameId ) );
+            ModelView.CancelButton1.Set( _interactionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.BackAction.NameId ) );
+            ModelView.CancelButton2.Set( _interactionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.BackAction.NameId ) );
 
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;
             
             if ( _inspectable is ExamineItemObject examineItem )
             {
-                ModelView.ExamineName.text = examineItem.NameId;
-                ModelView.ExamineText.text = examineItem.TextId;
+                ModelView.ExamineName.text = _localizationSystem.Translate( examineItem.NameId );
+                ModelView.ExamineText.text = _localizationSystem.Translate( examineItem.TextId );
                 
                 _inputRead.Enable();
                 ModelView.ReadButton.gameObject.SetActive( true );

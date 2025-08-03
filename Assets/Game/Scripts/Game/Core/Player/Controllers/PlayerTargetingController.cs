@@ -5,6 +5,7 @@ using Game.Core.UI.GameScreen;
 using Game.Core.UI.InspectDialog;
 using Game.Core.World.InteractionSystem;
 using Game.Core.World.Systems.InteractionSystem;
+using PuzzlescapeGames.Localization;
 using System;
 using UnityEngine;
 
@@ -26,18 +27,21 @@ namespace Game.Core.Player
         private readonly UIRootGame _uiRootGame;
         private readonly PlayerStates _states;
         private readonly CameraVisionController _cameraVisionController;
+        private readonly ILocalizationSystem _localizationSystem;
         
         public PlayerTargetingController(
             InteractionsSettings interactionsSettings,
             UIRootGame uiRootGame,
             PlayerStates states,
-            CameraVisionController cameraVisionController
+            CameraVisionController cameraVisionController,
+            ILocalizationSystem localizationSystem
             )
         {
             _interactionsSettings = interactionsSettings ?? throw new ArgumentNullException( nameof(interactionsSettings) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
+            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
 
         public void Initialize()
@@ -95,9 +99,9 @@ namespace Game.Core.Player
                 if( _currentObservable is PickableInspectableEntityObject pickableInspectable )
                 {
                     _targetInformer.Name.text = "Pickable Inspectable";
-                    _targetInformer.Button1.Set( _interactionsSettings.InteractAction.GetDisplayKey(), _interactionsSettings.InteractAction.NameId );
+                    _targetInformer.Button1.Set( _interactionsSettings.InteractAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.InteractAction.NameId ) );
                     _targetInformer.Button1.gameObject.SetActive( true );
-                    _targetInformer.Button2.Set( _interactionsSettings.InspectAction.GetDisplayKey(), _interactionsSettings.InspectAction.NameId );
+                    _targetInformer.Button2.Set( _interactionsSettings.InspectAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.InspectAction.NameId ) );
                     _targetInformer.Button2.gameObject.SetActive( true );
 
                     _interactionProcess.Enable( _targetInformer.Button1, pickableInspectable );
@@ -106,7 +110,7 @@ namespace Game.Core.Player
                 else if ( _currentObservable is IPickable pickable )
                 {
                     _targetInformer.Name.text = "Pickable";
-                    _targetInformer.Button1.Set( _interactionsSettings.InteractAction.GetDisplayKey(), _interactionsSettings.InteractAction.NameId );
+                    _targetInformer.Button1.Set( _interactionsSettings.InteractAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.InteractAction.NameId ) );
                     _targetInformer.Button1.gameObject.SetActive( true );
 
                     _interactionProcess.Enable( _targetInformer.Button1, pickable );
@@ -114,7 +118,7 @@ namespace Game.Core.Player
                 else if( _currentObservable is IInspectable inspectable )
                 {
                     _targetInformer.Name.text = "Inspectable";
-                    _targetInformer.Button1.Set( _interactionsSettings.InspectAction.GetDisplayKey(), _interactionsSettings.InspectAction.NameId );
+                    _targetInformer.Button1.Set( _interactionsSettings.InspectAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.InspectAction.NameId ) );
                     _targetInformer.Button1.gameObject.SetActive( true );
                     
                     _inspectionProcess.Enable( _targetInformer.Button1, inspectable );
