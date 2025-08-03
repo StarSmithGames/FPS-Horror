@@ -69,6 +69,8 @@ namespace Game.Core.Player
         private void InteractCompleted()
         {
             _item.Interact();
+            
+            Completed();
         }
         
         public override List< ContextMenuOperation > GetContextMenuOptions() => _contextMenuOperations;

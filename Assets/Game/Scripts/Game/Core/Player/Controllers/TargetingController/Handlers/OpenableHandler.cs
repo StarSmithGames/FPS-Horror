@@ -78,6 +78,8 @@ namespace Game.Core.Player
             {
                 _openable.Open();
             }
+            
+            Completed();
         }
         
         public override List< ContextMenuOperation > GetContextMenuOptions() => _contextMenuOperations;

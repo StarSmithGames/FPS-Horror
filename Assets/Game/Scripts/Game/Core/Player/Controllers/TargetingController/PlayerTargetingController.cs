@@ -6,6 +6,8 @@ using Game.Core.World.InteractionSystem;
 using PuzzlescapeGames.Localization;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using PointerType = Game.Core.UI.GameScreen.PointerType;
 
 namespace Game.Core.Player
 {
@@ -53,6 +55,10 @@ namespace Game.Core.Player
             _pickableHandler.Initialize( IsBreak );
             _inspectableHandler.Initialize();
             _openableHandler.Initialize( IsBreak );
+
+            _pickableHandler.OnCompleted += HandlerCompletedHandler;
+            _inspectableHandler.OnCompleted += HandlerCompletedHandler;
+            _openableHandler.OnCompleted += HandlerCompletedHandler;
             
             _cameraVisionController.OnObservablesChanged += ObservablesChangedHandler;
             _cameraVisionController.OnCurrentObservableChanged += CurrentObservableChangedHandler;
@@ -63,6 +69,10 @@ namespace Game.Core.Player
         {
             _cameraVisionController.OnObservablesChanged -= ObservablesChangedHandler;
             _cameraVisionController.OnCurrentObservableChanged -= CurrentObservableChangedHandler;
+            
+            _pickableHandler.OnCompleted -= HandlerCompletedHandler;
+            _inspectableHandler.OnCompleted -= HandlerCompletedHandler;
+            _openableHandler.OnCompleted -= HandlerCompletedHandler;
         }
 
         private void ObservablesChangedHandler( bool trigger )
@@ -72,7 +82,6 @@ namespace Game.Core.Player
         
         private void CurrentObservableChangedHandler( IObservable observable )
         {
-            if ( _currentObservable == observable ) return;
             _currentObservable = observable;
 
             for ( int i = 0; i < _targetInformer.Options.Count; i++ )
@@ -84,7 +93,6 @@ namespace Game.Core.Player
             _pickableHandler.Disable();
             _inspectableHandler.Disable();
             _openableHandler.Disable();
-            
             
             if ( _currentObservable == null )
             {
@@ -98,16 +106,20 @@ namespace Game.Core.Player
 
                 return;
             }
-            
-            List< ContextMenuOperation > options = TryGetHandler()?.GetContextMenuOptions();
-            if ( options != null )
+
+            var handler = TryGetHandler();
+            if ( handler != null )
             {
-                for ( int i = 0; i < options.Count; i++ )
+                List< ContextMenuOperation > options = handler.GetContextMenuOptions();
+                if ( options != null )
                 {
-                    var option = options[ i ];
-                    var view = _targetInformer.Options[ i ];
-                    view.gameObject.SetActive( true );
-                    view.Set( option.Key, option.Name );
+                    for ( int i = 0; i < options.Count; i++ )
+                    {
+                        var option = options[ i ];
+                        var view = _targetInformer.Options[ i ];
+                        view.gameObject.SetActive( true );
+                        view.Set( option.Key, option.Name );
+                    }
                 }
             }
             
@@ -156,5 +168,10 @@ namespace Game.Core.Player
         }
 
         private bool IsBreak() => _currentObservable != _cameraVisionController.CurrentObservable;
+
+        private void HandlerCompletedHandler( InteractableHandler handler )
+        {
+            CurrentObservableChangedHandler( _currentObservable );
+        }
     }
 }

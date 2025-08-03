@@ -80,6 +80,8 @@ namespace Game.Core.Player
             _inspectDialogViewModel = null;
             
             _states.IsBlocked = false;
+
+            Completed();
         }
 
         public override List< ContextMenuOperation > GetContextMenuOptions() => _contextMenuOperations;
