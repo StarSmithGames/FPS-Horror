@@ -6,6 +6,7 @@ namespace Game.Core.Entity
     public sealed class OpenCloseSettings
     {
         [ field: SerializeField ] public bool IsLocked { get; private set; }
+        [ field: SerializeField ] public bool IsOpen { get; private set; }
         [ field: Space ]
         [ field: SerializeField ] public float OpenSpeed { get; private set; } = 1f;
         [ field: SerializeField ] public string OpenAnimationName { get; private set; }

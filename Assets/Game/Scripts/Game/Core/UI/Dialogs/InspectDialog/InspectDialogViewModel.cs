@@ -8,6 +8,7 @@ using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.Core.UI.InspectDialog

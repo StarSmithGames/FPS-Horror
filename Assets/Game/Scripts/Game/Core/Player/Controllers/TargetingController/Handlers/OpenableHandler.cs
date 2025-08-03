@@ -1,5 +1,5 @@
+using Game.Core.Entity;
 using Game.Core.UI;
-using Game.Core.World.InteractionSystem;
 using Game.Core.World.Systems.InteractionSystem;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
@@ -11,9 +11,10 @@ namespace Game.Core.Player
     public sealed class OpenableHandler : InteractableHandler
     {
         private List< ContextMenuOperation > _contextMenuOperations;
-        
+
+        private Func< bool > _breaker;
         private InputActionProvider _provider;
-        private IOpenable _openable;
+        private OpenableObject _openable;
         private UIInfoButton _ui;
         
         private readonly InteractionsSettings _interactionsSettings;
@@ -27,26 +28,25 @@ namespace Game.Core.Player
             _interactionsSettings = interactionsSettings ?? throw new ArgumentNullException( nameof(interactionsSettings) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
-        
-        public void Initialize( Func< bool > breaker )
+
+        public void Initialize( Func< bool > breaker)
         {
-            _provider = new( _interactionsSettings.OpenAction.InputAction, InteractCompleted, 0.33f, breaker: breaker, progress: InteractProgress, callback: InteractFinished );
+            _provider = new( _interactionsSettings.OpenCloseAction.InputAction, InteractCompleted, 0.33f, breaker: breaker, progress: InteractProgress, callback: InteractFinished );
+        }
+        
+        public void Enable( UIInfoButton ui, OpenableObject openable )
+        {
+            _ui = ui ?? throw new ArgumentNullException( nameof(ui) );
+            _openable = openable ?? throw new ArgumentNullException( nameof(openable) );
 
             _contextMenuOperations = new()
             {
                 new()
                 {
-                    Key = _interactionsSettings.OpenAction.GetDisplayKey(),
-                    Name = _localizationSystem.Translate( _interactionsSettings.OpenAction.NameId )
+                    Key =  _interactionsSettings.OpenCloseAction.GetDisplayKey(),
+                    Name = _localizationSystem.Translate( _openable.IsOpen ? _interactionsSettings.OpenCloseAction.AdditionalNameIds[ 0 ] : _interactionsSettings.OpenCloseAction.NameId  )
                 }
             };
-        }
-
-        public void Enable( UIInfoButton ui, IOpenable openable )
-        {
-            _ui = ui ?? throw new ArgumentNullException( nameof(ui) );
-            _openable = openable ?? throw new ArgumentNullException( nameof(openable) );
-            
             _provider.Enable();
         }
 
@@ -54,6 +54,8 @@ namespace Game.Core.Player
         {
             _provider.Disable();
             _ui = null;
+            
+            _contextMenuOperations?.Clear();
         }
         
         private void InteractProgress( float value )
@@ -68,7 +70,14 @@ namespace Game.Core.Player
         
         private void InteractCompleted()
         {
-            // _openable.Interact();
+            if ( _openable.IsOpen )
+            {
+                _openable.Close();
+            }
+            else
+            {
+                _openable.Open();
+            }
         }
         
         public override List< ContextMenuOperation > GetContextMenuOptions() => _contextMenuOperations;
