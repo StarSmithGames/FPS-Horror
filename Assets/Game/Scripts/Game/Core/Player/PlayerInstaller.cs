@@ -15,6 +15,10 @@ namespace Game.Core.Player
             BindLocomotion();
             Container.Bind< CameraFOVController >().AsSingle();
             Container.Bind< CameraVisionController >().AsSingle();
+
+            Container.Bind< PickableHandler >().AsSingle();
+            Container.Bind< InspectableHandler >().AsSingle();
+            Container.Bind< OpenableHandler >().AsSingle();
             Container.Bind< PlayerTargetingController >().AsSingle();
             
             Container.Bind< PlayerFacade >().AsSingle();

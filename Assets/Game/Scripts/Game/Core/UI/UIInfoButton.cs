@@ -12,10 +12,10 @@ namespace Game.Core.UI
         [ SerializeField ] private Image _buttonProgress;
         [ SerializeField ] private TMPro.TextMeshProUGUI _buttonActionText;
 
-        public void Set( string name, string actionText )
+        public void Set( string key, string name )
         {
-            _buttonName.text = name;
-            _buttonActionText.text = actionText;
+            _buttonName.text = key;
+            _buttonActionText.text = name;
         }
 
         public void SetFillAmount( float value )

@@ -17,7 +17,7 @@ namespace Game.Core.UI.InspectDialog
         public event Action OnCancelButtonClicked;
 
         private InspectionSystem _inspectionSystem;
-        private IInspectable _inspectable;
+        private ItemObject _item;
         private bool _isExamine;
 
         private readonly InputHolder _inputRead;
@@ -36,9 +36,9 @@ namespace Game.Core.UI.InspectDialog
             _inputCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
-        public void Set( IInspectable inspectable, Camera camera )
+        public void Set( ItemObject item, Camera camera )
         {
-            _inspectable = inspectable ?? throw new ArgumentNullException( nameof(inspectable) );
+            _item = item ?? throw new ArgumentNullException( nameof(item) );
             _inspectionSystem = new( camera );
         }
 
@@ -85,17 +85,20 @@ namespace Game.Core.UI.InspectDialog
 
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;
-            
-            if ( _inspectable is ReadableItemObject item )
+
+            if ( !_item.NameId.IsEmpty() )
             {
-                ModelView.ExamineName.text = _localizationSystem.Translate( item.NameId );
-                ModelView.ExamineText.text = _localizationSystem.Translate( item.TextId );
+                ModelView.ExamineName.text = _localizationSystem.Translate( _item.NameId );
+            }
+            if ( !_item.TextId.IsEmpty() )
+            {
+                ModelView.ExamineText.text = _localizationSystem.Translate( _item.TextId );
                 
                 _inputRead.Enable();
                 ModelView.ReadButton.gameObject.SetActive( true );
             }
             
-            _inspectionSystem.StartInspection( _inspectable );
+            _inspectionSystem.StartInspection( _item );
         }
 
         private void ReadButtonClickedHandler()
@@ -105,6 +108,8 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ControlButtons.SetActive( false );
             ModelView.ExamineCanvasGroup.Enable( true, false );
             ModelView.ExamineCanvasGroup.DOFade( 1f, 0.33f );
+            
+            _inspectionSystem.Block( true );
         }
         
         private void CancelButtonClickedHandler()
@@ -117,6 +122,8 @@ namespace Game.Core.UI.InspectDialog
                 ModelView.ExamineCanvasGroup.Enable( false, false );
                 ModelView.ExamineCanvasGroup.DOFade( 0f, 0.33f );
 
+                _inspectionSystem.Block( false );
+                
                 return;
             }
             

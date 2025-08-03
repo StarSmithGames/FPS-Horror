@@ -3,13 +3,17 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public abstract class InspectableEntityObject : InteractableEntityObject, IInspectable
+    public class ItemObject : ObservableObject
     {
-        [ field: SerializeField ] public InspectionSettings InspectionSettings { get; private set; }
-        [ field: Space ]
         [ field: SerializeField ] public string NameId { get; private set; }
         [ field: SerializeField ] public string TextId { get; private set; }
+        [ field: SerializeField ] public InspectionSettings InspectionSettings { get; private set; }
 
+        public void Interact()
+        {
+            Debug.LogError( "Interact" );
+        }
+        
         public Transform TransformInspection => transform;
     }
 }
