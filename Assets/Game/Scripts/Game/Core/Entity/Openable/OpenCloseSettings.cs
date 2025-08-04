@@ -11,12 +11,6 @@ namespace Game.Core.Entity
         [ field: SerializeField ] public float DoorDuration { get; private set; } = 1f;
 
         [ field: SerializeField ] public float HandleAngle { get; private set; } = 30f;
-        [ field: SerializeField ] public float HandleDuration { get; private set; } = 0.3f;
-
-        // [ field: SerializeField ] public float OpenSpeed { get; private set; } = 1f;
-        // [ field: SerializeField ] public AnimationClip OpenAnimationClip { get; private set; }
-        // [ field: SerializeField ] public float CloseSpeed { get; private set; } = 1f;
-        // [ field: SerializeField ] public bool IsCloseAnimationIsReverseOpen { get; private set; } = true;
-        // [ field: SerializeField ] public AnimationClip CloseAnimationClip { get; private set; }
+        [ field: SerializeField ] public float HandleDuration { get; private set; } = 0.33f;
     }
 }
