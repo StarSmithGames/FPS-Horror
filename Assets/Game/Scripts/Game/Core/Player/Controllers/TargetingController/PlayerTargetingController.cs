@@ -1,12 +1,11 @@
 using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.UI.GameScreen;
-using Game.Core.World.InspectionSystem;
-using Game.Core.World.InteractionSystem;
 using PuzzlescapeGames.Localization;
+using PuzzlescapeGames.Extensions;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using IObservable = Game.Core.World.InteractionSystem.IObservable;
 using PointerType = Game.Core.UI.GameScreen.PointerType;
 
 namespace Game.Core.Player
@@ -24,6 +23,7 @@ namespace Game.Core.Player
         private readonly PickableHandler _pickableHandler;
         private readonly InspectableHandler _inspectableHandler;
         private readonly OpenableHandler _openableHandler;
+        private readonly PullableHandler _pullableHandler;
         private readonly UIRootGame _uiRootGame;
         private readonly CameraVisionController _cameraVisionController;
         private readonly ILocalizationSystem _localizationSystem;
@@ -32,6 +32,7 @@ namespace Game.Core.Player
             PickableHandler pickableHandler,
             InspectableHandler inspectableHandler,
             OpenableHandler openableHandler,
+            PullableHandler pullableHandler,
             UIRootGame uiRootGame,
             CameraVisionController cameraVisionController,
             ILocalizationSystem localizationSystem
@@ -40,6 +41,7 @@ namespace Game.Core.Player
             _pickableHandler = pickableHandler ?? throw new ArgumentNullException( nameof(pickableHandler) );
             _inspectableHandler = inspectableHandler ?? throw new ArgumentNullException( nameof(inspectableHandler) );
             _openableHandler = openableHandler ?? throw new ArgumentNullException( nameof(openableHandler) );
+            _pullableHandler = pullableHandler ?? throw new ArgumentNullException( nameof(pullableHandler) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
@@ -55,10 +57,12 @@ namespace Game.Core.Player
             _pickableHandler.Initialize( IsBreak );
             _inspectableHandler.Initialize();
             _openableHandler.Initialize( IsBreak );
+            _pullableHandler.Initialize( IsBreak );
 
             _pickableHandler.OnCompleted += HandlerCompletedHandler;
             _inspectableHandler.OnCompleted += HandlerCompletedHandler;
             _openableHandler.OnCompleted += HandlerCompletedHandler;
+            _pullableHandler.OnCompleted += HandlerCompletedHandler;
             
             _cameraVisionController.OnObservablesChanged += ObservablesChangedHandler;
             _cameraVisionController.OnCurrentObservableChanged += CurrentObservableChangedHandler;
@@ -73,6 +77,7 @@ namespace Game.Core.Player
             _pickableHandler.OnCompleted -= HandlerCompletedHandler;
             _inspectableHandler.OnCompleted -= HandlerCompletedHandler;
             _openableHandler.OnCompleted -= HandlerCompletedHandler;
+            _pullableHandler.OnCompleted -= HandlerCompletedHandler;
         }
 
         private void ObservablesChangedHandler( bool trigger )
@@ -93,6 +98,7 @@ namespace Game.Core.Player
             _pickableHandler.Disable();
             _inspectableHandler.Disable();
             _openableHandler.Disable();
+            _pullableHandler.Disable();
             
             if ( _currentObservable == null )
             {
@@ -136,19 +142,24 @@ namespace Game.Core.Player
             
             if ( _currentObservable is DynamicObject dynamic )
             {
-                _targetInformer.Name.text = _localizationSystem.Translate( dynamic.NameId );
+                _targetInformer.Name.text = dynamic.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( dynamic.NameId );
 
                 if ( _currentObservable is OpenableObject openable )
                 {
                     handler = _openableHandler;
                     _openableHandler.Enable( _targetInformer.Options[ 0 ], openable );
                 }
+                else if ( _currentObservable is PullableObject pullable )
+                {
+                    handler = _pullableHandler;
+                    _pullableHandler.Enable( _targetInformer.Options[ 0 ], pullable );
+                }
                 
                 _pointerController.SetPointer( PointerType.Hand );
             }
             else if( _currentObservable is ItemObject item )
             {
-                _targetInformer.Name.text = _localizationSystem.Translate( item.NameId );
+                _targetInformer.Name.text = item.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( item.NameId );
                 
                 if ( _currentObservable is PickableItemObject )
                 {

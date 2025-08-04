@@ -6,7 +6,9 @@ namespace Game.Core.Entity
 {
     public abstract class ObservableObject : EntityObject, IObservable
     {
-        [ SerializeField ] private List< Collider > _colliders = new();
+        [ SerializeField ] protected List< Collider > _colliders = new();
+        
+        public IReadOnlyList< Collider > Colliders => _colliders;
         
         public virtual void StartObserve() {}
 

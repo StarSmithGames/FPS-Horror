@@ -19,6 +19,7 @@ namespace Game.Core.Player
             Container.Bind< PickableHandler >().AsSingle();
             Container.Bind< InspectableHandler >().AsSingle();
             Container.Bind< OpenableHandler >().AsSingle();
+            Container.Bind< PullableHandler >().AsSingle();
             Container.Bind< PlayerTargetingController >().AsSingle();
             
             Container.Bind< PlayerFacade >().AsSingle();

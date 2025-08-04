@@ -7,7 +7,7 @@ namespace Game.Core.Entity
     {
         [ SerializeField ] private Transform _door;
         [ SerializeField ] private Transform _handle;
-        [ SerializeField ] private OpenCloseSettings _openCloseSettings;
+        [ SerializeField ] private OpenableSettings _settings;
 
         public bool IsOpen { get; private set; }
         
@@ -18,19 +18,19 @@ namespace Game.Core.Entity
         {
             base.Awake();
             
-            if ( _openCloseSettings.IsLocked )
+            if ( _settings.IsLocked )
             {
                 IsOpen = false;
                 _door.localRotation = Quaternion.identity;
             }
             else
             {
-                var angle = Mathf.Clamp( Mathf.Abs( _door.localRotation.eulerAngles.y - Quaternion.identity.eulerAngles.y ), 0, _openCloseSettings.DoorOpenAngle );
-                IsOpen = angle > _openCloseSettings.DoorOpenAngle / 2f && angle <= _openCloseSettings.DoorOpenAngle;
+                var angle = Mathf.Clamp( Mathf.Abs( _door.localRotation.eulerAngles.y - Quaternion.identity.eulerAngles.y ), 0, _settings.DoorOpenAngle );
+                IsOpen = angle > _settings.DoorOpenAngle / 2f && angle <= _settings.DoorOpenAngle;
             }
 
             _handleRestRot = _handle.localRotation;
-            _handleTurnedRot = Quaternion.Euler( 0, 0, -_openCloseSettings.HandleAngle ) * _handleRestRot;
+            _handleTurnedRot = Quaternion.Euler( 0, 0, -_settings.HandleAngle ) * _handleRestRot;
         }
 
         public void Open()
@@ -43,12 +43,16 @@ namespace Game.Core.Entity
             CloseDoorAsync().Forget();
         }
         
-        public async UniTask Toggle()
+        public void Toggle()
         {
             if ( IsOpen )
-                await CloseDoorAsync();
+            {
+                CloseDoorAsync().Forget();
+            }
             else
-                await OpenDoorAsync();
+            {
+                OpenDoorAsync().Forget();
+            }
         }
 
         private async UniTask OpenDoorAsync()
@@ -73,19 +77,19 @@ namespace Game.Core.Entity
 
         private async UniTask AnimateHandleAsync()
         {
-            await LerpRotation( _handle, _handleRestRot, _handleTurnedRot, _openCloseSettings.HandleDuration / 2f );
-            await LerpRotation( _handle, _handleTurnedRot, _handleRestRot, _openCloseSettings.HandleDuration / 2f );
+            await LerpRotation( _handle, _handleRestRot, _handleTurnedRot, _settings.HandleDuration / 2f );
+            await LerpRotation( _handle, _handleTurnedRot, _handleRestRot, _settings.HandleDuration / 2f );
         }
 
         private async UniTask AnimateDoorAsync( bool opening )
         {
-            Quaternion from = opening ? _door.localRotation : Quaternion.Euler( 0, _openCloseSettings.DoorOpenAngle, 0 );
-            Quaternion to = opening ? Quaternion.Euler( 0, _openCloseSettings.DoorOpenAngle, 0 ) :  Quaternion.identity;
+            Quaternion from = opening ? _door.localRotation : Quaternion.Euler( 0, _settings.DoorOpenAngle, 0 );
+            Quaternion to = opening ? Quaternion.Euler( 0, _settings.DoorOpenAngle, 0 ) :  Quaternion.identity;
 
             float angleDelta = Quaternion.Angle( from, to );
-            float fraction = Mathf.Clamp01( angleDelta / _openCloseSettings.DoorOpenAngle );
+            float fraction = Mathf.Clamp01( angleDelta / _settings.DoorOpenAngle );
 
-            await LerpRotation( _door, from, to, _openCloseSettings.DoorDuration * fraction );
+            await LerpRotation( _door, from, to, _settings.DoorDuration * fraction );
         }
 
         private async UniTask LerpRotation( Transform target, Quaternion from, Quaternion to, float duration )
@@ -96,6 +100,7 @@ namespace Game.Core.Entity
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01( elapsed / duration );
                 target.localRotation = Quaternion.Slerp( from, to, t );
+                
                 await UniTask.Yield();
             }
 
