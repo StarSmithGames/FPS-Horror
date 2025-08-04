@@ -1,6 +1,6 @@
 using DG.Tweening;
 using Game.Core.Entity;
-using Game.Core.World.InteractionSystem;
+using Game.Core.World.InspectionSystem;
 using Game.Core.World.Systems.InteractionSystem;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
@@ -8,14 +8,17 @@ using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
 using System;
+using System.Linq;
+using UnityEngine;
 
 namespace Game.Core.UI.InspectDialog
 {
     public sealed class InspectDialogViewModel : ViewModel< InspectDialog >
     {
         public event Action OnCancelButtonClicked;
-        
-        private IInspectable _inspectable;
+
+        private InspectionSystem _inspectionSystem;
+        private ItemObject _item;
         private bool _isExamine;
 
         private readonly InputHolder _inputRead;
@@ -34,9 +37,10 @@ namespace Game.Core.UI.InspectDialog
             _inputCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
-        public void Set( IInspectable inspectable )
+        public void Set( ItemObject item, Camera camera )
         {
-            _inspectable = inspectable ?? throw new ArgumentNullException( nameof(inspectable) );
+            _item = item ?? throw new ArgumentNullException( nameof(item) );
+            _inspectionSystem = new( camera );
         }
 
         protected override void SubscribeView()
@@ -82,15 +86,20 @@ namespace Game.Core.UI.InspectDialog
 
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;
-            
-            if ( _inspectable is ExamineItemObject examineItem )
+
+            if ( !_item.NameId.IsEmpty() )
             {
-                ModelView.ExamineName.text = _localizationSystem.Translate( examineItem.NameId );
-                ModelView.ExamineText.text = _localizationSystem.Translate( examineItem.TextId );
+                ModelView.ExamineName.text = _localizationSystem.Translate( _item.NameId );
+            }
+            if ( !_item.TextId.IsEmpty() )
+            {
+                ModelView.ExamineText.text = _localizationSystem.Translate( _item.TextId );
                 
                 _inputRead.Enable();
                 ModelView.ReadButton.gameObject.SetActive( true );
             }
+            
+            _inspectionSystem.StartInspection( _item );
         }
 
         private void ReadButtonClickedHandler()
@@ -100,6 +109,8 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ControlButtons.SetActive( false );
             ModelView.ExamineCanvasGroup.Enable( true, false );
             ModelView.ExamineCanvasGroup.DOFade( 1f, 0.33f );
+            
+            _inspectionSystem.Block( true );
         }
         
         private void CancelButtonClickedHandler()
@@ -112,8 +123,12 @@ namespace Game.Core.UI.InspectDialog
                 ModelView.ExamineCanvasGroup.Enable( false, false );
                 ModelView.ExamineCanvasGroup.DOFade( 0f, 0.33f );
 
+                _inspectionSystem.Block( false );
+                
                 return;
             }
+            
+            _inspectionSystem.StopInspection();
             
             OnCancelButtonClicked?.Invoke();
             

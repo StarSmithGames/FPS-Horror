@@ -522,6 +522,15 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Inspection"",
+                    ""type"": ""Value"",
+                    ""id"": ""c18a09b0-7a14-428c-bd4b-5314dd102d91"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Read"",
                     ""type"": ""Button"",
                     ""id"": ""789a669c-c751-4591-9d47-6125a3b22f2f"",
@@ -921,6 +930,28 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Read"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9fbb570f-98f5-4e3c-95a1-5b9325835e12"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inspection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e459de67-5f98-471f-9f96-e49c6ed58a77"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inspection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1001,6 +1032,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
+        m_UI_Inspection = m_UI.FindAction("Inspection", throwIfNotFound: true);
         m_UI_Read = m_UI.FindAction("Read", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
@@ -1260,6 +1292,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Navigate;
+    private readonly InputAction m_UI_Inspection;
     private readonly InputAction m_UI_Read;
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
@@ -1279,6 +1312,10 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Navigate".
         /// </summary>
         public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Inspection".
+        /// </summary>
+        public InputAction @Inspection => m_Wrapper.m_UI_Inspection;
         /// <summary>
         /// Provides access to the underlying input action "UI/Read".
         /// </summary>
@@ -1324,6 +1361,9 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
             @Navigate.started += instance.OnNavigate;
             @Navigate.performed += instance.OnNavigate;
             @Navigate.canceled += instance.OnNavigate;
+            @Inspection.started += instance.OnInspection;
+            @Inspection.performed += instance.OnInspection;
+            @Inspection.canceled += instance.OnInspection;
             @Read.started += instance.OnRead;
             @Read.performed += instance.OnRead;
             @Read.canceled += instance.OnRead;
@@ -1350,6 +1390,9 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
             @Navigate.started -= instance.OnNavigate;
             @Navigate.performed -= instance.OnNavigate;
             @Navigate.canceled -= instance.OnNavigate;
+            @Inspection.started -= instance.OnInspection;
+            @Inspection.performed -= instance.OnInspection;
+            @Inspection.canceled -= instance.OnInspection;
             @Read.started -= instance.OnRead;
             @Read.performed -= instance.OnRead;
             @Read.canceled -= instance.OnRead;
@@ -1538,6 +1581,13 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNavigate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Inspection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInspection(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Read" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

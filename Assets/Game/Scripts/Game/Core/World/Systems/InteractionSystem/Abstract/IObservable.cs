@@ -5,5 +5,7 @@ namespace Game.Core.World.InteractionSystem
         void StartObserve();
         void Observe();
         void EndObserve();
+        
+        void EnableCollider( bool trigger );
     }
 }
