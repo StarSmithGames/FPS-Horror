@@ -25,6 +25,7 @@ namespace Game.Core.Player
         private readonly CameraFOVController _cameraFOVController;
         private readonly CameraVisionController _cameraVisionController;
         private readonly PlayerTargetingController _targetingController;
+        private readonly PlayerSoundController _soundController;
         
         public PlayerBrain(
             PlayerObject view,
@@ -37,7 +38,8 @@ namespace Game.Core.Player
             
             CameraFOVController cameraFOVController,
             CameraVisionController cameraVisionController,
-            PlayerTargetingController targetingController
+            PlayerTargetingController targetingController,
+            PlayerSoundController soundController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -50,6 +52,7 @@ namespace Game.Core.Player
             _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
             _targetingController = targetingController ?? throw new ArgumentNullException( nameof(targetingController) );
+            _soundController = soundController ?? throw new ArgumentNullException( nameof(soundController) );
         }
 
         public void Initialize()
@@ -105,6 +108,8 @@ namespace Game.Core.Player
                 // HandleStairs( _moveDirection );
                 
                 _movementController.HandleVelocities( false, _moveInput );
+                
+                _soundController.FootSteps();
 
                 await UniTask.Yield( PlayerLoopTiming.Update );
             }

@@ -15,5 +15,7 @@ namespace Game.Core.Player
         [ field: Space ]
         [ field: SerializeField ] public CameraFOVSettings CameraFOVSettings { get; private set; }
         [ field: SerializeField ] public CameraVisionSettings CameraVisionSettings { get; private set; } 
+        [ field: Space ]
+        [ field: SerializeField ] public SoundsSettings SoundsSettings { get; private set; }
     }
 }

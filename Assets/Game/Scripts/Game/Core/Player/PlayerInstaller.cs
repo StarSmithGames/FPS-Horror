@@ -21,6 +21,7 @@ namespace Game.Core.Player
             Container.Bind< OpenableHandler >().AsSingle();
             Container.Bind< PullableHandler >().AsSingle();
             Container.Bind< PlayerTargetingController >().AsSingle();
+            Container.Bind< PlayerSoundController >().AsSingle();
             
             Container.Bind< PlayerFacade >().AsSingle();
             Container.Bind< PlayerStates >().AsSingle();
