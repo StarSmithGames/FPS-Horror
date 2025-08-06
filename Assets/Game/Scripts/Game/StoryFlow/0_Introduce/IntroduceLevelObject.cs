@@ -10,6 +10,7 @@ namespace Game.StoryFlow.Introduce
         [ field: Header( "Story" ) ]
         [ field: SerializeField ] public Trigger LightTrigger { get; private set; }
         [ field: SerializeField ] public List< Light > AllLights { get; private set; } = new();
+        [ field: SerializeField ] public AudioSource SoundLightDown { get; private set; }
         [ field: SerializeField ] public LightFlickerSettings LightFlickerSettings { get; private set; }
     }
 }
