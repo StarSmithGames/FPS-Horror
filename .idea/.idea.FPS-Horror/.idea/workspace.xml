@@ -5,33 +5,159 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fe0e433-bcb8-4294-9709-c4ec95d03e79" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/Editor.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/Editor/IntroduceLevelObjectEditor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/Editor/IntroduceLevelObjectEditor.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/IntroduceLevelObject.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/IntroduceLevelObject.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/IntroduceStoryController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/0_Introduce/IntroduceStoryController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/LevelObject.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/LevelObject.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/StoryFlowController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/StoryFlowController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/StoryFlowInstaller.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/StoryFlowInstaller.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/StoryManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/StoryFlow/StoryManager.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Light.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Light/LightFlicker.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Light/LightFlicker.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Light/LightFlickerSettings.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Light/LightFlickerSettings.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Triggers.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Triggers/LayersUtils.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Triggers/LayersUtils.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Triggers/Trigger.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/com.Triggers/Trigger.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinetC.FBX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinetC.FBX.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_ao.tif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_ao.tif.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_bc.tif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_bc.tif.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_m_g.tif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_m_g.tif.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_mtl.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_mtl.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_n.tif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FileCabinet_n.tif.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Level.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Level.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetA.FBX" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetA.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetB.FBX" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetB.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetC.FBX" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetC.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetD.FBX" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetD.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetE.FBX" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/1Mesh/FileCabinetE.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/CeilingProps_mtl.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/CeilingProps_mtl.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_ao.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_ao.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_bc.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_bc.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_m_g.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_m_g.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_n.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Fan_n.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_ao.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_ao.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_bc.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_bc.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_m_g.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_m_g.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_n.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/FileCabinet_n.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModernTransparent_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModernTransparent_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_ao.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_ao.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_bc.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_bc.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_m_g.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_m_g.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_n.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerModern_n.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerTransparent_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCoolerTransparent_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_ao.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_ao.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_bc.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_bc.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_m_g.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_m_g.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_n.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/WaterCooler_n.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Water_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/2Material/Water_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Bottle.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Bottle.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleEmpty.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleEmpty.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterD.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterE.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/BottleWaterE.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Ceiling/CeilingLampA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Ceiling/CeilingLampA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetB.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetC.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetC.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetD.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetD.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetE.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Drawers/CabinetE.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Fan.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Fan.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/WaterCooler.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/WaterCooler.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Models/Materials/FileCabinetYellow_mtl.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Models/Materials/FileCabinetYellow_mtl.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_ao.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_ao.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_bc.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_bc.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_m_g.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_m_g.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_n.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/QA_PoliceStation/Textures/FileCabinetYellow/FileCabinetYellow_n.tif.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/GameContext.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/GameContext.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/PlayerInstaller.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/PlayerInstaller.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scenes/Level_1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scenes/Level_1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraFOVController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraFOVController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraVisionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Camera/CameraVisionController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerCrouchController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerCrouchController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerJumpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerJumpController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerLookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerLookController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMovementController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/GameInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/GameInstaller.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameInstaller.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/GameplayConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameplayConfig.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/GameplayConfig.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameplayConfig.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/GameplayPipeline.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameplayPipeline.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/GameplayPipeline.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameplayPipeline.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Extensions.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/Extensions.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Extensions/QuaternionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/Extensions/QuaternionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Extensions/QuaternionExtensions.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Moduls/Extensions/QuaternionExtensions.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/CursorManager.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/CursorManager.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/CursorManager/CursorManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/CursorManager/CursorManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/CursorManager/CursorManager.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/CursorManager/CursorManager.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputActionProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputActionProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputActionProvider.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputActionProvider.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputHolder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputHolder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputHolder.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputHolder.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputKeyAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputKeyAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputKeyAction.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputKeyAction.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Managers/InputManager/InputManager.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputManager.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/ProjectInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/ProjectInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/ProjectInstaller.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/ProjectInstaller.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Services.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Services.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Services/ActionProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Services/ActionProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Services/ActionProvider.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Services/ActionProvider.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem/UIButtonComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem/UIButtonComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem/UIButtonComponent.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem/UIButtonComponent.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem/UIInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem/UIInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem/UIInstaller.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem/UIInstaller.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem/UISettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem/UISettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Systems/UISystem/UISettings.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/UISystem/UISettings.cs.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +173,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/Contexts/GameObjectContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/MonoInstaller.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.vvm@1.1.6/Runtime/View/UI/UIViewFade.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.vvm@1.1.6/Runtime/ViewController/ViewController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Behaviours/CinemachineCamera.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/CinemachineVirtualCameraBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/InputAxisControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
@@ -144,6 +271,7 @@
       <workItem from="1754031267415" duration="25423000" />
       <workItem from="1754106838009" duration="15464000" />
       <workItem from="1754130064334" duration="4053000" />
+      <workItem from="1754398950819" duration="6446000" />
     </task>
     <servers />
   </component>
