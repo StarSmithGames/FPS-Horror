@@ -39,8 +39,10 @@ namespace Game.StoryFlow.Introduce
             View.SoundLightDown.Play();
 
             // await UniTask.WaitForSeconds( 1.7f, cancellationToken: cancellationToken );
-            await LightFlicker.FlickerAndGrowingIntensity( View.AllLights, View.LightFlickerSettings );
+            await LightFlicker.FlickerAndGrowingIntensity( View.Corridor.CeilLamps, View.LightFlickerSettings );
 
+            LampUtils.SetLightsEnabled( View.MainRoom.CeilLamps, false );
+            
             View.LightTrigger.Enable( false );
         }
     }

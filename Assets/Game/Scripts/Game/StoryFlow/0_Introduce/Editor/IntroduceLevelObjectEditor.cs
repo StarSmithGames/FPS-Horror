@@ -16,14 +16,6 @@ namespace Game.StoryFlow.Introduce.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-
-            if ( GUILayout.Button( "REFRESH" ) )
-            {
-                _target.AllLights.Clear();
-                _target.AllLights.AddRange( GameObject.FindObjectsOfType< Light >() );
-                
-                EditorUtility.SetDirty( _target );
-            }
         }
     }
 }
