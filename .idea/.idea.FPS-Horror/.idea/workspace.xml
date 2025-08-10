@@ -5,51 +5,82 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fe0e433-bcb8-4294-9709-c4ec95d03e79" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/LighterItemObject.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/LighterItemObject.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Note.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Note.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/CompositeHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/CompositeHandler.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/InteractionActionFactory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/InteractionActionFactory.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/ItemController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/ItemController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Lighter.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Lighter/LighterController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Lighter/LighterController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/PlayerInputActionsController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/PlayerInputActionsController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerInventoryController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerInventoryController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputInstaller.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputInstaller.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/Inventory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/Inventory.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/InventorySystemInstaller.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/InventorySystemInstaller.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/ItemConfig.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/ItemConfig.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/ItemDatabase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/ItemDatabase.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/Services.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/Services/ItemFactory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/InventorySystem/Services/ItemFactory.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/QuickAccessSystem.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/QuickAccessSystem/QuickInputAccess.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/QuickAccessSystem/QuickInputAccess.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/QuickAccessSystem/QuickSlotController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Systems/QuickAccessSystem/QuickSlotController.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Fonts/NataSans-SemiBold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Fonts/NataSans-SemiBold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Ceiling/CeilingLampA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Ceiling/CeilingLampA.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Chancellery/Paper/PaperDocumentA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Office/Props/3Prefabs/Chancellery/Paper/PaperDocumentA.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter.jpg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter_neutral.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter_neutral.jpg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter_neutral.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Materials/lighter_neutral.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Models.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Models/lighter.FBX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Models/lighter.FBX.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Models/lighter_neutral.FBX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Player/Lighter/Models/lighter_neutral.FBX.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Assets/GameplayInputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Assets/GameplayInputs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Assets/GameplayInputs.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Assets/GameplayInputs.inputactions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Assets/Installers/InteractionSystemInstaller.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Assets/Installers/InteractionSystemInstaller.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/GameContext.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/GameContext.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Item/Lighter/Lighter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Item/Lighter/Lighter.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scenes/Level_1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scenes/Level_1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/Interactable/ItemObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/Interactable/ItemObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/Interactable/PickableItemObject.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/Interactable/PickableItemObject.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InspectableHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InspectActionHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InspectableHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InspectActionHandler.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InteractableHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/ActionHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InteractableHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/ActionHandler.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/OpenableHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/OpenActionHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/OpenableHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/OpenActionHandler.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PickableHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PickUpActionHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PickableHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PickUpActionHandler.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PullableHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PullActionHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PullableHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PullActionHandler.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/PlayerTargetingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/PlayerTargetingController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/Interactable/ItemObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/ItemObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/Interactable/ItemObject.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/ItemObject.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/ObservableObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Abstract/ObservableObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/LighterItemObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Lighter/LighterItemObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/LighterItemObject.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Lighter/LighterItemObject.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Note.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Entity/Item/Note.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/HoverContextMenu.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/ContextMenuOperation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/HoverContextMenu/ContextMenuOperation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/ContextMenuOperation.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/HoverContextMenu/ContextMenuOperation.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/ActionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/ContextMenuActionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/ActionHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/ContextMenuActionHandler.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/CompositeHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/ActionHandlerComposite.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/CompositeHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/ActionHandlerComposite.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InspectActionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/InspectActionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/InspectActionHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/InspectActionHandler.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/OpenActionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/OpenActionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/OpenActionHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/OpenActionHandler.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PickUpActionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/PickUpActionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PickUpActionHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/PickUpActionHandler.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PullActionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/PullActionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/Handlers/PullActionHandler.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ActionHandlers/Interacts/PullActionHandler.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/InteractionActionFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ContextMenuActionFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/InteractionActionFactory.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/ContextMenuActionFactory.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/PlayerTargetingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/HoverContextMenu/PlayerHoveringController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/TargetingController/PlayerTargetingController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/HoverContextMenu/PlayerHoveringController.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerInstaller.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputActionProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputActionProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Services/ActionProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Services/ActionProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/InspectDialog/InspectDialogViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/InspectDialog/InspectDialogViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/Abstract.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/Abstract/IInteractable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/IInteractable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/Abstract/IInteractable.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/IInteractable.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/Abstract/IObservable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/IObservable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/Abstract/IObservable.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/IObservable.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/InteractionSystemInstaller.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/InteractionSystemInstaller.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/InteractionsSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputKeyActionsSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/World/Systems/InteractionSystem/InteractionsSettings.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/Managers/InputManager/InputKeyActionsSettings.cs.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +206,7 @@
       <workItem from="1754478396319" duration="8157000" />
       <workItem from="1754492517258" duration="1459000" />
       <workItem from="1754657565850" duration="3704000" />
-      <workItem from="1754815936777" duration="9386000" />
+      <workItem from="1754815936777" duration="17106000" />
     </task>
     <servers />
   </component>

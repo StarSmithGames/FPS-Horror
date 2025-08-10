@@ -24,7 +24,8 @@ namespace Game.Core.Player
         private readonly PlayerCrouchController _crouchController;
         private readonly CameraFOVController _cameraFOVController;
         private readonly CameraVisionController _cameraVisionController;
-        private readonly PlayerTargetingController _targetingController;
+        private readonly PlayerHoveringController _hoveringController;
+        private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerSoundController _soundController;
         
         public PlayerBrain(
@@ -38,7 +39,8 @@ namespace Game.Core.Player
             
             CameraFOVController cameraFOVController,
             CameraVisionController cameraVisionController,
-            PlayerTargetingController targetingController,
+            PlayerHoveringController hoveringController,
+            PlayerInputActionsController inputActionsController,
             PlayerSoundController soundController
             )
         {
@@ -51,7 +53,8 @@ namespace Game.Core.Player
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
-            _targetingController = targetingController ?? throw new ArgumentNullException( nameof(targetingController) );
+            _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
+            _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
             _soundController = soundController ?? throw new ArgumentNullException( nameof(soundController) );
         }
 
@@ -62,7 +65,7 @@ namespace Game.Core.Player
             _crouchController.Initialize();
             _cameraFOVController.Initialize();
             _cameraVisionController.Initialize();
-            _targetingController.Initialize();
+            _hoveringController.Initialize();
 
             InputManager.OnJump += JumpClickedHandler;
             _inputHolders.Add( new( InputManager.Inputs.Player.Crouch, onStartHold: _crouchController.StartCrouch, onEndHold: _crouchController.StopCrouch ) );
@@ -72,6 +75,8 @@ namespace Game.Core.Player
             Tick( _cancellationTokenSource.Token ).Forget();
             LastTick( _cancellationTokenSource.Token ).Forget();
             FixedTick( _cancellationTokenSource.Token ).Forget();
+            
+            _inputActionsController.Enable();
         }
 
         public void Dispose()
@@ -89,7 +94,7 @@ namespace Game.Core.Player
             
             _cameraFOVController.Dispose();
             _cameraVisionController.Dispose();
-            _targetingController.Dispose();
+            _hoveringController.Dispose();
         }
 
         private async UniTask Tick( CancellationToken cancellationToken = default )

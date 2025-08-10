@@ -1,14 +1,12 @@
 using DG.Tweening;
 using Game.Core.Entity;
 using Game.Core.World.InspectionSystem;
-using Game.Core.World.Systems.InteractionSystem;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Game.Core.UI.InspectDialog
@@ -23,15 +21,15 @@ namespace Game.Core.UI.InspectDialog
 
         private readonly InputHolder _inputRead;
         private readonly InputHolder _inputCancel;
-        private readonly InteractionsSettings _interactionsSettings;
+        private readonly InputKeyActionsSettings _inputKeyActionsSettings;
         private readonly ILocalizationSystem _localizationSystem;
         
         public InspectDialogViewModel(
-            InteractionsSettings interactionsSettings,
+            InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
             )
         {
-            _interactionsSettings = interactionsSettings ?? throw new ArgumentNullException( nameof(interactionsSettings) );
+            _inputKeyActionsSettings = inputKeyActionsSettings ?? throw new ArgumentNullException( nameof(inputKeyActionsSettings) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
             _inputRead = new( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
             _inputCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
@@ -80,9 +78,9 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ExamineCanvasGroup.Enable( false );
 
             ModelView.ReadButton.gameObject.SetActive( false );
-            ModelView.ReadButton.Set( _interactionsSettings.ReadAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.ReadAction.NameId ) );
-            ModelView.CancelButton1.Set( _interactionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.BackAction.NameId ) );
-            ModelView.CancelButton2.Set( _interactionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _interactionsSettings.BackAction.NameId ) );
+            ModelView.ReadButton.Set( _inputKeyActionsSettings.ReadAction.GetDisplayKey(), _localizationSystem.Translate( _inputKeyActionsSettings.ReadAction.NameId ) );
+            ModelView.CancelButton1.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _inputKeyActionsSettings.BackAction.NameId ) );
+            ModelView.CancelButton2.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _inputKeyActionsSettings.BackAction.NameId ) );
 
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;

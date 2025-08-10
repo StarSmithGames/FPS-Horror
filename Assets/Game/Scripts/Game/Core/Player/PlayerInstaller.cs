@@ -15,9 +15,12 @@ namespace Game.Core.Player
             BindLocomotion();
             Container.Bind< CameraFOVController >().AsSingle();
             Container.Bind< CameraVisionController >().AsSingle();
-
-            Container.Bind< InteractionActionFactory >().AsSingle();
-            Container.Bind< PlayerTargetingController >().AsSingle();
+            Container.Bind< ContextMenuActionFactory >().AsSingle();
+            Container.Bind< PlayerHoveringController >().AsSingle();
+            
+            Container.Bind< PlayerInputActionsController >().AsSingle();
+            Container.Bind< PlayerInventoryController >().AsSingle();
+            
             Container.Bind< PlayerSoundController >().AsSingle();
             
             Container.Bind< PlayerFacade >().AsSingle();
@@ -32,6 +35,11 @@ namespace Game.Core.Player
             Container.Bind< PlayerMovementController >().AsSingle();
             Container.Bind< PlayerJumpController >().AsSingle();
             Container.Bind< PlayerCrouchController >().AsSingle();
+        }
+
+        private void BindInventory()
+        {
+            
         }
     }
 }

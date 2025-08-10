@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Lighter",
+                    "type": "Button",
+                    "id": "94622b70-239e-41e5-b26c-ce1739b62076",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -417,6 +426,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Inspect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f33744f6-1424-417e-842a-86e39b55082f",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Lighter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

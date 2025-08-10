@@ -1,4 +1,4 @@
-namespace Game.Core.Entity.Item
+namespace Game.Core.Entity
 {
     public sealed class Note : ItemObject
     {
