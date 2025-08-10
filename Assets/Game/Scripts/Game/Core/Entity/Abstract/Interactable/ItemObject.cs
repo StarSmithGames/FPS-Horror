@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public class ItemObject : ObservableObject
+    public abstract class ItemObject : ObservableObject
     {
         [ field: SerializeField ] public string NameId { get; private set; }
         [ field: SerializeField ] public string TextId { get; private set; }

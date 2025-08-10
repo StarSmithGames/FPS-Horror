@@ -9,8 +9,6 @@ namespace Game.Servies
 {
     public sealed class ActionProvider
     {
-        public bool IsInProcess { get; private set; }
-
         private Action _action;
         private Func< bool > _breaker;
         private Action< float > _progress;
@@ -38,8 +36,6 @@ namespace Game.Servies
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
-            
-            IsInProcess = false;
         }
 
         private async UniTask Tick( float duration = 0.33f, CancellationToken cancellationToken = default )

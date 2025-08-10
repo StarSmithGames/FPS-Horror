@@ -16,10 +16,7 @@ namespace Game.Core.Player
             Container.Bind< CameraFOVController >().AsSingle();
             Container.Bind< CameraVisionController >().AsSingle();
 
-            Container.Bind< PickableHandler >().AsSingle();
-            Container.Bind< InspectableHandler >().AsSingle();
-            Container.Bind< OpenableHandler >().AsSingle();
-            Container.Bind< PullableHandler >().AsSingle();
+            Container.Bind< InteractionActionFactory >().AsSingle();
             Container.Bind< PlayerTargetingController >().AsSingle();
             Container.Bind< PlayerSoundController >().AsSingle();
             
