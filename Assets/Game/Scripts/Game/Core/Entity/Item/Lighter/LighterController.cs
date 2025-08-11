@@ -1,24 +1,116 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Game.Managers.AudioManager;
 using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Core.Entity
 {
     public sealed class LighterController : ItemController
     {
-        private readonly LighterItemObject _view;
+        private readonly int Open = Animator.StringToHash( "Open" );
+        private readonly int Close = Animator.StringToHash( "Close" );
+
+        public bool IsOpened { get; private set; }
+        public bool IsHasFlame { get; private set; }
+
+        private float _cachedLightIntensity;
+        private bool _isInProcess;
         
-        public LighterController( LighterItemObject view ) : base( view )
+        private readonly LighterItemObject _view;
+        private readonly AudioManager _audioManager;
+
+        public LighterController(
+            LighterItemObject view,
+            AudioManager audioManager
+            ) : base( view )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
+            _audioManager = audioManager ?? throw new ArgumentNullException( nameof(audioManager) );
         }
 
+        public void Initialize()
+        {
+            _view.Light.enabled = false;
+            _cachedLightIntensity = _view.Light.intensity;
+        }
+        
         public void Show()
         {
-            _view.EnableLight( true );
+            if ( _isInProcess ) return;
+            
+            OpenLighter().Forget();
         }
 
         public void Hide()
         {
-            _view.EnableLight( false );
+            if ( _isInProcess ) return;
+            
+            CloseLighter().Forget();
+        }
+
+        private async UniTask OpenLighter()
+        {
+            _isInProcess = true;
+
+            if ( !IsOpened )
+            {
+                _view.Animator.SetTrigger( Open );
+                await UniTask.WaitForSeconds( 0.05f );
+                _audioManager.PlaySound( _view.SoundOpen );
+            
+                IsOpened = true;
+                
+                await UniTask.WaitForSeconds( 0.48f );
+            }
+
+            if ( !IsHasFlame )
+            {
+                _audioManager.PlaySound( _view.SoundIgnite );
+
+                if ( Random.value < 0.5f )
+                {
+                    await UniTask.WaitForSeconds( 0.08f );
+                    _view.Flame.transform.localScale = Vector3.zero;
+                    _view.Flame.transform.DOScale( 1f, 0.16f );
+                    _view.Flame.Play();
+                    _view.Light.intensity = 0f;
+                    _view.Light.DOIntensity( _cachedLightIntensity, 0.16f );
+                    _view.Light.enabled = true;
+                
+                    IsHasFlame = true;
+                }
+                
+                await UniTask.WaitForSeconds( 0.16f );
+            }
+            
+            _isInProcess = false;
+        }
+
+        private async UniTask CloseLighter()
+        {
+            _isInProcess = true;
+            
+            _view.Animator.SetTrigger( Close );
+            _view.Flame.transform.DOScale( 0f, 0.16f );
+            _view.Light.DOIntensity( 0f, 0.16f );
+            await UniTask.WaitForSeconds( 0.05f );
+            _audioManager.PlaySound( _view.SoundClose );
+            
+            IsOpened = false;
+
+            if ( IsHasFlame )
+            {
+                await UniTask.WaitForSeconds( 0.16f - 0.05f );
+
+                _view.Flame.Stop();
+                _view.Light.enabled = false;
+                
+                IsHasFlame = false;
+            }
+            
+            _isInProcess = false;
         }
     }
 }
