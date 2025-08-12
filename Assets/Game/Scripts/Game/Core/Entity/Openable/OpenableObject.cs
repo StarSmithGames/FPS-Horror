@@ -1,5 +1,11 @@
 using Cysharp.Threading.Tasks;
+using Game.Managers.AudioManager;
+using PuzzlescapeGames.Extensions;
+using System;
 using UnityEngine;
+using Zenject;
+using AudioSource = PuzzlescapeGames.Services.AudioService.AudioSource;
+using Random = UnityEngine.Random;
 
 namespace Game.Core.Entity
 {
@@ -14,6 +20,14 @@ namespace Game.Core.Entity
         private Quaternion _handleRestRot;
         private Quaternion _handleTurnedRot;
 
+        private AudioManager _audioManager;
+        
+        [ Inject ]
+        private void Construct( AudioManager audioManager )
+        {
+            _audioManager = audioManager ?? throw new ArgumentNullException( nameof(audioManager) );
+        }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -25,12 +39,15 @@ namespace Game.Core.Entity
             }
             else
             {
-                var angle = Mathf.Clamp( Mathf.Abs( _door.localRotation.eulerAngles.y - Quaternion.identity.eulerAngles.y ), 0, _settings.DoorOpenAngle );
+                var angle = Mathf.Clamp( Mathf.Abs( GetAngle( _settings.DoorAxis, _door.localRotation.eulerAngles - Quaternion.identity.eulerAngles ) ), 0, _settings.DoorOpenAngle );
                 IsOpen = angle > _settings.DoorOpenAngle / 2f && angle <= _settings.DoorOpenAngle;
             }
 
-            _handleRestRot = _handle.localRotation;
-            _handleTurnedRot = Quaternion.Euler( 0, 0, -_settings.HandleAngle ) * _handleRestRot;
+            if ( _handle != null )
+            {
+                _handleRestRot = _handle.localRotation;
+                _handleTurnedRot = GetAngle( _settings.HandleAxis, -_settings.HandleAngle ) * _handleRestRot;
+            }
         }
 
         public void Open()
@@ -60,7 +77,12 @@ namespace Game.Core.Entity
             if ( IsOpen ) return;
             IsOpen = true;
 
-            if ( _door.localRotation == Quaternion.identity )
+            AudioSource sound = null;
+            if ( _settings.OpenSounds.Count > 0 )
+            {
+                sound = _audioManager.PlaySound( _settings.OpenSounds.RandomItem(), volume: Random.Range( 0.5f, 1f ), pitch: Random.Range( 0.7f, 1.3f ) );
+            }
+            if ( _door.localRotation == Quaternion.identity && _handle != null )
             {
                 await AnimateHandleAsync();
             }
@@ -83,8 +105,8 @@ namespace Game.Core.Entity
 
         private async UniTask AnimateDoorAsync( bool opening )
         {
-            Quaternion from = opening ? _door.localRotation : Quaternion.Euler( 0, _settings.DoorOpenAngle, 0 );
-            Quaternion to = opening ? Quaternion.Euler( 0, _settings.DoorOpenAngle, 0 ) :  Quaternion.identity;
+            Quaternion from = opening ? _door.localRotation : GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle );
+            Quaternion to = opening ? GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle ) :  Quaternion.identity;
 
             float angleDelta = Quaternion.Angle( from, to );
             float fraction = Mathf.Clamp01( angleDelta / _settings.DoorOpenAngle );
@@ -106,5 +128,21 @@ namespace Game.Core.Entity
 
             target.localRotation = to;
         }
+        
+        private float GetAngle( Axis axis, Vector3 angle ) => axis switch
+        {
+            Axis.X => angle.x,
+            Axis.Y => angle.y,
+            Axis.Z => angle.z,
+            _ => angle.y
+        };
+        
+        private Quaternion GetAngle( Axis axis, float angle ) => axis switch
+        {
+            Axis.X => Quaternion.Euler( angle, 0, 0 ),
+            Axis.Y => Quaternion.Euler( 0, angle, 0 ),
+            Axis.Z => Quaternion.Euler( 0, 0, angle ),
+            _ => Quaternion.Euler( 0, angle, 0 )
+        };
     }
 }
