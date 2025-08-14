@@ -7,6 +7,8 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInventoryController
     {
+        public Inventory Inventory { get; private set; } = new();
+        
         private LighterController _lighterController;
 
         private readonly ItemDatabase _itemDatabase;
@@ -26,18 +28,15 @@ namespace Game.Core.Player
 
         public void PickUpItem( ItemObject item )
         {
-            if ( item.Controller != null )
-            {
-                item.SetController( null );
-            }
-            GameObject.Destroy( item.gameObject );
+            Inventory.AddItem( item.Config );
+            item.gameObject.SetActive( false );
         }
         
         public void SelectLighter()
         {
             if ( _lighterController == null )
             {
-                _lighterController = _itemFactory.Create< LighterController >( _itemDatabase.LighterConfig.Prefab, _playerAvatar.HandRight );
+                _lighterController = (LighterController)_itemFactory.Create( _itemDatabase.LighterConfig.Prefab, _playerAvatar.HandRight );
                 _lighterController.View.transform.localPosition = Vector3.zero;
                 _lighterController.View.transform.localRotation = Quaternion.identity;
                 _lighterController.Initialize();

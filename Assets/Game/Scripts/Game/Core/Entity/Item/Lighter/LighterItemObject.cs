@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Game.Core.Entity
@@ -11,5 +12,7 @@ namespace Game.Core.Entity
         [ field: SerializeField ] public AudioClip SoundOpen { get; private set; }
         [ field: SerializeField ] public AudioClip SoundClose { get; private set; }
         [ field: SerializeField ] public AudioClip SoundIgnite { get; private set; }
+
+        public override Type ControllerType => typeof(LighterController);
     }
 }

@@ -14,11 +14,10 @@ namespace Game.Systems.InventorySystem
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
         }
         
-        public T Create< T >( ItemObject prefab, Transform parent = null )
-            where T : ItemController
+        public ItemController Create( ItemObject prefab, Transform parent = null )
         {
             var view = _diContainer.InstantiatePrefab( prefab, parent ).GetComponent< ItemObject >();
-            var controller = _diContainer.Instantiate< T >( new[] { view } );
+            var controller = (ItemController)_diContainer.Instantiate( view.ControllerType, new[] { view } );
             view.SetController( controller );
             return controller;
         }

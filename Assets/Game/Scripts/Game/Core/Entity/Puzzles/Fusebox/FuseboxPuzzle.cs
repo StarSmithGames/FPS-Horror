@@ -20,7 +20,12 @@ namespace Game.Core.Entity
         {
             RefreshSlots();
         }
-        
+
+        public override void Interact()
+        {
+            
+        }
+
         private void RefreshSlots()
         {
             for ( int i = 0; i < Slots.Count; i++ )

@@ -155,13 +155,13 @@ namespace Game.Core.Player
                 
                 return _contextMenuActionFactory.GetOrCreateItemHandler();
             }
-            // else if ( _currentObservable is PuzzleObject puzzle )
-            // {
-            //     _pointerController.SetPointer( PointerType.Point );
-            //     _targetInformer.Name.text = string.Empty;
-            //     
-            //     return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
-            // }
+            else if ( _currentObservable is PuzzleObject puzzle )
+            {
+                _pointerController.SetPointer( PointerType.Point );
+                _targetInformer.Name.text = string.Empty;
+                
+                return _contextMenuActionFactory.GetOrCreatePuzzleHandler();
+            }
 
             return null;
         }

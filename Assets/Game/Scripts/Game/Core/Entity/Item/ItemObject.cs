@@ -1,5 +1,6 @@
 using Game.Core.World.InspectionSystem;
 using Game.Systems.InventorySystem;
+using System;
 using UnityEngine;
 
 namespace Game.Core.Entity
@@ -13,8 +14,9 @@ namespace Game.Core.Entity
         [ field: Header( "INSPECT" ) ]
         [ field: SerializeField ] public InspectionSettings InspectionSettings { get; private set; }
 
+        public virtual Type ControllerType { get; }
         public ItemController Controller { get; private set; }
-
+        
         public void SetController( ItemController controller )
         {
             Controller = controller;
