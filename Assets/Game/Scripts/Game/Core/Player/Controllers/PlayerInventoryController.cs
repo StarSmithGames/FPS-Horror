@@ -23,6 +23,15 @@ namespace Game.Core.Player
             _itemFactory = itemFactory ?? throw new ArgumentNullException( nameof(itemFactory) );
             _playerAvatar = playerAvatar ?? throw new ArgumentNullException( nameof(playerAvatar) );
         }
+
+        public void PickUpItem( ItemObject item )
+        {
+            if ( item.Controller != null )
+            {
+                item.SetController( null );
+            }
+            GameObject.Destroy( item.gameObject );
+        }
         
         public void SelectLighter()
         {

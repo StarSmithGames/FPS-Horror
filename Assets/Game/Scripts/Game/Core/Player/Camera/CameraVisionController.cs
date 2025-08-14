@@ -88,7 +88,7 @@ namespace Game.Core.Player
         {
             RaycastHit hit;
             Ray ray = new Ray( _head.position, _head.forward );
-            if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.MaxRayDistance, _config.CameraVisionSettings.InteractLayers ) )
+            if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.MaxRayDistance, _config.CameraVisionSettings.DefaultLayers ) )
             {
                 _lastHitPoint = hit.point;
 

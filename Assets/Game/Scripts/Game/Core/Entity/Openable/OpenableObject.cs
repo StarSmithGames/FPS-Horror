@@ -9,14 +9,12 @@ using Random = UnityEngine.Random;
 
 namespace Game.Core.Entity
 {
-    public sealed class OpenableObject : DynamicObject
+    public sealed class OpenableObject : OpenCloseDynamicObject
     {
         [ SerializeField ] private Transform _door;
         [ SerializeField ] private Transform _handle;
         [ SerializeField ] private OpenableSettings _settings;
 
-        public bool IsOpen { get; private set; }
-        
         private Quaternion _handleRestRot;
         private Quaternion _handleTurnedRot;
 
@@ -50,26 +48,14 @@ namespace Game.Core.Entity
             }
         }
 
-        public void Open()
+        public override void Open()
         {
             OpenDoorAsync().Forget();
         }
 
-        public void Close()
+        public override void Close()
         {
             CloseDoorAsync().Forget();
-        }
-        
-        public void Toggle()
-        {
-            if ( IsOpen )
-            {
-                CloseDoorAsync().Forget();
-            }
-            else
-            {
-                OpenDoorAsync().Forget();
-            }
         }
 
         private async UniTask OpenDoorAsync()

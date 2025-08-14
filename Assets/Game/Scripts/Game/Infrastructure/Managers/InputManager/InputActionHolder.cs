@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace Game.Managers.InputManager
 {
-    public sealed class InputHolder
+    public sealed class InputActionHolder
     {
         private bool _isHold;
         
@@ -12,7 +12,7 @@ namespace Game.Managers.InputManager
         private readonly Action _onHold;
         private readonly Action _onEndHold;
         
-        public InputHolder( InputAction input, Action onStartHold = null, Action onEndHold = null, Action onHold = null )
+        public InputActionHolder( InputAction input, Action onStartHold = null, Action onEndHold = null, Action onHold = null )
         {
             _input = input ?? throw new ArgumentNullException( nameof(input) );
             _onStartHold = onStartHold;

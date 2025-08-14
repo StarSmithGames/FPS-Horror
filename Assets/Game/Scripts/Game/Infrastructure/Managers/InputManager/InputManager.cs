@@ -16,7 +16,7 @@ namespace Game.Managers.InputManager
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
 
         private static CancellationTokenSource _cancellationTokenSource;
-        private static List< InputHolder > _inputHolders = new();
+        private static List< InputActionHolder > _inputHolders = new();
         
         public static void Initialize()
         {
@@ -90,7 +90,7 @@ namespace Game.Managers.InputManager
             }
         }
 
-        public static void AddInputHolders( List< InputHolder > inputHolders )
+        public static void AddInputHolders( List< InputActionHolder > inputHolders )
         {
             for ( int i = 0; i < inputHolders.Count; i++ )
             {
@@ -98,16 +98,16 @@ namespace Game.Managers.InputManager
             }
         }
         
-        public static void AddInputHolder( InputHolder inputHolder )
+        public static void AddInputHolder( InputActionHolder inputActionHolder )
         {
-            inputHolder.Enable();
-            _inputHolders.Add( inputHolder );
+            inputActionHolder.Enable();
+            _inputHolders.Add( inputActionHolder );
         }
 
-        public static void RemoveInputHolder( InputHolder inputHolder )
+        public static void RemoveInputHolder( InputActionHolder inputActionHolder )
         {
-            _inputHolders.Remove( inputHolder );
-            inputHolder.Disable();
+            _inputHolders.Remove( inputActionHolder );
+            inputActionHolder.Disable();
         }
 
         public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.deltaTime * currentControllerSensX );

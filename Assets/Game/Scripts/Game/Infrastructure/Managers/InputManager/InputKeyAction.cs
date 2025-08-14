@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,9 +10,6 @@ namespace Game.Managers.InputManager
         [ SerializeField ] private InputActionAsset _inputActionAsset;
         [ SerializeField ] private string _actionMapName;
         [ SerializeField ] private string _actionName;
-        [ field: Space ]
-        [ field: SerializeField ] public string NameId { get; private set; }
-        [ field: SerializeField ] public List< string > AdditionalNameIds { get; private set; } = new();
 
         public InputAction InputAction
         {

@@ -66,11 +66,7 @@ namespace Game.Core.Player
         {
             _currentObservable = observable;
 
-            for ( int i = 0; i < _targetInformer.Options.Count; i++ )
-            {
-                _targetInformer.Options[ i ].gameObject.SetActive( false );
-                _targetInformer.Options[ i ].SetFillAmount( 0f );
-            }
+            ResetOptions();
 
             if ( _actionHandlerComposite != null )
             {
@@ -98,19 +94,7 @@ namespace Game.Core.Player
                 List< ContextMenuOperation > options = _actionHandlerComposite.GetContextMenuOptions();
                 if ( options != null )
                 {
-                    List< UIInfoButton > ui = new( options.Count );
-                    for ( int i = 0; i < options.Count; i++ )
-                    {
-                        var option = options[ i ];
-                        var view = _targetInformer.Options[ i ];
-                       
-                        view.gameObject.SetActive( true );
-                        view.Set( option.Key, option.Name );
-                        
-                        ui.Add( view );
-                    }
-                    
-                    _actionHandlerComposite.Enable( ui );
+                    _actionHandlerComposite.Enable( GetOptions( options ) );
                     _actionHandlerComposite.OnCompleted += ActionCompleted;
                 }
             }
@@ -120,6 +104,32 @@ namespace Game.Core.Player
                 _isShowingInformer = true;
                 _targetInformer.Show();
             }
+
+            List< UIInfoButton > GetOptions( List< ContextMenuOperation > options )
+            {
+                List< UIInfoButton > result = new( options.Count );
+                for ( int i = 0; i < options.Count; i++ )
+                {
+                    var option = options[ i ];
+                    var view = _targetInformer.Options[ i ];
+                       
+                    view.gameObject.SetActive( true );
+                    view.Set( option.Key, option.Name );
+                        
+                    result.Add( view );
+                }
+
+                return result;
+            }
+            
+            void ResetOptions()
+            {
+                for ( int i = 0; i < _targetInformer.Options.Count; i++ )
+                {
+                    _targetInformer.Options[ i ].gameObject.SetActive( false );
+                    _targetInformer.Options[ i ].SetFillAmount( 0f );
+                }
+            }
         }
 
         private ActionHandlerComposite TryGetHandler()
@@ -128,13 +138,9 @@ namespace Game.Core.Player
             {
                 _pointerController.SetPointer( PointerType.Hand );
                 _targetInformer.Name.text = dynamic.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( dynamic.NameId );
-                if ( _currentObservable is OpenableObject )
+                if ( _currentObservable is OpenCloseDynamicObject )
                 {
-                    return _contextMenuActionFactory.GetOrCreateOpenableHandler();
-                }
-                if ( _currentObservable is PullableObject )
-                {
-                    return _contextMenuActionFactory.GetOrCreatePullableHandler();
+                    return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
                 }
             }
             else if( _currentObservable is ItemObject item )
@@ -149,6 +155,13 @@ namespace Game.Core.Player
                 
                 return _contextMenuActionFactory.GetOrCreateItemHandler();
             }
+            // else if ( _currentObservable is PuzzleObject puzzle )
+            // {
+            //     _pointerController.SetPointer( PointerType.Point );
+            //     _targetInformer.Name.text = string.Empty;
+            //     
+            //     return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
+            // }
 
             return null;
         }

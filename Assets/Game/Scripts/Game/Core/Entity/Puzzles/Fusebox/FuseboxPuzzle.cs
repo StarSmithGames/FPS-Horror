@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public sealed class FuseboxPuzzle : ObservableObject
+    public sealed class FuseboxPuzzle : PuzzleObject
     {
         [ field: SerializeField ] public List< FuseboxSlot > Slots { get; private set; } = new();
         [ Space ]

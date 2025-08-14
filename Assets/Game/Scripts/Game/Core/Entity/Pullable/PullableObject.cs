@@ -4,12 +4,10 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public sealed class PullableObject : DynamicObject
+    public sealed class PullableObject : OpenCloseDynamicObject
     {
         [ SerializeField ] private Transform _pull;
         [ SerializeField ] private PullableSettings _settings;
-        
-        public bool IsOpen { get; private set; }
         
         private Vector3 _closedPosition;
         private Vector3 _openPosition;
@@ -33,28 +31,16 @@ namespace Game.Core.Entity
             }
         }
         
-        public void Open()
+        public override void Open()
         {
             OpenAsync().Forget();
         }
 
-        public void Close()
+        public override void Close()
         {
             CloseAsync().Forget();
         }
         
-        public void Toggle()
-        {
-            if ( IsOpen )
-            {
-                CloseAsync().Forget();
-            }
-            else
-            {
-                OpenAsync().Forget();
-            }
-        }
-
         private async UniTask OpenAsync()
         {
             if ( IsOpen ) return;

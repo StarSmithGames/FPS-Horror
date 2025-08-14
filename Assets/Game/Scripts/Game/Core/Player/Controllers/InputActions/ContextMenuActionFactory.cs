@@ -1,4 +1,6 @@
+using PuzzlescapeGames.Localization;
 using System;
+using System.Linq;
 using Zenject;
 
 namespace Game.Core.Player
@@ -10,12 +12,18 @@ namespace Game.Core.Player
         private ActionHandlerComposite _inspect;
         private ActionHandlerComposite _item;
         private ActionHandlerComposite _itemNote;
+        private ActionHandlerComposite _puzzleUse;
 
         private readonly DiContainer _diContainer;
+        private readonly ILocalizationSystem _localizationSystem;
         
-        public ContextMenuActionFactory( DiContainer diContainer )
+        public ContextMenuActionFactory(
+            DiContainer diContainer,
+            ILocalizationSystem localizationSystem
+            )
         {
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
+            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
         
         public ActionHandlerComposite GetOrCreateItemHandler()
@@ -45,23 +53,24 @@ namespace Game.Core.Player
             return _itemNote;
         }
         
-        public ActionHandlerComposite GetOrCreateOpenableHandler()
+        public ActionHandlerComposite GetOrCreateOpenCloseHandler()
         {
             if ( _open == null )
             {
-                _open = new( new() { _diContainer.Instantiate< OpenActionHandler >() } );
+                _open = new( new() { _diContainer.Instantiate< OpenCloseActionHandler >() } );
             }
 
             return _open;
         }
-        
-        public ActionHandlerComposite GetOrCreatePullableHandler()
-        {
-            if ( _pull == null )
-            {
-                _pull = new( new() { _diContainer.Instantiate< PullActionHandler >() } );
-            }
-            return _pull;
-        }
+
+        // public ActionHandlerComposite GetOrCreatePuzzleHandler()
+        // {
+        //     if ( _puzzleUse == null )
+        //     {
+        //         _puzzleUse = new();
+        //     }
+        //
+        //     return _puzzleUse;
+        // }
     }
 }

@@ -6,6 +6,7 @@ using Game.Managers.InputManager;
 using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
+using StarSmithGames.Localization;
 using System;
 using UnityEngine;
 
@@ -19,8 +20,8 @@ namespace Game.Core.UI.InspectDialog
         private ItemObject _item;
         private bool _isExamine;
 
-        private readonly InputHolder _inputRead;
-        private readonly InputHolder _inputCancel;
+        private readonly InputActionHolder _inputActionRead;
+        private readonly InputActionHolder _inputActionCancel;
         private readonly InputKeyActionsSettings _inputKeyActionsSettings;
         private readonly ILocalizationSystem _localizationSystem;
         
@@ -31,8 +32,8 @@ namespace Game.Core.UI.InspectDialog
         {
             _inputKeyActionsSettings = inputKeyActionsSettings ?? throw new ArgumentNullException( nameof(inputKeyActionsSettings) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
-            _inputRead = new( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
-            _inputCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
+            _inputActionRead = new( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
+            _inputActionCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
         public void Set( ItemObject item, Camera camera )
@@ -51,7 +52,7 @@ namespace Game.Core.UI.InspectDialog
             ModelView.CancelButton1.OnButtonClicked += CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked += CancelButtonClickedHandler;
             
-            _inputCancel.Enable();
+            _inputActionCancel.Enable();
         }
 
         protected override void UnSubscribeView()
@@ -62,8 +63,8 @@ namespace Game.Core.UI.InspectDialog
             ModelView.CancelButton1.OnButtonClicked -= CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked -= CancelButtonClickedHandler;
             
-            _inputRead.Disable();
-            _inputCancel.Disable();
+            _inputActionRead.Disable();
+            _inputActionCancel.Disable();
             
             CursorManager.Disable();
         }
@@ -78,9 +79,9 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ExamineCanvasGroup.Enable( false );
 
             ModelView.ReadButton.gameObject.SetActive( false );
-            ModelView.ReadButton.Set( _inputKeyActionsSettings.ReadAction.GetDisplayKey(), _localizationSystem.Translate( _inputKeyActionsSettings.ReadAction.NameId ) );
-            ModelView.CancelButton1.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _inputKeyActionsSettings.BackAction.NameId ) );
-            ModelView.CancelButton2.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( _inputKeyActionsSettings.BackAction.NameId ) );
+            ModelView.ReadButton.Set( _inputKeyActionsSettings.ReadAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_READ ) );
+            ModelView.CancelButton1.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_BACK ) );
+            ModelView.CancelButton2.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_BACK ) );
 
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;
@@ -93,7 +94,7 @@ namespace Game.Core.UI.InspectDialog
             {
                 ModelView.ExamineText.text = _localizationSystem.Translate( _item.TextId );
                 
-                _inputRead.Enable();
+                _inputActionRead.Enable();
                 ModelView.ReadButton.gameObject.SetActive( true );
             }
             

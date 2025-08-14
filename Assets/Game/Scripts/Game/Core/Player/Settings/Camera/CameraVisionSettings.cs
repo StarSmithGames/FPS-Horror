@@ -5,6 +5,7 @@ namespace Game.Core.Player
     [ System.Serializable ]
     public sealed class CameraVisionSettings
     {
+        [ field: SerializeField ] public LayerMask DefaultLayers { get; private set; } = ~0;
         [ field: SerializeField ] public LayerMask InteractLayers { get; private set; }
         [ field: Space ]
         [ field: SerializeField ] public float MaxRayDistance { get; private set; } = 5f;

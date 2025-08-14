@@ -20,11 +20,6 @@ namespace Game.Core.Entity
             Controller = controller;
         }
         
-        public void Interact()
-        {
-            Debug.LogError( "Interact" );
-        }
-        
         public Transform TransformInspection => transform;
     }
 }

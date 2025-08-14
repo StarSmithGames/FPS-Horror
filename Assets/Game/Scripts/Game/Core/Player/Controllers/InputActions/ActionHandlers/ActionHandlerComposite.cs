@@ -9,7 +9,8 @@ namespace Game.Core.Player
     public sealed class ActionHandlerComposite
     {
         public event Action OnCompleted;
-        
+
+        public List< ContextMenuActionHandler > Handlers => _handlers;
         private readonly List< ContextMenuActionHandler > _handlers;
         
         public ActionHandlerComposite( List< ContextMenuActionHandler > handlers )

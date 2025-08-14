@@ -11,7 +11,7 @@ namespace Game.Core.Player
     {
         public event Action OnLanded;
 
-        private List< InputHolder > _inputHolders = new();
+        private List< InputActionHolder > _inputHolders = new();
         private CancellationTokenSource _cancellationTokenSource;
         private Vector2 _moveInput;
         
