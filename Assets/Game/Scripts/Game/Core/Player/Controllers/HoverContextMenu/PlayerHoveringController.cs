@@ -5,6 +5,7 @@ using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.Extensions;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using IObservable = Game.Core.World.InteractionSystem.IObservable;
 using PointerType = Game.Core.UI.GameScreen.PointerType;
 
@@ -158,7 +159,7 @@ namespace Game.Core.Player
             else if ( _currentObservable is PuzzleObject puzzle )
             {
                 _pointerController.SetPointer( PointerType.Point );
-                _targetInformer.Name.text = string.Empty;
+                _targetInformer.Name.text = "Puzzle";
                 
                 return _contextMenuActionFactory.GetOrCreatePuzzleHandler();
             }

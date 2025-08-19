@@ -9,5 +9,7 @@ namespace Game.Systems.InventorySystem
         [ field: SerializeField ] public List< ItemConfig > AllItems { get; private set; }
         [ field: Space ]
         [ field: SerializeField ] public ItemConfig LighterConfig { get; private set; }
+
+        public const string FUSE = "fuse";
     }
 }

@@ -1,27 +1,25 @@
+using Game.Core.World.InteractionSystem;
 using System;
 
 namespace Game.Core.Player
 {
-    public sealed class PlayerController
+    public sealed class PlayerController : IInteractor
     {
         public PlayerObject View { get; }
         public PlayerConfig Config { get; }
-        
-        public PlayerFacade Facade { get; }
-        
+
+        public IServiceLocator ServiceLocator => _brain.ServiceLocator;
 
         private readonly PlayerBrain _brain;
         
         public PlayerController(
             PlayerObject view,
             PlayerConfig config,
-            PlayerFacade facade,
             PlayerBrain brain
             )
         {
             View = view ?? throw new ArgumentNullException( nameof(view) );
             Config = config ?? throw new ArgumentNullException( nameof(config) );
-            Facade = facade ?? throw new ArgumentNullException( nameof(facade) );
             _brain = brain ?? throw new ArgumentNullException( nameof(brain) );
             
             View.SetController( this );

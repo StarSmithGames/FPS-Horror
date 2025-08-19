@@ -10,12 +10,17 @@ namespace Game.Core.Player
     public sealed class InteractActionHandler : QuickActionHandler
     {
         private IInteractable _interactable;
+
+        private readonly PlayerController _playerController;
         
         public InteractActionHandler(
+            PlayerController playerController,
             InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
             ) : base( inputKeyActionsSettings.InteractAction )
         {
+            _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
+            
             if ( ContextMenuOperation == null )
             {
                 ContextMenuOperation = new();
@@ -39,7 +44,7 @@ namespace Game.Core.Player
         {
             if ( !IsEnable ) return;
 
-            _interactable.Interact();
+            _interactable.Interact( _playerController );
             
             base.Completed();
         }
