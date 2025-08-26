@@ -11,6 +11,8 @@ namespace Game.Core.Player
     {
         public event Action OnLanded;
 
+        public IServiceLocator ServiceLocator { get; }
+        
         private List< InputActionHolder > _inputHolders = new();
         private CancellationTokenSource _cancellationTokenSource;
         private Vector2 _moveInput;
@@ -26,6 +28,7 @@ namespace Game.Core.Player
         private readonly CameraVisionController _cameraVisionController;
         private readonly PlayerHoveringController _hoveringController;
         private readonly PlayerInputActionsController _inputActionsController;
+        private readonly PlayerInventoryController _inventoryController;
         private readonly PlayerSoundController _soundController;
         
         public PlayerBrain(
@@ -41,6 +44,7 @@ namespace Game.Core.Player
             CameraVisionController cameraVisionController,
             PlayerHoveringController hoveringController,
             PlayerInputActionsController inputActionsController,
+            PlayerInventoryController inventoryController,
             PlayerSoundController soundController
             )
         {
@@ -55,7 +59,20 @@ namespace Game.Core.Player
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
             _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
+            _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
             _soundController = soundController ?? throw new ArgumentNullException( nameof(soundController) );
+
+            ServiceLocator = new ServiceLocator();
+            ServiceLocator.Register( _lookController );
+            ServiceLocator.Register( _movementController );
+            ServiceLocator.Register( _jumpController );
+            ServiceLocator.Register( _crouchController );
+            ServiceLocator.Register( _cameraFOVController );
+            ServiceLocator.Register( _cameraVisionController );
+            ServiceLocator.Register( _hoveringController );
+            ServiceLocator.Register( _inputActionsController );
+            ServiceLocator.Register( _inventoryController );
+            ServiceLocator.Register( _soundController );
         }
 
         public void Initialize()

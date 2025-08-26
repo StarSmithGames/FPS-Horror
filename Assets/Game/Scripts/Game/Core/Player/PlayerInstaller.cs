@@ -31,7 +31,6 @@ namespace Game.Core.Player
             
             Container.Bind< PlayerSoundController >().AsSingle();
             
-            Container.Bind< PlayerFacade >().AsSingle();
             Container.Bind< PlayerStates >().AsSingle();
             Container.Bind< PlayerBrain >().AsSingle();
             Container.Bind< PlayerController >().AsSingle().NonLazy();
