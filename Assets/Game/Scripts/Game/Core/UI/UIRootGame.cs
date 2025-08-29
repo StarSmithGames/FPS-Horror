@@ -1,9 +1,5 @@
-using Game.Core.UI.GameScreen;
-using Game.Core.UI.MenuScreen;
 using Game.UISystem;
 using PuzzlescapeGames.VVM;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -11,18 +7,12 @@ namespace Game.Core.UI
 {
     public sealed class UIRootGame : MonoBehaviour
     {
-        [ field: SerializeField ] public UIMenuScreen MenuScreen { get; private set; }
-        [ field: SerializeField ] public UIGameScreen GameScreen { get; private set; }
         [ field: SerializeField ] public UIDynamicScreen DynamicScreen { get; private set; }
+
+        [ SerializeField ] private Transform _screensRoot;
         
         public ViewModelAggregator ScreenAggregator { get; private set; }
         public ViewModelAggregator DialogAggregator { get; private set; }
-        
-        private List< Type > _runtimeViewModels = new()
-        {
-            typeof(MenuScreenViewModel),
-            typeof(GameScreenViewModel),
-        };
         
         [ Inject ]
         private void Construct(
@@ -30,24 +20,8 @@ namespace Game.Core.UI
             UISettings uiSettings
             )
         {
-            ScreenAggregator = ViewModelAggregator.Create( diContainer, transform, Array.Empty< View >() );
+            ScreenAggregator = ViewModelAggregator.Create( diContainer, _screensRoot, uiSettings.Screens );
             DialogAggregator = ViewModelAggregator.Create( diContainer, DynamicScreen.DialogsRoot, uiSettings.Dialogs );
-
-            Initialize();
-        }
-        
-        public void Initialize()
-        {
-            // var camera = Camera.main;
-            // for ( int i = 0; i < _canvases.Count; i++ )
-            // {
-            //     _canvases[ i ].worldCamera = camera;
-            // }
-			
-            for ( int i = 0; i < _runtimeViewModels.Count; i++ )
-            {
-                ScreenAggregator.Create( _runtimeViewModels[ i ] );
-            }
         }
         
         private void OnDestroy()

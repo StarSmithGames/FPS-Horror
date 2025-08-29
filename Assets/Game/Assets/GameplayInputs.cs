@@ -397,7 +397,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8cbb2f4b-a784-49cc-8d5e-c010b8c7f4e6"",
-                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -507,7 +507,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""651d93b3-d14a-4024-8a7d-5c83cfa367b4"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",

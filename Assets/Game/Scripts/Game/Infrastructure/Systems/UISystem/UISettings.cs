@@ -7,6 +7,7 @@ namespace Game.UISystem
     [ System.Serializable ]
     public sealed class UISettings
     {
+        [ field: SerializeField ] public List< View > Screens { get; private set; } = new();
         [ field: SerializeField ] public List< View > Dialogs { get; private set; } = new();
     }
 }
