@@ -1,5 +1,7 @@
 using Game.Managers.InputManager;
+using Game.SceneSystem;
 using PuzzlescapeGames.VVM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +13,13 @@ namespace Game.Core.UI.MenuScreen
     {
         private List< UIOptionButton > _buttons = new( 3 );
 
+        private readonly ISceneSystem _sceneSystem;
+        
+        public MenuScreenViewModel( ISceneSystem sceneSystem )
+        {
+            _sceneSystem = sceneSystem ?? throw new ArgumentNullException( nameof(sceneSystem) );
+        }
+        
         protected override void SubscribeView()
         {
             base.SubscribeView();
@@ -90,7 +99,19 @@ namespace Game.Core.UI.MenuScreen
         
         private void ButtonClickedHandler( UIOptionButton button )
         {
-            Debug.LogError( "ButtonClickedHandler" );
+            var index = _buttons.IndexOf( button );
+            if ( index == 0 )
+            {
+                _sceneSystem.LoadSceneFromBuild( 1 );
+            }
+            else if ( index == 1 )
+            {
+                
+            }
+            else if ( index == 2 )
+            {
+                Application.Quit();
+            }
         }
     }
 }

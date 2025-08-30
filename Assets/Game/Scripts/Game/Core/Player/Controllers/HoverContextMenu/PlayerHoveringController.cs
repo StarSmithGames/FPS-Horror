@@ -42,7 +42,8 @@ namespace Game.Core.Player
 
         public void Initialize()
         {
-            _gameScreenViewModel = _uiRootGame.ScreenAggregator.GetAs< GameScreenViewModel >();
+            _gameScreenViewModel = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< GameScreenViewModel >();
+            _gameScreenViewModel.EnableView( true );
             _pointerController = new( _gameScreenViewModel );
             _targetInformer = _gameScreenViewModel.ModelView.TargetInformer;
             _targetInformer.Enable( false );

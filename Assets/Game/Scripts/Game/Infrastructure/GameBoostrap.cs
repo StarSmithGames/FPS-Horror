@@ -11,27 +11,26 @@ using Zenject;
 
 namespace Game
 {
-    public sealed class GameplayPipeline : IInitializable, IDisposable
+    public sealed class GameBoostrap : IInitializable, IDisposable
     {
-        private readonly UIRootGame _uiRootGame;
         private readonly StoryManager _storyManager;
-        
-        public GameplayPipeline( UIRootGame uiRootGame, StoryManager storyManager )
+        private readonly UIRootGame _uiRootGame;
+
+        public GameBoostrap( UIRootGame uiRootGame , StoryManager storyManager )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _storyManager = storyManager ?? throw new ArgumentNullException( nameof(storyManager) );
         }
-        
+
         public void Initialize()
         {
             InputManager.Initialize();
+            CursorManager.Disable();
             
-            _uiRootGame.ScreenAggregator.ShowAndCreateIfNotExist< MenuScreenViewModel >();
-
-            // CursorManager.Disable();
-            //
-            // _storyManager.CreateAndStartStory( GameObject.FindAnyObjectByType< IntroduceLevelObject >() );
-            // GameObject.FindAnyObjectByType< PlayerObject >().Controller.Initialize();
+            _storyManager.CreateAndStartStory( GameObject.FindAnyObjectByType< IntroduceLevelObject >() );
+            GameObject.FindAnyObjectByType< PlayerObject >().Controller.Initialize();
+            
+            // _uiRootGame.ScreenAggregator.ShowAndCreateIfNotExist< MenuScreenViewModel >();
         }
 
         public void Dispose()
