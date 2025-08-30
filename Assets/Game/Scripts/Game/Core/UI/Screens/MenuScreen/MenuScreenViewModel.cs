@@ -27,7 +27,7 @@ namespace Game.Core.UI.MenuScreen
                 button.OnButtonClicked += ButtonClickedHandler;
             }
 
-            InputManager.OnControllerChanged += ControllerChangedHandler;
+            GamepadDetector.OnChanged += GamepadChangedHandler;
         }
 
         protected override void UnSubscribeView()
@@ -42,7 +42,7 @@ namespace Game.Core.UI.MenuScreen
                 button.OnButtonClicked -= ButtonClickedHandler;
             }
             
-            InputManager.OnControllerChanged -= ControllerChangedHandler;
+            GamepadDetector.OnChanged -= GamepadChangedHandler;
         }
 
         protected override void OnViewCreated()
@@ -55,16 +55,18 @@ namespace Game.Core.UI.MenuScreen
             {
                 _buttons[ i ].Deselect();
             }
-            ControllerChangedHandler();
+            GamepadChangedHandler();
         }
 
-        private void ControllerChangedHandler()
+        private void GamepadChangedHandler()
         {
-            if ( InputManager.IsController )
+            if ( GamepadDetector.IsConnected )
             {
                 if ( _buttons.All( ( x ) => !x.IsSelected ) )
                 {
-                    _buttons.First().Select();
+                    var button = _buttons.First();
+                    button.Select();
+                    EventSystem.current.SetSelectedGameObject( button.gameObject );
                 }
             }
         }
@@ -80,7 +82,7 @@ namespace Game.Core.UI.MenuScreen
 
         private void ButtonPointerExitedHandler( UIOptionButton button )
         {
-            if ( !InputManager.IsController )
+            if ( !GamepadDetector.IsConnected )
             {
                 button.Deselect();
             }
@@ -89,8 +91,6 @@ namespace Game.Core.UI.MenuScreen
         private void ButtonClickedHandler( UIOptionButton button )
         {
             Debug.LogError( "ButtonClickedHandler" );
-            
-            // EventSystem.current.SetSelectedGameObject( null );
         }
     }
 }

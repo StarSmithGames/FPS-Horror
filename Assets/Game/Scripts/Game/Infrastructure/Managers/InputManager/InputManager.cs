@@ -11,15 +11,10 @@ namespace Game.Managers.InputManager
 {
     public static class InputManager
     {
-        public static event Action OnControllerChanged;
-        
         public static event Action OnJump;
         
         public static GameplayInputs Inputs { get; private set; }
 
-        public static bool IsMouse => Mouse.current != null;
-        public static bool IsController => Gamepad.current != null;
-        
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
 
         private static InputDevice _lastGamepad;
@@ -29,27 +24,17 @@ namespace Game.Managers.InputManager
         
         public static void Initialize()
         {
+            _cancellationTokenSource = new();
+            GamepadDetector.Initialize( _cancellationTokenSource.Token );
+            
             Inputs = new GameplayInputs();
             Inputs.Enable();
-            
-            var gamepads = Gamepad.all.ToList();
-            foreach ( var gamepad in gamepads )
-            {
-                if ( gamepad != null )
-                {
-                    InputSystem.RemoveDevice( gamepad );
-                }
-            }
-            InputSystem.onDeviceChange += DeviceChangedHandler;
-
             
             Inputs.Player.Jump.started += JumStartedHandler;
             
             ToggleGameControls( true );
             ToggleUIControls( false );
 
-            _cancellationTokenSource = new();
-            JoystickReconnectDetector.Initialize( _cancellationTokenSource.Token );
             Tick( _cancellationTokenSource.Token ).Forget();
             
             void ToggleGameControls( bool enable )
@@ -67,8 +52,6 @@ namespace Game.Managers.InputManager
 
         public static void Dispose()
         {
-            InputSystem.onDeviceChange -= DeviceChangedHandler;
-            
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
@@ -89,17 +72,15 @@ namespace Game.Managers.InputManager
 
         private static async UniTask Tick( CancellationToken cancellationToken = default )
         {
-            bool isController = IsController;
-            
             while ( !cancellationToken.IsCancellationRequested )
             {
-                if ( IsMouse )
+                if ( Mouse.current != null )
                 {
                     MouseX = Mouse.current.delta.x.ReadValue();
                     MouseY = Mouse.current.delta.y.ReadValue();
                 }
 
-                if ( IsController )
+                if ( Gamepad.current != null )
                 {
                     ControllerX = Gamepad.current.rightStick.x.ReadValue();
                     ControllerY = -Gamepad.current.rightStick.y.ReadValue();
@@ -111,12 +92,6 @@ namespace Game.Managers.InputManager
                 }
 
                 await UniTask.Yield();
-
-                if ( isController != IsController )
-                {
-                    isController = IsController;
-                    OnControllerChanged?.Invoke();
-                }
             }
         }
 
@@ -146,25 +121,6 @@ namespace Game.Managers.InputManager
         private static void JumStartedHandler( InputAction.CallbackContext callbackContext )
         {
             OnJump?.Invoke();
-        }
-
-        private static void DeviceChangedHandler( InputDevice device, InputDeviceChange change )
-        {
-            if ( device is Gamepad )
-            {
-                if ( _lastGamepad == null )
-                {
-                    _lastGamepad = device;
-                    OnControllerChanged?.Invoke();
-                }
-                else if ( _lastGamepad != device )
-                {
-                    _lastGamepad = device;
-                    OnControllerChanged?.Invoke();
-                }
-                
-                Debug.LogError( $"[DeviceChange] {device.displayName} ({device.layout}) -> {change}" );
-            }
         }
     }
 }
