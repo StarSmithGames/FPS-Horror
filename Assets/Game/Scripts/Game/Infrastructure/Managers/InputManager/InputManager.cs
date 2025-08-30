@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XInput;
 
 namespace Game.Managers.InputManager
 {
@@ -17,9 +18,11 @@ namespace Game.Managers.InputManager
         public static GameplayInputs Inputs { get; private set; }
 
         public static bool IsMouse => Mouse.current != null;
-        public static bool IsController => Gamepad.current != null && Gamepad.current.enabled;
+        public static bool IsController => Gamepad.current != null;
         
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
+
+        private static InputDevice _lastGamepad;
 
         private static CancellationTokenSource _cancellationTokenSource;
         private static List< InputActionHolder > _inputHolders = new();
@@ -28,8 +31,17 @@ namespace Game.Managers.InputManager
         {
             Inputs = new GameplayInputs();
             Inputs.Enable();
-
+            
+            var gamepads = Gamepad.all.ToList();
+            foreach ( var gamepad in gamepads )
+            {
+                if ( gamepad != null )
+                {
+                    InputSystem.RemoveDevice( gamepad );
+                }
+            }
             InputSystem.onDeviceChange += DeviceChangedHandler;
+
             
             Inputs.Player.Jump.started += JumStartedHandler;
             
@@ -37,6 +49,7 @@ namespace Game.Managers.InputManager
             ToggleUIControls( false );
 
             _cancellationTokenSource = new();
+            JoystickReconnectDetector.Initialize( _cancellationTokenSource.Token );
             Tick( _cancellationTokenSource.Token ).Forget();
             
             void ToggleGameControls( bool enable )
@@ -139,28 +152,18 @@ namespace Game.Managers.InputManager
         {
             if ( device is Gamepad )
             {
-                switch ( change )
+                if ( _lastGamepad == null )
                 {
-                    case InputDeviceChange.Reconnected:
-                    case InputDeviceChange.Added:
-                    case InputDeviceChange.Enabled:
-                    {
-                        OnControllerChanged?.Invoke();
-                        break;
-                    }
-                    case InputDeviceChange.Disconnected:
-                    case InputDeviceChange.Removed:
-                    case InputDeviceChange.Disabled:
-                    {
-                        OnControllerChanged?.Invoke();
-                        break;
-                    }
-                    default:
-                    {
-                        OnControllerChanged?.Invoke();
-                        break;
-                    }
+                    _lastGamepad = device;
+                    OnControllerChanged?.Invoke();
                 }
+                else if ( _lastGamepad != device )
+                {
+                    _lastGamepad = device;
+                    OnControllerChanged?.Invoke();
+                }
+                
+                Debug.LogError( $"[DeviceChange] {device.displayName} ({device.layout}) -> {change}" );
             }
         }
     }

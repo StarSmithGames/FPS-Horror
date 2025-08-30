@@ -60,7 +60,6 @@ namespace Game.Core.UI.MenuScreen
 
         private void ControllerChangedHandler()
         {
-            Debug.LogError( "HERER" );
             if ( InputManager.IsController )
             {
                 if ( _buttons.All( ( x ) => !x.IsSelected ) )
