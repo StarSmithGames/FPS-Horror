@@ -56,12 +56,21 @@ namespace Game.Core.Player
             _cameraPitch = Mathf.Clamp( _cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle );
 
             CalculateCameraRoll();
-            
-            // Handle camera rotation
-            Head.localRotation = Quaternion.Euler( _cameraPitch, _cameraYaw, _cameraRoll );
-            Root.rotation = Quaternion.Euler( 0, _cameraYaw, 0 );
+            SetRotation( _cameraPitch, _cameraYaw, _cameraRoll );
 
             // HandleAimAssist();
+        }
+
+        public void SetRotation( float x, float y, float z )
+        {
+            Head.localRotation = Quaternion.Euler( x, y, z );
+            Root.rotation = Quaternion.Euler( 0, y, 0 );
+        }
+
+        public void SetRotation( Vector3 rotation )
+        {
+            Head.localRotation = Quaternion.Euler( rotation.x, rotation.y, rotation.z );
+            Root.rotation = Quaternion.Euler( 0, rotation.y, 0 );
         }
 
         // public void VerticalLook()

@@ -21,7 +21,7 @@ namespace Game.Core.Player
         private readonly PlayerConfig _config;
         private readonly PlayerStates _states;
         private readonly PlayerLookController _lookController;
-        private readonly PlayerMovementController _movementController;
+        private readonly PlayerMoveController _moveController;
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerCrouchController _crouchController;
         private readonly CameraFOVController _cameraFOVController;
@@ -36,7 +36,7 @@ namespace Game.Core.Player
             PlayerConfig config,
             PlayerStates states,
             PlayerLookController lookController,
-            PlayerMovementController movementController,
+            PlayerMoveController moveController,
             PlayerJumpController jumpController,
             PlayerCrouchController crouchController,
             
@@ -52,7 +52,7 @@ namespace Game.Core.Player
             _config = config ?? throw new ArgumentNullException( nameof(config) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _lookController = lookController ?? throw new ArgumentNullException( nameof(lookController) );
-            _movementController = movementController ?? throw new ArgumentNullException( nameof(movementController) );
+            _moveController = moveController ?? throw new ArgumentNullException( nameof(moveController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
@@ -64,7 +64,7 @@ namespace Game.Core.Player
 
             ServiceLocator = new ServiceLocator();
             ServiceLocator.Register( _lookController );
-            ServiceLocator.Register( _movementController );
+            ServiceLocator.Register( _moveController );
             ServiceLocator.Register( _jumpController );
             ServiceLocator.Register( _crouchController );
             ServiceLocator.Register( _cameraFOVController );
@@ -77,7 +77,7 @@ namespace Game.Core.Player
 
         public void Initialize()
         {
-            _movementController.Initialize();
+            _moveController.Initialize();
             _jumpController.Initialize();
             _crouchController.Initialize();
             _cameraFOVController.Initialize();
@@ -129,7 +129,7 @@ namespace Game.Core.Player
 
                 // HandleStairs( _moveDirection );
                 
-                _movementController.HandleVelocities( false, _moveInput );
+                _moveController.HandleVelocities( false, _moveInput );
                 
                 _soundController.FootSteps();
 
@@ -154,7 +154,7 @@ namespace Game.Core.Player
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
-                _movementController.Movement( _crouchController.IsSliding(), _moveInput );
+                _moveController.Movement( _crouchController.IsSliding(), _moveInput );
                 
                 await UniTask.Yield( PlayerLoopTiming.FixedUpdate );
             }
@@ -173,7 +173,7 @@ namespace Game.Core.Player
             bool foundGround = false;
             if ( Physics.Raycast( origin, Vector3.down, out RaycastHit hit, _config.GroundSettings.GroundCheckDistance, _config.GroundSettings.GroundLayer ) )
             {
-                if ( _movementController.IsFloor( hit.normal ) )
+                if ( _moveController.IsFloor( hit.normal ) )
                 {
                     foundGround = true;
                 }

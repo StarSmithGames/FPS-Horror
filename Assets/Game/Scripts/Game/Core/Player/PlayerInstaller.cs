@@ -39,7 +39,7 @@ namespace Game.Core.Player
         private void BindLocomotion()
         {
             Container.Bind< PlayerLookController >().AsSingle();
-            Container.Bind< PlayerMovementController >().AsSingle();
+            Container.Bind< PlayerMoveController >().AsSingle();
             Container.Bind< PlayerJumpController >().AsSingle();
             Container.Bind< PlayerCrouchController >().AsSingle();
         }

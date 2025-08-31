@@ -1,5 +1,6 @@
 using Game.Core.World.InteractionSystem;
 using System;
+using UnityEngine;
 
 namespace Game.Core.Player
 {
@@ -33,6 +34,12 @@ namespace Game.Core.Player
         public void Dispose()
         {
             _brain.Dispose();
+        }
+
+        public void Teleport( Vector3 targetPosition, Vector3 targetRotation )
+        {
+            ServiceLocator.GetAs< PlayerMoveController >().SetPosition( targetPosition );
+            ServiceLocator.GetAs< PlayerLookController >().SetRotation( targetRotation );
         }
     }
 }

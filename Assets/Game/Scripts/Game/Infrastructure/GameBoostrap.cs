@@ -59,8 +59,8 @@ namespace Game
 
                 var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
                 var player = playerInstaller.GetComponentInChildren< PlayerObject >();
+                player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
                 player.Controller.Initialize();
-                player.transform.position = level.PlayerPoint.transform.position;
             }
             #endif
 

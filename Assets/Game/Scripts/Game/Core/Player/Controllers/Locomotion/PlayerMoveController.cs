@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class PlayerMovementController
+    public sealed class PlayerMoveController
     {
         private readonly float FRICTION_THRESHOLD = 0.1f;
 
@@ -21,7 +21,7 @@ namespace Game.Core.Player
         private readonly PlayerStates _states;
         private readonly CameraFOVController _cameraFOVController;
         
-        public PlayerMovementController(
+        public PlayerMoveController(
             PlayerObject view,
             PlayerConfig config,
             PlayerStates states,
@@ -37,6 +37,11 @@ namespace Game.Core.Player
         public void Initialize()
         {
             _localScale = _view.transform.localScale;
+        }
+
+        public void SetPosition( Vector3 position )
+        {
+            Root.position = position;
         }
 
         public void SetSpeed( float speed )
