@@ -13,11 +13,11 @@ namespace Game.Core.UI.MenuScreen
     {
         private List< UIOptionButton > _buttons = new( 3 );
 
-        private readonly ISceneSystem _sceneSystem;
+        private readonly GameBoostrap _gameBoostrap;
         
-        public MenuScreenViewModel( ISceneSystem sceneSystem )
+        public MenuScreenViewModel( GameBoostrap gameBoostrap )
         {
-            _sceneSystem = sceneSystem ?? throw new ArgumentNullException( nameof(sceneSystem) );
+            _gameBoostrap = gameBoostrap ?? throw new ArgumentNullException( nameof(gameBoostrap) );
         }
         
         protected override void SubscribeView()
@@ -102,7 +102,7 @@ namespace Game.Core.UI.MenuScreen
             var index = _buttons.IndexOf( button );
             if ( index == 0 )
             {
-                _sceneSystem.LoadSceneFromBuild( 1 );
+                _gameBoostrap.Start();
             }
             else if ( index == 1 )
             {
