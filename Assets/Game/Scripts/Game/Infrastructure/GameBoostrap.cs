@@ -4,16 +4,17 @@ using Game.Core.UI.MenuScreen;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
 using Game.StoryFlow;
-using Game.StoryFlow.Introduce;
 using System;
 using UnityEngine;
 using Zenject;
-using ArgumentNullException = System.ArgumentNullException;
 
 namespace Game
 {
     public sealed class GameBoostrap : IInitializable, IDisposable
     {
+        private Camera _cameraUI;
+        private MenuScreenViewModel _menuScreenViewModel;
+        
         private readonly DiContainer _diContainer;
         private readonly UIRootGame _uiRootGame;
         private readonly GameConfig _gameConfig;
@@ -35,9 +36,9 @@ namespace Game
         public void Initialize()
         {
             InputManager.Initialize();
-            CursorManager.Disable();
 
-            _uiRootGame.ScreenAggregator.ShowAndCreateIfNotExist< MenuScreenViewModel >();
+            _menuScreenViewModel = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< MenuScreenViewModel >();
+            _menuScreenViewModel.ShowView();
         }
 
         public void Dispose()
@@ -47,12 +48,22 @@ namespace Game
 
         public void Start()
         {
-            var level = _diContainer.InstantiatePrefabForComponent< IntroduceLevelObject >( _gameConfig.Level1Prefab );
-            _storyManager.CreateAndStartStory( level );
+            _menuScreenViewModel.HideView();
+            CursorManager.Disable();
+            
+            #if UNITY_EDITOR
+            if ( _gameConfig.EditorLevelPrefab != null )
+            {
+                var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
+                _storyManager.CreateAndStartStory( level );
 
-            var player = GameObject.FindAnyObjectByType< PlayerObject >( FindObjectsInactive.Include );
-            player.gameObject.SetActive( true );
-            player.Controller.Initialize();
+                var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
+                var player = playerInstaller.GetComponentInChildren< PlayerObject >();
+                player.Controller.Initialize();
+                player.transform.position = level.PlayerPoint.transform.position;
+            }
+            #endif
+
         }
     }
 }
