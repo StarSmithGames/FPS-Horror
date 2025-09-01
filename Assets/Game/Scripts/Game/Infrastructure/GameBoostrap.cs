@@ -64,21 +64,28 @@ namespace Game
          
             _uiTransitionService.LoadThroughBlank( onShowed: () =>
             {
-                _menuScreenViewModel.HideView();
-                CursorManager.Disable();
+                try
+                {
+                    _menuScreenViewModel.HideView();
+                    CursorManager.Disable();
             
 #if UNITY_EDITOR
-                if ( _gameConfig.EditorLevelPrefab != null )
-                {
-                    var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
-                    _storyManager.CreateAndStartStory( level );
+                    if ( _gameConfig.EditorLevelPrefab != null )
+                    {
+                        var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
+                        _storyManager.CreateAndStartStory( level );
 
-                    var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
-                    var player = playerInstaller.GetComponentInChildren< PlayerObject >();
-                    player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
-                    player.Controller.Initialize();
-                }
+                        var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
+                        var player = playerInstaller.GetComponentInChildren< PlayerObject >();
+                        player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
+                        player.Controller.Initialize();
+                    }
 #endif
+                }
+                catch ( Exception e )
+                {
+                    Debug.LogError( e );
+                }
             } );
         }
     }

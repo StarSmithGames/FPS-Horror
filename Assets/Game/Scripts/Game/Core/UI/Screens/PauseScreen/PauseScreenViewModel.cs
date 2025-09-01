@@ -1,6 +1,6 @@
 using Game.Managers.CursorManager;
+using Game.Managers.GameManager;
 using Game.Managers.InputManager;
-using Game.SceneSystem;
 using PuzzlescapeGames.VVM;
 using System;
 using System.Collections.Generic;
@@ -8,24 +8,24 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game.Core.UI.MenuScreen
+namespace Game.Core.UI.PauseScreen
 {
-    public sealed class MenuScreenViewModel : ViewModel< UIMenuScreen >
+    public sealed class PauseScreenViewModel : ViewModel< UIPauseScreen >
     {
         private List< UIOptionButton > _buttons = new( 3 );
+        
+        private readonly GameManager _gameManager;
 
-        private readonly GameBoostrap _gameBoostrap;
-        
-        public MenuScreenViewModel( GameBoostrap gameBoostrap )
+        public PauseScreenViewModel( GameManager gameManager )
         {
-            _gameBoostrap = gameBoostrap ?? throw new ArgumentNullException( nameof(gameBoostrap) );
+            _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
         }
-        
+
         protected override void SubscribeView()
         {
             base.SubscribeView();
             
-            _buttons.Add( ModelView.StartButton );
+            _buttons.Add( ModelView.ContinueButton );
             _buttons.Add( ModelView.OptionsButton );
             _buttons.Add( ModelView.ExitButton );
             
@@ -65,9 +65,13 @@ namespace Game.Core.UI.MenuScreen
             CursorManager.Disable();
         }
 
-        protected override void OnViewCreated()
+        protected override void OnViewShowingChanged()
         {
-            EventSystem.current.SetSelectedGameObject( ModelView.StartButton.gameObject );
+            if ( !ModelView.IsShowing ) return;
+            
+            _gameManager.SetState( GameState.Pause );
+            
+            EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
          
             for ( int i = 0; i < _buttons.Count; i++ )
             {
@@ -75,7 +79,7 @@ namespace Game.Core.UI.MenuScreen
             }
             GamepadChangedHandler();
         }
-
+        
         private void GamepadChangedHandler()
         {
             if ( GamepadDetector.IsConnected )
@@ -111,7 +115,8 @@ namespace Game.Core.UI.MenuScreen
             var index = _buttons.IndexOf( button );
             if ( index == 0 )
             {
-                _gameBoostrap.Start();
+                HideViewAndDispose();
+                _gameManager.SetState( GameState.Game );
             }
             else if ( index == 1 )
             {

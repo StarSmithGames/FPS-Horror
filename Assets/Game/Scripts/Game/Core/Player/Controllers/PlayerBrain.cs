@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Game.Managers.InputManager;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -13,7 +12,6 @@ namespace Game.Core.Player
 
         public IServiceLocator ServiceLocator { get; }
         
-        private List< InputActionHolder > _inputHolders = new();
         private CancellationTokenSource _cancellationTokenSource;
         private Vector2 _moveInput;
         
@@ -83,16 +81,13 @@ namespace Game.Core.Player
             _cameraFOVController.Initialize();
             _cameraVisionController.Initialize();
             _hoveringController.Initialize();
+            _inputActionsController.Initialize();
 
-            InputManager.OnJump += JumpClickedHandler;
-            _inputHolders.Add( new( InputManager.Inputs.Player.Crouch, onStartHold: _crouchController.StartCrouch, onEndHold: _crouchController.StopCrouch ) );
-            InputManager.AddInputHolders( _inputHolders );
-            
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
             LastTick( _cancellationTokenSource.Token ).Forget();
             FixedTick( _cancellationTokenSource.Token ).Forget();
-            
+
             _inputActionsController.Enable();
         }
 
@@ -102,12 +97,7 @@ namespace Game.Core.Player
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
             
-            InputManager.OnJump -= JumpClickedHandler;
-            for ( int i = 0; i < _inputHolders.Count; i++ )
-            {
-                InputManager.RemoveInputHolder( _inputHolders[ i ] );
-            }
-            _inputHolders.Clear();
+            _inputActionsController.Disable();
             
             _cameraFOVController.Dispose();
             _cameraVisionController.Dispose();
@@ -119,7 +109,6 @@ namespace Game.Core.Player
             while ( !cancellationToken.IsCancellationRequested )
             {
                 _moveInput = InputManager.Inputs.Player.Movement.ReadValue< Vector2 >();
-                _states.IsSprinting = InputManager.Inputs.Player.Sprint.IsPressed();
                 
                 CheckGrounded();
 
@@ -203,12 +192,5 @@ namespace Game.Core.Player
         //AimAssist
         //Climbing Ladders
         //Stamina
-        
-        private void JumpClickedHandler()
-        {
-            if ( _states.IsBlocked ) return;
-            
-            _jumpController.Jump( _moveInput );
-        }
     }
 }

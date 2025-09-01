@@ -11,8 +11,6 @@ namespace Game.Managers.InputManager
 {
     public static class InputManager
     {
-        public static event Action OnJump;
-        
         public static GameplayInputs Inputs { get; private set; }
 
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
@@ -20,7 +18,6 @@ namespace Game.Managers.InputManager
         private static InputDevice _lastGamepad;
 
         private static CancellationTokenSource _cancellationTokenSource;
-        private static List< InputActionHolder > _inputHolders = new();
         
         public static void Initialize()
         {
@@ -29,8 +26,6 @@ namespace Game.Managers.InputManager
             
             Inputs = new GameplayInputs();
             Inputs.Enable();
-            
-            Inputs.Player.Jump.started += JumStartedHandler;
             
             ToggleGameControls( true );
             ToggleUIControls( false );
@@ -59,15 +54,7 @@ namespace Game.Managers.InputManager
             if ( Inputs != null )
             {
                 Inputs.Disable();
-                Inputs.Player.Jump.started -= JumStartedHandler;
             }
-            OnJump = null;
-
-            for ( int i = _inputHolders.Count - 1; i >= 0; i-- )
-            {
-                RemoveInputHolder( _inputHolders[ i ] );
-            }
-            _inputHolders.Clear();
         }
 
         private static async UniTask Tick( CancellationToken cancellationToken = default )
@@ -86,41 +73,11 @@ namespace Game.Managers.InputManager
                     ControllerY = -Gamepad.current.rightStick.y.ReadValue();
                 }
 
-                for ( int i = 0; i < _inputHolders.Count; i++ )
-                {
-                    _inputHolders[ i ].Tick();
-                }
-
                 await UniTask.Yield();
             }
         }
 
-        public static void AddInputHolders( List< InputActionHolder > inputHolders )
-        {
-            for ( int i = 0; i < inputHolders.Count; i++ )
-            {
-                AddInputHolder( inputHolders[ i ] );
-            }
-        }
-        
-        public static void AddInputHolder( InputActionHolder inputActionHolder )
-        {
-            inputActionHolder.Enable();
-            _inputHolders.Add( inputActionHolder );
-        }
-
-        public static void RemoveInputHolder( InputActionHolder inputActionHolder )
-        {
-            _inputHolders.Remove( inputActionHolder );
-            inputActionHolder.Disable();
-        }
-
         public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.fixedDeltaTime * currentControllerSensX );
         public static float GatherRawMouseY( int sensYInverted, int sensYInvertedController, float currentSensY, float currentControllerSensY ) => ( MouseY * currentSensY * sensYInverted * Time.fixedDeltaTime + ControllerY * sensYInvertedController * currentControllerSensY * Time.fixedDeltaTime );
-
-        private static void JumStartedHandler( InputAction.CallbackContext callbackContext )
-        {
-            OnJump?.Invoke();
-        }
     }
 }
