@@ -5,6 +5,7 @@ using Game.Managers.CursorManager;
 using Game.Managers.GameManager;
 using Game.Managers.InputManager;
 using Game.StoryFlow;
+using PuzzlescapeGames.Services.UITransitionService;
 using System;
 using UnityEngine;
 using Zenject;
@@ -21,13 +22,15 @@ namespace Game
         private readonly GameConfig _gameConfig;
         private readonly GameManager _gameManager;
         private readonly StoryManager _storyManager;
+        private readonly UITransitionService _uiTransitionService;
 
         public GameBoostrap(
             DiContainer diContainer,
             UIRootGame uiRootGame,
             GameConfig gameConfig,
             GameManager gameManager,
-            StoryManager storyManager
+            StoryManager storyManager,
+            UITransitionService uiTransitionService
             )
         {
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
@@ -35,6 +38,7 @@ namespace Game
             _gameConfig = gameConfig ?? throw new ArgumentNullException( nameof(gameConfig) );
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
             _storyManager = storyManager ?? throw new ArgumentNullException( nameof(storyManager) );
+            _uiTransitionService = uiTransitionService ?? throw new ArgumentNullException( nameof(uiTransitionService) );
         }
 
         public void Initialize()
@@ -57,23 +61,25 @@ namespace Game
         public void Start()
         {
             _gameManager.SetState( GameState.Game );
-            
-            _menuScreenViewModel.HideView();
-            CursorManager.Disable();
-            
-            #if UNITY_EDITOR
-            if ( _gameConfig.EditorLevelPrefab != null )
+         
+            _uiTransitionService.LoadThroughBlank( onShowed: () =>
             {
-                var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
-                _storyManager.CreateAndStartStory( level );
+                _menuScreenViewModel.HideView();
+                CursorManager.Disable();
+            
+#if UNITY_EDITOR
+                if ( _gameConfig.EditorLevelPrefab != null )
+                {
+                    var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
+                    _storyManager.CreateAndStartStory( level );
 
-                var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
-                var player = playerInstaller.GetComponentInChildren< PlayerObject >();
-                player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
-                player.Controller.Initialize();
-            }
-            #endif
-
+                    var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
+                    var player = playerInstaller.GetComponentInChildren< PlayerObject >();
+                    player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
+                    player.Controller.Initialize();
+                }
+#endif
+            } );
         }
     }
 }
