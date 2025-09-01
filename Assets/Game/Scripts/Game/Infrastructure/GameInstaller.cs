@@ -1,4 +1,5 @@
 using Game.Core.UI;
+using Game.Managers.GameManager;
 using Game.SceneSystem;
 using UnityEngine;
 using Zenject;
@@ -17,7 +18,7 @@ namespace Game
             SceneSystemInstaller.Install( Container );
             
             Container.Bind< UIRootGame >().FromComponentInNewPrefab( _uiRootGamePrefab ).AsSingle().NonLazy();
-
+            Container.Bind< GameManager >().AsSingle();
             Container.BindInterfacesAndSelfTo< GameBoostrap >().AsSingle().NonLazy();
         }
     }
