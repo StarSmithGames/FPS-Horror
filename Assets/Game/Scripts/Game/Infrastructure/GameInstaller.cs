@@ -2,6 +2,7 @@ using Game.Core.UI;
 using Game.Managers.GameManager;
 using Game.Managers.PauseManager;
 using Game.SceneSystem;
+using Game.Systems.StorageSystem;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +17,7 @@ namespace Game
         {
             Container.BindInstance( _gameConfig );
             
+            StorageSystemInstaller.Install( Container );
             SceneSystemInstaller.Install( Container );
             PauseManagerInstaller.Install( Container );
             

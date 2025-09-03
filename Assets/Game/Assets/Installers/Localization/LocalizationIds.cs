@@ -31,5 +31,7 @@ namespace StarSmithGames.Localization
 		public const string UI_OPTIONS_DIALOG_SFX_VOLUME = "ui.options_dialog.sfx_volume";
 		public const string UI_OPTIONS_DIALOG_AMBIENT_VOLUME = "ui.options_dialog.ambient_volume";
 		public const string UI_OPTIONS_DIALOG_RESOLUTION = "ui.options_dialog.resolution";
+		public const string UI_OPTIONS_DIALOG_FULL_SCREEN = "ui.options_dialog.full_screen";
+		public const string UI_OPTIONS_DIALOG_VSYNC = "ui.options_dialog.vsync";
 	}
 }

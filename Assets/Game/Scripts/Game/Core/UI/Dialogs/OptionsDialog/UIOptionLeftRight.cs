@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Core.UI.OptionsDialog
 {
@@ -12,6 +13,7 @@ namespace Game.Core.UI.OptionsDialog
         [ SerializeField ] private TextMeshProUGUI _text;
         [ SerializeField ] private GameObject _buttonLeft;
         [ SerializeField ] private GameObject _buttonRight;
+        [ SerializeField ] private LayoutElement _centerLayout;
         
         public void EnableButtons( bool trigger )
         {
@@ -24,6 +26,18 @@ namespace Game.Core.UI.OptionsDialog
             _text.text = text;
         }
 
+        public void SetCenter( int type )
+        {
+            if ( type == 0 )
+            {
+                _centerLayout.minWidth = 80f;
+            }
+            else if ( type == 1 )
+            {
+                _centerLayout.minWidth = 150f;
+            }
+        }
+        
         public void OnLeftButtonClick()
         {
             OnLeftButtonClicked?.Invoke();

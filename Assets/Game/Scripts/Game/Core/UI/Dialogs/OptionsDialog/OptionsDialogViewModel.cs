@@ -1,11 +1,13 @@
 using Cysharp.Threading.Tasks;
 using Game.Core.UI.SaveOptionsDialog;
 using Game.Managers.InputManager;
+using Game.Systems.StorageSystem;
 using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.VVM;
 using StarSmithGames.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
@@ -17,17 +19,32 @@ namespace Game.Core.UI.OptionsDialog
         private InputActionWrap _inputActionCancel;
         private int _currentTabIndex;
         private CancellationTokenSource _cancellationTokenSource;
-        private OptionLeftRightController _resolutionOption;
+        private List< OptionController > _options = new();
+
+        private bool _isAudioInitialized;
+        private OptionPercentsController _masterVolumeOption;
+        private OptionPercentsController _dialogueVolumeOption;
+        private OptionPercentsController _musicVolumeOption;
+        private OptionPercentsController _sfxVolumeOption;
+        private OptionPercentsController _ambientVolumeOption;
+        
+        private bool _isGraphicsInitialized;
+        private OptionSelectorController _resolutionOption;
+        private OptionToggleController _fullScreenOption;
+        private OptionToggleController _vsyncOption;
         
         private readonly UIRootGame _uiRootGame;
+        private readonly DataHolder _dataHolder;
         private readonly ILocalizationSystem _localizationSystem;
         
         public OptionsDialogViewModel(
             UIRootGame uiRootGame,
+            DataHolder dataHolder,
             ILocalizationSystem localizationSystem
             )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
 
@@ -37,7 +54,7 @@ namespace Game.Core.UI.OptionsDialog
 
             for ( int i = 0; i < ModelView.Tabs.Count; i++ )
             {
-                ModelView.Tabs[ i ].OnButtonClicked += OnTabButtonClicked;
+                ModelView.Tabs[ i ].OnButtonClicked += OnTabButtonClickedHandler;
             }
             
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
@@ -50,7 +67,7 @@ namespace Game.Core.UI.OptionsDialog
             
             for ( int i = 0; i < ModelView.Tabs.Count; i++ )
             {
-                ModelView.Tabs[ i ].OnButtonClicked -= OnTabButtonClicked;
+                ModelView.Tabs[ i ].OnButtonClicked -= OnTabButtonClickedHandler;
             }
             
             _inputActionCancel.Disable();
@@ -61,6 +78,12 @@ namespace Game.Core.UI.OptionsDialog
         {
             if ( !IsShowing ) return;
 
+            for ( int i = 0; i < ModelView.Contents.Count; i++ )
+            {
+                ModelView.Contents[ i ].DestroyChildren();
+            }
+            _options.Clear();
+
             _cancellationTokenSource = new();
             LoadOptions( 0, _cancellationTokenSource.Token ).Forget();
         }
@@ -69,66 +92,129 @@ namespace Game.Core.UI.OptionsDialog
         {
             _currentTabIndex = index;
             
-            ModelView.Content.DestroyChildren();
-            await UniTask.Yield();
-            cancellationToken.ThrowIfCancellationRequested();
-
+            for ( int i = 0; i < ModelView.Contents.Count; i++ )
+            {
+                ModelView.Contents[ i ].gameObject.SetActive( false );
+            }
+            ModelView.Contents[ index ].gameObject.SetActive( true );
+            
             if ( index == 1 )
             {
-                await LoadAudio( cancellationToken );
+                if ( !_isAudioInitialized )
+                {
+                    _isAudioInitialized = true;
+                    await LoadAudio( ModelView.Contents[ 1 ], cancellationToken );
+                }
             }
             else if ( index == 2 )
             {
-                await LoadGraphics( cancellationToken );
+                if ( !_isGraphicsInitialized )
+                {
+                    _isGraphicsInitialized = true;
+                    await LoadGraphics( ModelView.Contents[ 2 ], cancellationToken );
+                }
             }
 
-            async UniTask LoadAudio( CancellationToken cancellationToken = default )
+            async UniTask LoadAudio( Transform content, CancellationToken cancellationToken = default )
             {
-                var masterVolume = GameObject.Instantiate( ModelView.OptionLeftRightPrefab, ModelView.Content );
-                masterVolume.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_MASTER_VOLUME ) );
-                masterVolume.SetText( $"{100}%" );
+                var data = _dataHolder.GeneralStorageData.Audio.Value;
+                
+                _masterVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.MasterVolume );
+                _masterVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_MASTER_VOLUME ) );
+                _masterVolumeOption.Initialize();
+                _options.Add( _masterVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-            
-                var dialogueVolume = GameObject.Instantiate( ModelView.OptionLeftRightPrefab, ModelView.Content );
-                dialogueVolume.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_DIALOGUE_VOLUME ) );
-                dialogueVolume.SetText( $"{100}%" );
+
+                _dialogueVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.DialogueVolume );
+                _dialogueVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_DIALOGUE_VOLUME ) );
+                _dialogueVolumeOption.Initialize();
+                _options.Add( _dialogueVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-            
-                var musicVolume = GameObject.Instantiate( ModelView.OptionLeftRightPrefab, ModelView.Content );
-                musicVolume.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_MUSIC_VOLUME ) );
-                musicVolume.SetText( $"{100}%" );
+
+                _musicVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.MusicVolume );
+                _musicVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_MUSIC_VOLUME ) );
+                _musicVolumeOption.Initialize();
+                _options.Add( _musicVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-            
-                var sfxVolume = GameObject.Instantiate( ModelView.OptionLeftRightPrefab, ModelView.Content );
-                sfxVolume.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_SFX_VOLUME ) );
-                sfxVolume.SetText( $"{100}%" );
+
+                _sfxVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.SFXVolume );
+                _sfxVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_SFX_VOLUME ) );
+                _sfxVolumeOption.Initialize();
+                _options.Add( _sfxVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-            
-                var ambientVolume = GameObject.Instantiate( ModelView.OptionLeftRightPrefab, ModelView.Content );
-                ambientVolume.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_AMBIENT_VOLUME ) );
-                ambientVolume.SetText( $"{100}%" );
+
+                _ambientVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.AmbientVolume );
+                _ambientVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_AMBIENT_VOLUME ) );
+                _ambientVolumeOption.Initialize();
+                _options.Add( _ambientVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
             }
 
-            async UniTask LoadGraphics( CancellationToken cancellationToken = default )
+            async UniTask LoadGraphics( Transform content, CancellationToken cancellationToken = default )
             {
+                var data = _dataHolder.GeneralStorageData.Graphics.Value;
+                
                 //RESOLUTION
-                var view = GameObject.Instantiate( ModelView.OptionLeftRightPrefab, ModelView.Content );
-                view.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_RESOLUTION ) );
-                _resolutionOption = new( view );
                 var resolutions = Screen.resolutions.ToList();
-                _resolutionOption.Initialize( resolutions.IndexOf( Screen.currentResolution ), resolutions.Select( ( x ) => $"{x.width}x{x.height}" ).ToArray() );
+                _resolutionOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), resolutions.IndexOf( Screen.currentResolution ) );
+                _resolutionOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_RESOLUTION ) );
+                _resolutionOption.Initialize( resolutions.Select( ( x ) => $"{x.width}x{x.height}" ).ToArray() );
+                _options.Add( _resolutionOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                //FULL SCREEN
+                _fullScreenOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsFullScreen );
+                _fullScreenOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_FULL_SCREEN ) );
+                _fullScreenOption.Initialize();
+                _options.Add( _fullScreenOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                //VSYNC
+                _vsyncOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsVsync );
+                _vsyncOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_VSYNC ) );
+                _vsyncOption.Initialize();
+                _options.Add( _vsyncOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
             }
         }
 
-        private void OnTabButtonClicked( UITab tab )
+        private void Save()
+        {
+            for ( int i = 0; i < _options.Count; i++ )
+            {
+                _options[ i ].ResetDirty();
+            }
+            
+            var audio = _dataHolder.GeneralStorageData.Audio.Value;
+            audio.MasterVolume = _masterVolumeOption.Value;
+            audio.DialogueVolume = _dialogueVolumeOption.Value;
+            audio.MusicVolume = _musicVolumeOption.Value;
+            audio.SFXVolume = _sfxVolumeOption.Value;
+            audio.AmbientVolume = _ambientVolumeOption.Value;
+
+            var graphics = _dataHolder.GeneralStorageData.Graphics.Value;
+            var resolution = Screen.resolutions[ _resolutionOption.Index ];
+            graphics.ResolutionWidth = resolution.width;
+            graphics.ResolutionHeight = resolution.height;
+            graphics.IsFullScreen = _fullScreenOption.IsOn;
+            graphics.IsVsync = _vsyncOption.IsOn;
+            
+            _dataHolder.SaveGeneral();
+            
+            Screen.SetResolution( graphics.ResolutionWidth, graphics.ResolutionHeight, graphics.IsFullScreen );
+            QualitySettings.vSyncCount = graphics.IsVsync ? 1 : 0;
+            Application.targetFrameRate = 60;
+        }
+
+        private void OnTabButtonClickedHandler( UITab tab )
         {
             int index = ModelView.Tabs.IndexOf( tab );
             if ( _currentTabIndex != index )
@@ -142,11 +228,18 @@ namespace Game.Core.UI.OptionsDialog
         
         private void CancelButtonClickedHandler()
         {
-            _inputActionCancel.Disable();
+            if ( _options.Any( ( x ) => x.IsDirty ) )
+            {
+                _inputActionCancel.Disable();
             
-            var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< SaveOptionsDialogViewModel >();
-            dialog.OnAcceptRejectShowingChanged += AcceptRejectShowingChanged;
-            dialog.ShowView();
+                var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< SaveOptionsDialogViewModel >();
+                dialog.OnAcceptRejectShowingChanged += AcceptRejectShowingChanged;
+                dialog.ShowView();
+            }
+            else
+            {
+                HideViewAndDispose();
+            }
         }
 
         private void AcceptRejectShowingChanged( IViewModel dialog, bool result )
@@ -155,12 +248,12 @@ namespace Game.Core.UI.OptionsDialog
             acceptReject.OnAcceptRejectShowingChanged -= AcceptRejectShowingChanged;
             
             _inputActionCancel.Enable();
-
+            
             if ( result )
             {
-                Debug.LogError( "Save" );
-                HideViewAndDispose();
+                Save();
             }
+            HideViewAndDispose();
         }
     }
 }

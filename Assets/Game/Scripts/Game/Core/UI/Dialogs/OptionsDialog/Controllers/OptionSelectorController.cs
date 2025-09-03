@@ -3,26 +3,31 @@ using UnityEngine;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class OptionLeftRightController
+    public sealed class OptionSelectorController : OptionController
     {
-        private int _index;
+        public int Index { get; private set; }
+        
         private string[] _options;
         
         private readonly UIOptionLeftRight _view;
         
-        public OptionLeftRightController( UIOptionLeftRight view )
+        public OptionSelectorController( UIOptionLeftRight view, int index ) : base( view )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
+            Index = index;
         }
 
-        public void Initialize( int index = 0, params string[] options )
+        public void Initialize( params string[] options )
         {
-            _index = index;
             _options = options;
+
+            IsDirty = false;
             
             _view.OnLeftButtonClicked += LeftButtonClickedHandler;
             _view.OnRightButtonClicked += RightButtonClickedHandler;
 
+            _view.SetCenter( 1 );
+            
             RefreshUI();
         }
 
@@ -34,21 +39,25 @@ namespace Game.Core.UI.OptionsDialog
 
         private void RefreshUI()
         {
-            _view.SetText( _options[ _index ] );
+            _view.SetText( _options[ Index ] );
         }
 
         private void LeftButtonClickedHandler()
         {
-            _index = Mathf.Clamp( _index - 1, 0, _options.Length - 1 );
+            Index = Mathf.Clamp( Index - 1, 0, _options.Length - 1 );
             
             RefreshUI();
+
+            IsDirty = true;
         }
 
         private void RightButtonClickedHandler()
         {
-            _index = Mathf.Clamp( _index + 1, 0, _options.Length - 1 );
+            Index = Mathf.Clamp( Index + 1, 0, _options.Length - 1 );
             
             RefreshUI();
+            
+            IsDirty = true;
         }
     }
 }
