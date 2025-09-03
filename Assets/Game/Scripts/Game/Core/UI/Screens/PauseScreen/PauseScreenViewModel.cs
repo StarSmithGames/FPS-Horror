@@ -1,6 +1,10 @@
+using Game.Core.UI.OptionsDialog;
+using Game.Core.UI.QuitGameDialog;
 using Game.Managers.CursorManager;
 using Game.Managers.GameManager;
 using Game.Managers.InputManager;
+using Game.Managers.PauseManager;
+using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.VVM;
 using System;
 using System.Collections.Generic;
@@ -14,11 +18,23 @@ namespace Game.Core.UI.PauseScreen
     {
         private List< UIOptionButton > _buttons = new( 3 );
         
+        private readonly InputActionHolder _inputActionCancel;
+        
         private readonly GameManager _gameManager;
-
-        public PauseScreenViewModel( GameManager gameManager )
+        private readonly PauseManager _pauseManager;
+        private readonly UIRootGame _uiRootGame;
+        
+        public PauseScreenViewModel(
+            GameManager gameManager,
+            PauseManager pauseManager,
+            UIRootGame uiRootGame
+            )
         {
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
+            _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
+            _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+
+            _inputActionCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
 
         protected override void SubscribeView()
@@ -41,8 +57,6 @@ namespace Game.Core.UI.PauseScreen
             
             InputManager.Inputs.UI.Navigate.Enable();
             InputManager.Inputs.UI.Submit.Enable();
-            
-            CursorManager.Enable();
         }
 
         protected override void UnSubscribeView()
@@ -61,15 +75,22 @@ namespace Game.Core.UI.PauseScreen
             
             InputManager.Inputs.UI.Navigate.Disable();
             InputManager.Inputs.UI.Submit.Disable();
-            
-            CursorManager.Disable();
         }
 
         protected override void OnViewShowingChanged()
         {
-            if ( !ModelView.IsShowing ) return;
-            
-            _gameManager.SetState( GameState.Pause );
+            if ( !ModelView.IsShowing )
+            {
+                _inputActionCancel.Disable();
+                CursorManager.Disable();
+                _pauseManager.UnPause();
+                _gameManager.SetState( GameState.Game );
+                return;
+            }
+            _inputActionCancel.Enable();
+            CursorManager.Enable();
+            _pauseManager.Pause();
+            _gameManager.SetState( GameState.Menu );
             
             EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
          
@@ -109,6 +130,11 @@ namespace Game.Core.UI.PauseScreen
                 button.Deselect();
             }
         }
+
+        private void CancelButtonClickedHandler()
+        {
+            HideViewAndDispose();
+        }
         
         private void ButtonClickedHandler( UIOptionButton button )
         {
@@ -116,16 +142,29 @@ namespace Game.Core.UI.PauseScreen
             if ( index == 0 )
             {
                 HideViewAndDispose();
-                _gameManager.SetState( GameState.Game );
             }
             else if ( index == 1 )
             {
-                
+                _inputActionCancel.Disable();
+                var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< OptionsDialogViewModel >();
+                dialog.OnShowingChanged += DialogShowingChangedHandler;
+                dialog.ShowView();
             }
             else if ( index == 2 )
             {
-                Application.Quit();
+                _inputActionCancel.Disable();
+                var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
+                dialog.OnShowingChanged += DialogShowingChangedHandler;
+                dialog.ShowView();
             }
+        }
+
+        private void DialogShowingChangedHandler( IViewModel dialog )
+        {
+            if ( dialog.IsShowing ) return;
+            dialog.OnShowingChanged -= DialogShowingChangedHandler;
+
+            _inputActionCancel.Enable();
         }
     }
 }

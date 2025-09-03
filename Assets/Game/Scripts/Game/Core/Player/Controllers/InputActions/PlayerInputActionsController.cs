@@ -74,9 +74,12 @@ namespace Game.Core.Player
 
         private void MenuClickedHandler()
         {
-            DisablePlayer();
-            _states.IsBlocked = true;
-            _uiRootGame.ScreenAggregator.ShowAndCreateIfNotExist< PauseScreenViewModel >();
+            var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< PauseScreenViewModel >();
+            if ( screen.IsShowing )
+            {
+                return;
+            }
+            screen.ShowView();
         }
 
         #region Player

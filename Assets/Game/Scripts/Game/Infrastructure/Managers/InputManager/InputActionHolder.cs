@@ -19,7 +19,7 @@ namespace Game.Managers.InputManager
             _onHold = onHold;
             _onEndHold = onEndHold;
         }
-
+        
         public void Enable()
         {
             _input.performed += InputPerformedHandler;

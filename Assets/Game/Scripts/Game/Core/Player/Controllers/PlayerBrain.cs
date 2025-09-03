@@ -1,12 +1,13 @@
 using Cysharp.Threading.Tasks;
 using Game.Managers.InputManager;
+using Game.Managers.PauseManager;
 using System;
 using System.Threading;
 using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class PlayerBrain
+    public sealed class PlayerBrain : IPauseable
     {
         public event Action OnLanded;
 
@@ -28,6 +29,7 @@ namespace Game.Core.Player
         private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerInventoryController _inventoryController;
         private readonly PlayerSoundController _soundController;
+        private readonly PauseManager _pauseManager;
         
         public PlayerBrain(
             PlayerObject view,
@@ -43,7 +45,9 @@ namespace Game.Core.Player
             PlayerHoveringController hoveringController,
             PlayerInputActionsController inputActionsController,
             PlayerInventoryController inventoryController,
-            PlayerSoundController soundController
+            PlayerSoundController soundController,
+            
+            PauseManager pauseManager
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
@@ -59,6 +63,7 @@ namespace Game.Core.Player
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
             _soundController = soundController ?? throw new ArgumentNullException( nameof(soundController) );
+            _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
 
             ServiceLocator = new ServiceLocator();
             ServiceLocator.Register( _lookController );
@@ -89,10 +94,14 @@ namespace Game.Core.Player
             FixedTick( _cancellationTokenSource.Token ).Forget();
 
             _inputActionsController.Enable();
+            
+            _pauseManager.AddObserver( this );
         }
 
         public void Dispose()
         {
+            _pauseManager.RemoveObserver( this );
+            
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
@@ -192,5 +201,17 @@ namespace Game.Core.Player
         //AimAssist
         //Climbing Ladders
         //Stamina
+        
+        public void Pause()
+        {
+            _states.IsBlocked = true;
+            _inputActionsController.DisablePlayer();
+        }
+
+        public void UnPause()
+        {
+            _states.IsBlocked = false;
+            _inputActionsController.EnablePlayer();
+        }
     }
 }

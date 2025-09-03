@@ -6,6 +6,5 @@ namespace Game.Managers.GameManager
         Loading,
         Menu,
         Game,
-        Pause,
     }
 }

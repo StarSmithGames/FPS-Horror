@@ -15,5 +15,21 @@ namespace StarSmithGames.Localization
 		public const string UI_CONTROL_OPEN = "ui.control.open";
 		public const string UI_CONTROL_CLOSE = "ui.control.close";
 		public const string UI_CONTROL_TAKE = "ui.control.take";
+		public const string UI_MENU_SCREEN_START = "ui.menu_screen.start";
+		public const string UI_MENU_SCREEN_OPTIONS = "ui.menu_screen.options";
+		public const string UI_MENU_SCREEN_EXIT = "ui.menu_screen.exit";
+		public const string UI_MENU_SCREEN_RESUME = "ui.menu_screen.resume";
+		public const string UI_OPTIONS_DIALOG_TITLE = "ui.options_dialog.title";
+		public const string UI_OPTIONS_DIALOG_GENERAL = "ui.options_dialog.general";
+		public const string UI_OPTIONS_DIALOG_AUDIO = "ui.options_dialog.audio";
+		public const string UI_OPTIONS_DIALOG_GRAPHICS = "ui.options_dialog.graphics";
+		public const string UI_OPTIONS_DIALOG_CONTROLS = "ui.options_dialog.controls";
+		public const string UI_OPTIONS_DIALOG_ACCESSIBILITY = "ui.options_dialog.accessibility";
+		public const string UI_OPTIONS_DIALOG_MASTER_VOLUME = "ui.options_dialog.master_volume";
+		public const string UI_OPTIONS_DIALOG_DIALOGUE_VOLUME = "ui.options_dialog.dialogue_volume";
+		public const string UI_OPTIONS_DIALOG_MUSIC_VOLUME = "ui.options_dialog.music_volume";
+		public const string UI_OPTIONS_DIALOG_SFX_VOLUME = "ui.options_dialog.sfx_volume";
+		public const string UI_OPTIONS_DIALOG_AMBIENT_VOLUME = "ui.options_dialog.ambient_volume";
+		public const string UI_OPTIONS_DIALOG_RESOLUTION = "ui.options_dialog.resolution";
 	}
 }

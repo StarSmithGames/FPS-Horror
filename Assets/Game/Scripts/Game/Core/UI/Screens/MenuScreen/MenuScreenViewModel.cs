@@ -1,3 +1,4 @@
+using Game.Core.UI.OptionsDialog;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
 using Game.SceneSystem;
@@ -15,10 +16,15 @@ namespace Game.Core.UI.MenuScreen
         private List< UIOptionButton > _buttons = new( 3 );
 
         private readonly GameBoostrap _gameBoostrap;
+        private readonly UIRootGame _uiRootGame;
         
-        public MenuScreenViewModel( GameBoostrap gameBoostrap )
+        public MenuScreenViewModel(
+            GameBoostrap gameBoostrap,
+            UIRootGame uiRootGame
+            )
         {
             _gameBoostrap = gameBoostrap ?? throw new ArgumentNullException( nameof(gameBoostrap) );
+            _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
         }
         
         protected override void SubscribeView()
@@ -115,7 +121,7 @@ namespace Game.Core.UI.MenuScreen
             }
             else if ( index == 1 )
             {
-                
+                _uiRootGame.DialogAggregator.ShowAndCreateIfNotExist< OptionsDialogViewModel >();
             }
             else if ( index == 2 )
             {
