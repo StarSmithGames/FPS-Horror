@@ -1,9 +1,9 @@
 using PuzzlescapeGames.VVM.UI;
 using System;
 
-namespace Game.Core.UI.QuitGameDialog
+namespace Game.Core.UI.Dialogs
 {
-    public sealed class QuitGameDialog : UIViewFade
+    public class AcceptRejectModalDialog : UIViewFade
     {
         public event Action OnAcceptButtonClicked;
         public event Action OnRejectButtonClicked;

@@ -9,6 +9,6 @@ namespace Game.Core.UI.OptionsDialog
         [ field: SerializeField ] public List< UITab > Tabs { get; private set; } = new();
         [ field: SerializeField ] public Transform Content { get; private set; }
         [ field: Space ]
-        [ field: SerializeField ] public UIOptionLeftRightSelector OptionLeftRightSelectorPrefab { get; private set; }
+        [ field: SerializeField ] public UIOptionLeftRight OptionLeftRightPrefab { get; private set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Game.Core.UI.PauseScreen
     {
         private List< UIOptionButton > _buttons = new( 3 );
         
-        private readonly InputActionHolder _inputActionCancel;
+        private readonly InputActionWrap _inputActionCancel;
         
         private readonly GameManager _gameManager;
         private readonly PauseManager _pauseManager;
@@ -154,6 +154,7 @@ namespace Game.Core.UI.PauseScreen
             {
                 _inputActionCancel.Disable();
                 var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
+                // dialog.SetAcceptAction( Application.Quit );
                 dialog.OnShowingChanged += DialogShowingChangedHandler;
                 dialog.ShowView();
             }

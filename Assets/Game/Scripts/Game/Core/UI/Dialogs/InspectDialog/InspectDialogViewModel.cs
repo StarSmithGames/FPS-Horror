@@ -20,8 +20,8 @@ namespace Game.Core.UI.InspectDialog
         private ItemObject _item;
         private bool _isExamine;
 
-        private readonly InputActionHolder _inputActionRead;
-        private readonly InputActionHolder _inputActionCancel;
+        private readonly InputActionWrap _inputActionRead;
+        private readonly InputActionWrap _inputActionCancel;
         private readonly InputKeyActionsSettings _inputKeyActionsSettings;
         private readonly ILocalizationSystem _localizationSystem;
         

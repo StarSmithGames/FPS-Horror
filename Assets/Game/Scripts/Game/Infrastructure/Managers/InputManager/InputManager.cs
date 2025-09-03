@@ -16,7 +16,7 @@ namespace Game.Managers.InputManager
         public static float scrolling, MouseX, MouseY, ControllerX, ControllerY;
 
         private static InputDevice _lastGamepad;
-
+        
         private static CancellationTokenSource _cancellationTokenSource;
         
         public static void Initialize()
@@ -79,5 +79,7 @@ namespace Game.Managers.InputManager
 
         public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.fixedDeltaTime * currentControllerSensX );
         public static float GatherRawMouseY( int sensYInverted, int sensYInvertedController, float currentSensY, float currentControllerSensY ) => ( MouseY * currentSensY * sensYInverted * Time.fixedDeltaTime + ControllerY * sensYInvertedController * currentControllerSensY * Time.fixedDeltaTime );
+
+
     }
 }

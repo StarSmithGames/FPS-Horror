@@ -7,7 +7,7 @@ namespace Game.Core.Player
     public abstract class QuickActionHandler : ContextMenuActionHandler
     {
         protected readonly InputKeyAction _inputKeyAction;
-        protected readonly InputActionHolder _holder;
+        protected readonly InputActionWrap _holder;
         
         public QuickActionHandler( InputKeyAction inputAction )
         {

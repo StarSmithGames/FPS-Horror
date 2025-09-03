@@ -1,11 +1,10 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class UIOptionLeftRightSelector : UIOption
+    public sealed class UIOptionLeftRight : UIOption
     {
         public event Action OnLeftButtonClicked;
         public event Action OnRightButtonClicked;
