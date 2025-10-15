@@ -134,7 +134,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a9dd8390-56ef-4881-acfe-35666afa6870"",
-                    ""path"": ""<Gamepad>/systemButton"",
+                    ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
