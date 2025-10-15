@@ -11,13 +11,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Game.Core.UI.OptionsDialog
 {
     public sealed class OptionsDialogViewModel : ViewModel< OptionsDialog >
     {
-        private InputActionWrap _inputActionCancel;
-        private int _currentTabIndex;
+        private int _currentTabIndex = -1;
         private CancellationTokenSource _cancellationTokenSource;
         private List< OptionController > _options = new();
 
@@ -32,6 +32,14 @@ namespace Game.Core.UI.OptionsDialog
         private OptionSelectorController _resolutionOption;
         private OptionToggleController _fullScreenOption;
         private OptionToggleController _vsyncOption;
+        
+        private bool _isControlsInitialized;
+        private OptionToggleController _sprintOption;
+        private OptionToggleController _crouchOption;
+
+        private InputActionWrap _inputActionCancel;
+        private InputActionWrap _inputActionLB;
+        private InputActionWrap _inputActionRB;
         
         private readonly UIRootGame _uiRootGame;
         private readonly DataHolder _dataHolder;
@@ -58,12 +66,19 @@ namespace Game.Core.UI.OptionsDialog
             }
             
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
+            _inputActionLB = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.LB, LBButtonClickedHandler );
+            _inputActionRB = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.RB, RBButtonClickedHandler );
             _inputActionCancel.Enable();
+            _inputActionLB.Enable();
+            _inputActionRB.Enable();
         }
 
         protected override void UnSubscribeView()
         {
             base.UnSubscribeView();
+            
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
             
             for ( int i = 0; i < ModelView.Tabs.Count; i++ )
             {
@@ -71,7 +86,11 @@ namespace Game.Core.UI.OptionsDialog
             }
             
             _inputActionCancel.Disable();
+            _inputActionLB.Disable();
+            _inputActionRB.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
+            InputActionManager.RemoveInputActionWrap( _inputActionLB );
+            InputActionManager.RemoveInputActionWrap( _inputActionRB );
         }
 
         protected override void OnViewShowingChanged()
@@ -84,26 +103,51 @@ namespace Game.Core.UI.OptionsDialog
             }
             _options.Clear();
 
-            _cancellationTokenSource = new();
-            LoadOptions( 0, _cancellationTokenSource.Token ).Forget();
+            EventSystem.current.SetSelectedGameObject( null );//TODO
+
+            TryLoadTab( 0 );
         }
 
+        private void TryLoadTab( int index )
+        {
+            if ( _currentTabIndex != index )
+            {
+                _currentTabIndex = index;
+
+                for ( int i = 0; i < ModelView.Tabs.Count; i++ )
+                {
+                    if ( _currentTabIndex == i )
+                    {
+                        ModelView.Tabs[ i ].Select();
+                    }
+                    else
+                    {
+                        ModelView.Tabs[ i ].Deselect();
+                    }
+                }
+                
+                if ( _cancellationTokenSource == null )
+                {
+                    _cancellationTokenSource = new();
+                }
+                LoadOptions( index, _cancellationTokenSource.Token ).Forget();
+            }
+        }
+        
         private async UniTask LoadOptions( int index, CancellationToken cancellationToken = default )
         {
-            _currentTabIndex = index;
-            
             for ( int i = 0; i < ModelView.Contents.Count; i++ )
             {
                 ModelView.Contents[ i ].gameObject.SetActive( false );
             }
             ModelView.Contents[ index ].gameObject.SetActive( true );
-            
+
             if ( index == 1 )
             {
                 if ( !_isAudioInitialized )
                 {
                     _isAudioInitialized = true;
-                    await LoadAudio( ModelView.Contents[ 1 ], cancellationToken );
+                    await LoadAudio( ModelView.Contents[ index ], cancellationToken );
                 }
             }
             else if ( index == 2 )
@@ -111,10 +155,18 @@ namespace Game.Core.UI.OptionsDialog
                 if ( !_isGraphicsInitialized )
                 {
                     _isGraphicsInitialized = true;
-                    await LoadGraphics( ModelView.Contents[ 2 ], cancellationToken );
+                    await LoadGraphics( ModelView.Contents[ index ], cancellationToken );
                 }
             }
-
+            else if ( index == 3 )
+            {
+                if ( !_isControlsInitialized )
+                {
+                    _isControlsInitialized = true;
+                    await LoadControls( ModelView.Contents[ index ], cancellationToken );
+                }
+            }
+            
             async UniTask LoadAudio( Transform content, CancellationToken cancellationToken = default )
             {
                 var data = _dataHolder.GeneralStorageData.Audio.Value;
@@ -184,6 +236,25 @@ namespace Game.Core.UI.OptionsDialog
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
             }
+            
+            async UniTask LoadControls( Transform content, CancellationToken cancellationToken = default )
+            {
+                var data = _dataHolder.GeneralStorageData.Controls.Value;
+                
+                _sprintOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsSprintToggle );
+                _sprintOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_SPRINT ) );
+                _sprintOption.Initialize();
+                _options.Add( _sprintOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                _crouchOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsCrouchToggle );
+                _crouchOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_CROUCH ) );
+                _crouchOption.Initialize();
+                _options.Add( _crouchOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+            }
         }
 
         private void Save()
@@ -192,38 +263,58 @@ namespace Game.Core.UI.OptionsDialog
             {
                 _options[ i ].ResetDirty();
             }
-            
-            var audio = _dataHolder.GeneralStorageData.Audio.Value;
-            audio.MasterVolume = _masterVolumeOption.Value;
-            audio.DialogueVolume = _dialogueVolumeOption.Value;
-            audio.MusicVolume = _musicVolumeOption.Value;
-            audio.SFXVolume = _sfxVolumeOption.Value;
-            audio.AmbientVolume = _ambientVolumeOption.Value;
 
-            var graphics = _dataHolder.GeneralStorageData.Graphics.Value;
-            var resolution = Screen.resolutions[ _resolutionOption.Index ];
-            graphics.ResolutionWidth = resolution.width;
-            graphics.ResolutionHeight = resolution.height;
-            graphics.IsFullScreen = _fullScreenOption.IsOn;
-            graphics.IsVsync = _vsyncOption.IsOn;
+            if ( _isAudioInitialized )
+            {
+                var audio = _dataHolder.GeneralStorageData.Audio.Value;
+                audio.MasterVolume = _masterVolumeOption.Value;
+                audio.DialogueVolume = _dialogueVolumeOption.Value;
+                audio.MusicVolume = _musicVolumeOption.Value;
+                audio.SFXVolume = _sfxVolumeOption.Value;
+                audio.AmbientVolume = _ambientVolumeOption.Value;
+            }
+
+            if ( _isGraphicsInitialized )
+            {
+                var graphics = _dataHolder.GeneralStorageData.Graphics.Value;
+                var resolution = Screen.resolutions[ _resolutionOption.Index ];
+                graphics.ResolutionWidth = resolution.width;
+                graphics.ResolutionHeight = resolution.height;
+                graphics.IsFullScreen = _fullScreenOption.IsOn;
+                graphics.IsVsync = _vsyncOption.IsOn;
+            }
+
+            if ( _isControlsInitialized )
+            {
+                var controls = _dataHolder.GeneralStorageData.Controls.Value;
+                controls.IsSprintToggle = _sprintOption.IsOn;
+                controls.IsCrouchToggle = _crouchOption.IsOn;
+            }
             
             _dataHolder.SaveGeneral();
-            
-            Screen.SetResolution( graphics.ResolutionWidth, graphics.ResolutionHeight, graphics.IsFullScreen );
-            QualitySettings.vSyncCount = graphics.IsVsync ? 1 : 0;
+
+            if ( _isGraphicsInitialized )
+            {
+                var graphics = _dataHolder.GeneralStorageData.Graphics.Value;
+                Screen.SetResolution( graphics.ResolutionWidth, graphics.ResolutionHeight, graphics.IsFullScreen );
+                QualitySettings.vSyncCount = graphics.IsVsync ? 1 : 0;
+            }
             Application.targetFrameRate = 60;
         }
 
         private void OnTabButtonClickedHandler( UITab tab )
         {
-            int index = ModelView.Tabs.IndexOf( tab );
-            if ( _currentTabIndex != index )
-            {
-                _cancellationTokenSource?.Cancel();
-                _cancellationTokenSource?.Dispose();
-                _cancellationTokenSource = new();
-                LoadOptions( index ).Forget();
-            }
+            TryLoadTab( ModelView.Tabs.IndexOf( tab ) );
+        }
+
+        private void LBButtonClickedHandler()
+        {
+            TryLoadTab( Mathf.Clamp( _currentTabIndex - 1, 0, ModelView.Tabs.Count - 1 ) );
+        }
+        
+        private void RBButtonClickedHandler()
+        {
+            TryLoadTab( Mathf.Clamp( _currentTabIndex + 1, 0, ModelView.Tabs.Count - 1 ) );
         }
         
         private void CancelButtonClickedHandler()

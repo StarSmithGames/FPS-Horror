@@ -2,8 +2,5 @@ using Game.Core.UI.Dialogs;
 
 namespace Game.Core.UI.QuitGameDialog
 {
-    public sealed class QuitGameDialogViewModel : AcceptRejectModalDialogViewModel< AcceptRejectModalDialog >
-    {
-        
-    }
+    public sealed class QuitGameDialogViewModel : AcceptRejectModalDialogViewModel< QuitGameDialog > {}
 }

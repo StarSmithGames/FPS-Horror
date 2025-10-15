@@ -8,6 +8,7 @@ using PuzzlescapeGames.VVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Game.Core.UI.PauseScreen
@@ -17,6 +18,8 @@ namespace Game.Core.UI.PauseScreen
         private List< UIOptionButton > _buttons = new( 3 );
         
         private InputActionWrap _inputActionCancel;
+
+        private QuitGameDialogViewModel _quitGameDialog;
         
         private readonly GameManager _gameManager;
         private readonly PauseManager _pauseManager;
@@ -152,11 +155,12 @@ namespace Game.Core.UI.PauseScreen
             }
             else if ( index == 2 )
             {
+                EventSystem.current.SetSelectedGameObject( null );
+
                 _inputActionCancel.Disable();
-                var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
-                // dialog.SetAcceptAction( Application.Quit );
-                dialog.OnShowingChanged += DialogShowingChangedHandler;
-                dialog.ShowView();
+                _quitGameDialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
+                _quitGameDialog.OnShowingChanged += DialogShowingChangedHandler;
+                _quitGameDialog.ShowView();
             }
         }
 

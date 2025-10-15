@@ -54,6 +54,12 @@ namespace Game.Systems.StorageSystem
                 SFXVolume = 100,
                 AmbientVolume = 100,
             } );
+            
+            storage.Controls.SetData( new ControlsData()
+            {
+                IsSprintToggle = false,
+                IsCrouchToggle = true,
+            } );
         }
 
         private bool AddDataForOldPlayers( GeneralStorage storage )

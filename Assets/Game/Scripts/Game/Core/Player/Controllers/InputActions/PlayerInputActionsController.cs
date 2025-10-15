@@ -1,6 +1,8 @@
 using Game.Core.UI;
 using Game.Core.UI.PauseScreen;
 using Game.Managers.InputManager;
+using Game.Systems.StorageSystem;
+using PuzzlescapeGames.VVM;
 using System;
 using UnityEngine;
 
@@ -19,13 +21,15 @@ namespace Game.Core.Player
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerInventoryController _inventoryController;
         private readonly UIRootGame _uiRootGame;
+        private readonly DataHolder _dataHolder;
         
         public PlayerInputActionsController(
             PlayerStates states,
             PlayerCrouchController crouchController,
             PlayerJumpController jumpController,
             PlayerInventoryController inventoryController,
-            UIRootGame uiRootGame
+            UIRootGame uiRootGame,
+            DataHolder dataHolder
             )
         {
             _states = states ?? throw new ArgumentNullException( nameof(states) );
@@ -33,6 +37,7 @@ namespace Game.Core.Player
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
         }
 
         public void Initialize()
@@ -74,35 +79,77 @@ namespace Game.Core.Player
 
         private void MenuClickedHandler()
         {
+            _inputActionMenu.Disable();
+            
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< PauseScreenViewModel >();
-            if ( screen.IsShowing )
-            {
-                return;
-            }
+            screen.OnShowingChanged += PauseScreenShowingChangedHandler;
             screen.ShowView();
+        }
+
+        private void PauseScreenShowingChangedHandler( IViewModel viewModel )
+        {
+            if ( viewModel.IsShowing ) return;
+            viewModel.OnShowingChanged -= PauseScreenShowingChangedHandler;
+            
+            _inputActionMenu.Enable();
         }
 
         #region Player
         private void SpringStartHandler()
         {
-            _states.IsSprinting = true;
+            if ( _dataHolder.GeneralStorageData.Controls.Value.IsSprintToggle )
+            {
+                _states.IsSprinting = !_states.IsSprinting;
+            }
+            else
+            {
+                _states.IsSprinting = true;
+            }
         }
         
         private void SpringStopHandler()
         {
-            _states.IsSprinting = false;
+            if ( _dataHolder.GeneralStorageData.Controls.Value.IsSprintToggle )
+            {
+                
+            }
+            else
+            {
+                _states.IsSprinting = false;
+            }
         }
 
         private void CrouchStartHandler()
         {
-            if ( _states.IsBlocked ) return;
-            
-            _crouchController.StartCrouch();
+            if ( _dataHolder.GeneralStorageData.Controls.Value.IsCrouchToggle )
+            {
+                if ( _states.IsCrouching )
+                {
+                    _crouchController.StopCrouch();
+                }
+                else
+                {
+                    _crouchController.StartCrouch();
+                }
+            }
+            else
+            {
+                if ( _states.IsBlocked ) return;
+
+                _crouchController.StartCrouch();
+            }
         }
         
         private void CrouchStopHandler()
         {
-            _crouchController.StopCrouch();
+            if ( _dataHolder.GeneralStorageData.Controls.Value.IsCrouchToggle )
+            {
+                
+            }
+            else
+            {
+                _crouchController.StopCrouch();
+            }
         }
 
         private void JumpClickedHandler()
