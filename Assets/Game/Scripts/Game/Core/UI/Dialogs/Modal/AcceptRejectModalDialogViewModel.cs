@@ -1,6 +1,8 @@
 using Game.Managers.InputManager;
 using PuzzlescapeGames.VVM;
 using System;
+using System.Linq;
+using UnityEngine.EventSystems;
 
 namespace Game.Core.UI.Dialogs
 {
@@ -9,8 +11,8 @@ namespace Game.Core.UI.Dialogs
     {
         public event Action< IViewModel, bool > OnAcceptRejectShowingChanged;
         
-        private InputActionWrap _inputActionSubmit;
-        private InputActionWrap _inputActionCancel;
+        private InputActionVoidWrap _inputActionSubmit;
+        private InputActionVoidWrap _inputActionCancel;
         
         protected override void SubscribeView()
         {
@@ -21,9 +23,14 @@ namespace Game.Core.UI.Dialogs
             
             _inputActionSubmit = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Submit, AcceptButtonClickedHandler );
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, RejectButtonClickedHandler );
-            
             _inputActionSubmit.Enable();
             _inputActionCancel.Enable();
+
+            for ( int i = 0; i < ModelView.Buttons.Count; i++ )
+            {
+                ModelView.Buttons[ i ].OnButtonPointerEntered += ButtonPointerEnteredHandler;
+            }
+            EventSystem.current.SetSelectedGameObject( ModelView.Buttons.Last().gameObject );
         }
 
         protected override void UnSubscribeView()
@@ -32,13 +39,25 @@ namespace Game.Core.UI.Dialogs
             
             ModelView.OnAcceptButtonClicked -= AcceptButtonClickedHandler;
             ModelView.OnRejectButtonClicked -= RejectButtonClickedHandler;
-
-            _inputActionSubmit.Disable();
-            _inputActionCancel.Disable();
+            
+            for ( int i = 0; i < ModelView.Buttons.Count; i++ )
+            {
+                ModelView.Buttons[ i ].OnButtonPointerEntered -= ButtonPointerEnteredHandler;
+            }
+            
             InputActionManager.RemoveInputActionWrap( _inputActionSubmit );
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
 
             OnAcceptRejectShowingChanged = null;
+        }
+        
+        private void ButtonPointerEnteredHandler( UIOption option )
+        {
+            for ( int i = 0; i < ModelView.Buttons.Count; i++ )
+            {
+                ModelView.Buttons[ i ].Deselect();
+            }
+            option.Select();
         }
 
         private void AcceptButtonClickedHandler()

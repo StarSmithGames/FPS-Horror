@@ -42,7 +42,7 @@ namespace Game.Core.UI.OptionsDialog
             _view.SetText( _options[ Index ] );
         }
 
-        private void LeftButtonClickedHandler()
+        public void Left()
         {
             Index = Mathf.Clamp( Index - 1, 0, _options.Length - 1 );
             
@@ -51,13 +51,23 @@ namespace Game.Core.UI.OptionsDialog
             IsDirty = true;
         }
 
-        private void RightButtonClickedHandler()
+        public void Right()
         {
             Index = Mathf.Clamp( Index + 1, 0, _options.Length - 1 );
             
             RefreshUI();
             
             IsDirty = true;
+        }
+        
+        private void LeftButtonClickedHandler()
+        {
+            Left();
+        }
+
+        private void RightButtonClickedHandler()
+        {
+            Right();
         }
     }
 }

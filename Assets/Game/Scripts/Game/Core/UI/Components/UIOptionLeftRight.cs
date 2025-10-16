@@ -3,13 +3,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Core.UI.OptionsDialog
+namespace Game.Core.UI
 {
     public sealed class UIOptionLeftRight : UIOption
     {
         public event Action OnLeftButtonClicked;
         public event Action OnRightButtonClicked;
 
+        [ SerializeField ] private Image _back;
         [ SerializeField ] private TextMeshProUGUI _text;
         [ SerializeField ] private GameObject _buttonLeft;
         [ SerializeField ] private GameObject _buttonRight;
@@ -36,6 +37,20 @@ namespace Game.Core.UI.OptionsDialog
             {
                 _centerLayout.minWidth = 150f;
             }
+        }
+        
+        public override void Select()
+        {
+            base.Select();
+            
+            _back.color = new( 1, 1, 1, 0.3f );
+        }
+
+        public override void Deselect()
+        {
+            base.Deselect();
+
+            _back.color = new( 1, 1, 1, 0.0f );
         }
         
         public void OnLeftButtonClick()

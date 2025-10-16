@@ -6,16 +6,26 @@ namespace Game.Core.UI.OptionsDialog
     {
         public bool IsDirty { get; protected set; }
 
-        private readonly UIOption _view;
+        public UIOption View { get; }
         
         public OptionController( UIOption view )
         {
-            _view = view ?? throw new ArgumentNullException( nameof(view) );
+            View = view ?? throw new ArgumentNullException( nameof(view) );
         }
 
         public void SetName( string name )
         {
-            _view.SetName( name );
+            View.SetName( name );
+        }
+
+        public void Select()
+        {
+            View.Select();
+        }
+
+        public void Deselect()
+        {
+            View.Deselect();
         }
 
         public void ResetDirty()

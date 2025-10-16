@@ -13,7 +13,7 @@ namespace Game.Core.UI.MenuScreen
 {
     public sealed class MenuScreenViewModel : ViewModel< UIMenuScreen >
     {
-        private List< UIOptionButton > _buttons = new( 3 );
+        private List< UIOptionMenuButton > _buttons = new( 3 );
 
         private readonly GameBoostrap _gameBoostrap;
         private readonly UIRootGame _uiRootGame;
@@ -95,26 +95,26 @@ namespace Game.Core.UI.MenuScreen
             }
         }
 
-        private void ButtonPointerEnteredHandler( UIOptionButton button )
+        private void ButtonPointerEnteredHandler( UIOption option )
         {
             for ( int i = 0; i < _buttons.Count; i++ )
             {
                 _buttons[ i ].Deselect();
             }
-            button.Select();
+            option.Select();
         }
 
-        private void ButtonPointerExitedHandler( UIOptionButton button )
+        private void ButtonPointerExitedHandler( UIOption option )
         {
             if ( !GamepadDetector.IsConnected )
             {
-                button.Deselect();
+                option.Deselect();
             }
         }
         
-        private void ButtonClickedHandler( UIOptionButton button )
+        private void ButtonClickedHandler( UIOption option )
         {
-            var index = _buttons.IndexOf( button );
+            var index = _buttons.IndexOf( (UIOptionMenuButton)option );
             if ( index == 0 )
             {
                 _gameBoostrap.Start();

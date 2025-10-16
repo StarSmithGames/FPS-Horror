@@ -33,12 +33,7 @@ namespace Game.Core.UI.OptionsDialog
             _view.OnRightButtonClicked -= RightButtonClickedHandler;
         }
 
-        private void RefreshUI()
-        {
-            _view.SetText( $"{Value}%" );
-        }
-
-        private void LeftButtonClickedHandler()
+        public void Left()
         {
             Value = Mathf.Clamp( Value - 1, 0, 100 );
             
@@ -47,13 +42,28 @@ namespace Game.Core.UI.OptionsDialog
             IsDirty = true;
         }
 
-        private void RightButtonClickedHandler()
+        public void Right()
         {
             Value = Mathf.Clamp( Value + 1, 0, 100 );
             
             RefreshUI();
             
             IsDirty = true;
+        }
+
+        private void RefreshUI()
+        {
+            _view.SetText( $"{Value}%" );
+        }
+
+        private void LeftButtonClickedHandler()
+        {
+            Left();
+        }
+
+        private void RightButtonClickedHandler()
+        {
+            Right();
         }
     }
 }

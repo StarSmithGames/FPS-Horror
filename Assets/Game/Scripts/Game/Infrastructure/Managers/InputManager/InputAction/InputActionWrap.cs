@@ -3,40 +3,46 @@ using UnityEngine.InputSystem;
 
 namespace Game.Managers.InputManager
 {
-    public sealed class InputActionWrap
+    public abstract class InputActionWrap
     {
         public InputAction Input { get; }
-        
-        private readonly Action _onStarted;
-        private readonly Action _onEnded;
-        
-        public InputActionWrap( InputAction input, Action onStartHold = null, Action onEndHold = null )
+
+        public InputActionWrap( InputAction input )
         {
             Input = input ?? throw new ArgumentNullException( nameof(input) );
-            _onStarted = onStartHold;
-            _onEnded = onEndHold;
         }
 
         public void Enable()
         {
+            Input.started += InputStartedHandler;
             Input.performed += InputPerformedHandler;
             Input.canceled += InputCanceledHandler;
         }
 
         public void Disable()
         {
+            Input.started -= InputStartedHandler;
             Input.performed -= InputPerformedHandler;
             Input.canceled -= InputCanceledHandler;
         }
 
-        private void InputPerformedHandler( InputAction.CallbackContext context )
+        protected abstract void OnStarted();
+        protected abstract void OnPerformed();
+        protected abstract void OnCanceled();
+
+        private void InputStartedHandler( InputAction.CallbackContext context )
         {
-            _onStarted?.Invoke();
+            OnStarted();
         }
         
+        private void InputPerformedHandler( InputAction.CallbackContext context )
+        {
+            OnPerformed();
+        }
+
         private void InputCanceledHandler( InputAction.CallbackContext context )
         {
-            _onEnded?.Invoke();
+            OnCanceled();
         }
     }
 }

@@ -10,11 +10,11 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInputActionsController
     {
-        private InputActionWrap _inputActionMenu;
-        private InputActionWrap _inputActionSprint;
-        private InputActionWrap _inputActionCrouch;
-        private InputActionWrap _inputActionJump;
-        private InputActionWrap _inputActionLighter;
+        private InputActionVoidWrap _inputActionMenu;
+        private InputActionVoidWrap _inputActionSprint;
+        private InputActionVoidWrap _inputActionCrouch;
+        private InputActionVoidWrap _inputActionJump;
+        private InputActionVoidWrap _inputActionLighter;
 
         private readonly PlayerStates _states;
         private readonly PlayerCrouchController _crouchController;

@@ -15,10 +15,13 @@ namespace Game.Core.UI.PauseScreen
 {
     public sealed class PauseScreenViewModel : ViewModel< UIPauseScreen >
     {
-        private List< UIOptionButton > _buttons = new( 3 );
+        private List< UIOptionMenuButton > _buttons = new( 3 );
         
-        private InputActionWrap _inputActionCancel;
+        private InputActionValueWrap< Vector2 > _inputActionNavigate;
+        private InputActionVoidWrap _inputActionSubmit;
+        private InputActionVoidWrap _inputActionCancel;
 
+        private UIOption _lastOption;
         private QuitGameDialogViewModel _quitGameDialog;
         
         private readonly GameManager _gameManager;
@@ -54,11 +57,12 @@ namespace Game.Core.UI.PauseScreen
 
             GamepadDetector.OnChanged += GamepadChangedHandler;
             
-            InputManager.Inputs.UI.Navigate.Enable();
-            InputManager.Inputs.UI.Submit.Enable();
-            
+            _inputActionNavigate = InputActionManager.CreateInputActionWrap< Vector2 >( InputManager.Inputs.UI.Navigate );
+            // _inputActionSubmit = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Submit, SubmitButtonClickedHandler );
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
             _inputActionCancel.Enable();
+            // _inputActionSubmit.Enable();
+            _inputActionNavigate.Enable();
         }
 
         protected override void UnSubscribeView()
@@ -75,11 +79,9 @@ namespace Game.Core.UI.PauseScreen
             
             GamepadDetector.OnChanged -= GamepadChangedHandler;
             
-            InputManager.Inputs.UI.Navigate.Disable();
-            InputManager.Inputs.UI.Submit.Disable();
-
-            _inputActionCancel.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
+            // InputActionManager.RemoveInputActionWrap( _inputActionSubmit );
+            InputActionManager.RemoveInputActionWrap( _inputActionNavigate );
         }
 
         protected override void OnViewShowingChanged()
@@ -117,47 +119,57 @@ namespace Game.Core.UI.PauseScreen
             }
         }
 
-        private void ButtonPointerEnteredHandler( UIOptionButton button )
+        private void ButtonPointerEnteredHandler( UIOption option )
         {
             for ( int i = 0; i < _buttons.Count; i++ )
             {
                 _buttons[ i ].Deselect();
             }
-            button.Select();
+            option.Select();
+
+            _lastOption = option;
         }
 
-        private void ButtonPointerExitedHandler( UIOptionButton button )
+        private void ButtonPointerExitedHandler( UIOption option )
         {
             if ( !GamepadDetector.IsConnected )
             {
-                button.Deselect();
+                option.Deselect();
             }
         }
-
+        
         private void CancelButtonClickedHandler()
         {
             HideViewAndDispose();
         }
         
-        private void ButtonClickedHandler( UIOptionButton button )
+        private void SubmitButtonClickedHandler()
         {
-            var index = _buttons.IndexOf( button );
+            // if ( _lastOption is UIOptionMenuButton )
+            // {
+            //     _lastOption.Submit();
+            // }
+        }
+        
+        private void ButtonClickedHandler( UIOption option )
+        {
+            _inputActionCancel.Disable();
+            _inputActionNavigate.Disable();
+            // _inputActionSubmit.Disable();
+            
+            var index = _buttons.IndexOf( (UIOptionMenuButton)option );
             if ( index == 0 )
             {
                 HideViewAndDispose();
             }
             else if ( index == 1 )
             {
-                _inputActionCancel.Disable();
                 var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< OptionsDialogViewModel >();
                 dialog.OnShowingChanged += DialogShowingChangedHandler;
                 dialog.ShowView();
             }
             else if ( index == 2 )
             {
-                EventSystem.current.SetSelectedGameObject( null );
-
-                _inputActionCancel.Disable();
                 _quitGameDialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
                 _quitGameDialog.OnShowingChanged += DialogShowingChangedHandler;
                 _quitGameDialog.ShowView();

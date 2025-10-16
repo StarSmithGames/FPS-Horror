@@ -27,19 +27,25 @@ namespace Game.Core.UI.OptionsDialog
         private OptionPercentsController _musicVolumeOption;
         private OptionPercentsController _sfxVolumeOption;
         private OptionPercentsController _ambientVolumeOption;
+        private List< OptionController > _audioOptions = new();
         
         private bool _isGraphicsInitialized;
         private OptionSelectorController _resolutionOption;
         private OptionToggleController _fullScreenOption;
         private OptionToggleController _vsyncOption;
+        private List< OptionController > _graphicsOptions = new();
         
         private bool _isControlsInitialized;
         private OptionToggleController _sprintOption;
         private OptionToggleController _crouchOption;
+        private List< OptionController > _controlsOptions = new();
 
-        private InputActionWrap _inputActionCancel;
-        private InputActionWrap _inputActionLB;
-        private InputActionWrap _inputActionRB;
+        private InputActionVoidWrap _inputActionCancel;
+        private InputActionVoidWrap _inputActionLB;
+        private InputActionVoidWrap _inputActionRB;
+        private InputActionValueWrap< Vector2 > _inputActionNavigate;
+
+        private OptionController _lastOption;
         
         private readonly UIRootGame _uiRootGame;
         private readonly DataHolder _dataHolder;
@@ -68,9 +74,11 @@ namespace Game.Core.UI.OptionsDialog
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
             _inputActionLB = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.LB, LBButtonClickedHandler );
             _inputActionRB = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.RB, RBButtonClickedHandler );
+            _inputActionNavigate = InputActionManager.CreateInputActionWrap< Vector2 >( InputManager.Inputs.UI.Navigate, onPerformed: NavigateChangedHandler );
             _inputActionCancel.Enable();
             _inputActionLB.Enable();
             _inputActionRB.Enable();
+            _inputActionNavigate.Enable();
         }
 
         protected override void UnSubscribeView()
@@ -85,12 +93,10 @@ namespace Game.Core.UI.OptionsDialog
                 ModelView.Tabs[ i ].OnButtonClicked -= OnTabButtonClickedHandler;
             }
             
-            _inputActionCancel.Disable();
-            _inputActionLB.Disable();
-            _inputActionRB.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
             InputActionManager.RemoveInputActionWrap( _inputActionLB );
             InputActionManager.RemoveInputActionWrap( _inputActionRB );
+            InputActionManager.RemoveInputActionWrap( _inputActionNavigate );
         }
 
         protected override void OnViewShowingChanged()
@@ -102,9 +108,7 @@ namespace Game.Core.UI.OptionsDialog
                 ModelView.Contents[ i ].DestroyChildren();
             }
             _options.Clear();
-
-            EventSystem.current.SetSelectedGameObject( null );//TODO
-
+            
             TryLoadTab( 0 );
         }
 
@@ -147,62 +151,58 @@ namespace Game.Core.UI.OptionsDialog
                 if ( !_isAudioInitialized )
                 {
                     _isAudioInitialized = true;
-                    await LoadAudio( ModelView.Contents[ index ], cancellationToken );
+                    LoadAudio( ModelView.Contents[ index ], cancellationToken ).Forget();
+                    await UniTask.Yield();
                 }
+                EventSystem.current.SetSelectedGameObject( _audioOptions.First().View.gameObject );
             }
             else if ( index == 2 )
             {
                 if ( !_isGraphicsInitialized )
                 {
                     _isGraphicsInitialized = true;
-                    await LoadGraphics( ModelView.Contents[ index ], cancellationToken );
+                    LoadGraphics( ModelView.Contents[ index ], cancellationToken ).Forget();
+                    await UniTask.Yield();
                 }
+                EventSystem.current.SetSelectedGameObject( _graphicsOptions.First().View.gameObject );
             }
             else if ( index == 3 )
             {
                 if ( !_isControlsInitialized )
                 {
                     _isControlsInitialized = true;
-                    await LoadControls( ModelView.Contents[ index ], cancellationToken );
+                    LoadControls( ModelView.Contents[ index ], cancellationToken ).Forget();
+                    await UniTask.Yield();
                 }
+                EventSystem.current.SetSelectedGameObject( _controlsOptions.First().View.gameObject );
             }
             
             async UniTask LoadAudio( Transform content, CancellationToken cancellationToken = default )
             {
                 var data = _dataHolder.GeneralStorageData.Audio.Value;
+
+                _masterVolumeOption = CreateLeftRight( content, data.MasterVolume, LocalizationIds.UI_OPTIONS_DIALOG_MASTER_VOLUME );
+                _audioOptions.Add( _masterVolumeOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
                 
-                _masterVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.MasterVolume );
-                _masterVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_MASTER_VOLUME ) );
-                _masterVolumeOption.Initialize();
-                _options.Add( _masterVolumeOption );
+                _dialogueVolumeOption = CreateLeftRight( content, data.DialogueVolume, LocalizationIds.UI_OPTIONS_DIALOG_DIALOGUE_VOLUME );
+                _audioOptions.Add( _dialogueVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-
-                _dialogueVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.DialogueVolume );
-                _dialogueVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_DIALOGUE_VOLUME ) );
-                _dialogueVolumeOption.Initialize();
-                _options.Add( _dialogueVolumeOption );
+                
+                _musicVolumeOption = CreateLeftRight( content, data.MusicVolume, LocalizationIds.UI_OPTIONS_DIALOG_MUSIC_VOLUME );
+                _audioOptions.Add( _musicVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-
-                _musicVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.MusicVolume );
-                _musicVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_MUSIC_VOLUME ) );
-                _musicVolumeOption.Initialize();
-                _options.Add( _musicVolumeOption );
+                
+                _sfxVolumeOption = CreateLeftRight( content, data.SFXVolume, LocalizationIds.UI_OPTIONS_DIALOG_SFX_VOLUME );
+                _audioOptions.Add( _sfxVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-
-                _sfxVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.SFXVolume );
-                _sfxVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_SFX_VOLUME ) );
-                _sfxVolumeOption.Initialize();
-                _options.Add( _sfxVolumeOption );
-                await UniTask.Yield();
-                cancellationToken.ThrowIfCancellationRequested();
-
-                _ambientVolumeOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), data.AmbientVolume );
-                _ambientVolumeOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_AMBIENT_VOLUME ) );
-                _ambientVolumeOption.Initialize();
-                _options.Add( _ambientVolumeOption );
+                
+                _ambientVolumeOption = CreateLeftRight( content, data.AmbientVolume, LocalizationIds.UI_OPTIONS_DIALOG_AMBIENT_VOLUME );
+                _audioOptions.Add( _ambientVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
             }
@@ -210,29 +210,20 @@ namespace Game.Core.UI.OptionsDialog
             async UniTask LoadGraphics( Transform content, CancellationToken cancellationToken = default )
             {
                 var data = _dataHolder.GeneralStorageData.Graphics.Value;
-                
-                //RESOLUTION
+
                 var resolutions = Screen.resolutions.ToList();
-                _resolutionOption = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), resolutions.IndexOf( Screen.currentResolution ) );
-                _resolutionOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_RESOLUTION ) );
-                _resolutionOption.Initialize( resolutions.Select( ( x ) => $"{x.width}x{x.height}" ).ToArray() );
-                _options.Add( _resolutionOption );
+                _resolutionOption = CreateSelector( content, resolutions.IndexOf( Screen.currentResolution ), LocalizationIds.UI_OPTIONS_DIALOG_RESOLUTION, resolutions.Select( ( x ) => $"{x.width}x{x.height}" ).ToArray() );
+                _graphicsOptions.Add( _resolutionOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                //FULL SCREEN
-                _fullScreenOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsFullScreen );
-                _fullScreenOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_FULL_SCREEN ) );
-                _fullScreenOption.Initialize();
-                _options.Add( _fullScreenOption );
+                _fullScreenOption = CreateToggle( content, data.IsVsync, LocalizationIds.UI_OPTIONS_DIALOG_FULL_SCREEN );
+                _graphicsOptions.Add( _fullScreenOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
-                
-                //VSYNC
-                _vsyncOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsVsync );
-                _vsyncOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_VSYNC ) );
-                _vsyncOption.Initialize();
-                _options.Add( _vsyncOption );
+
+                _vsyncOption = CreateToggle( content, data.IsVsync, LocalizationIds.UI_OPTIONS_DIALOG_VSYNC );
+                _graphicsOptions.Add( _vsyncOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
             }
@@ -240,20 +231,55 @@ namespace Game.Core.UI.OptionsDialog
             async UniTask LoadControls( Transform content, CancellationToken cancellationToken = default )
             {
                 var data = _dataHolder.GeneralStorageData.Controls.Value;
-                
-                _sprintOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsSprintToggle );
-                _sprintOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_SPRINT ) );
-                _sprintOption.Initialize();
-                _options.Add( _sprintOption );
+
+                _sprintOption = CreateToggle( content, data.IsSprintToggle, LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_SPRINT );
+                _controlsOptions.Add( _sprintOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _crouchOption = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), data.IsCrouchToggle );
-                _crouchOption.SetName( _localizationSystem.Translate( LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_CROUCH ) );
-                _crouchOption.Initialize();
-                _options.Add( _crouchOption );
+                _crouchOption = CreateToggle( content, data.IsCrouchToggle, LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_CROUCH );
+                _controlsOptions.Add( _crouchOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            OptionSelectorController CreateSelector( Transform content, int value, string nameId, params string[] options )
+            {
+                OptionSelectorController option = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), value );
+                option.SetName( _localizationSystem.Translate( nameId ) );
+                option.Initialize( options );
+                option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
+                option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+                
+                _options.Add( option );
+
+                return option;
+            }
+            
+            OptionPercentsController CreateLeftRight( Transform content, int value, string nameId )
+            {
+                OptionPercentsController option = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), value );
+                option.SetName( _localizationSystem.Translate( nameId ) );
+                option.Initialize();
+                option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
+                option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+                
+                _options.Add( option );
+
+                return option;
+            }
+
+            OptionToggleController CreateToggle( Transform content, bool value, string nameId )
+            {
+                OptionToggleController option = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), value );
+                option.SetName( _localizationSystem.Translate( nameId ) );
+                option.Initialize();
+                option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
+                option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+
+                _options.Add( option );
+
+                return option;
             }
         }
 
@@ -315,6 +341,49 @@ namespace Game.Core.UI.OptionsDialog
         private void RBButtonClickedHandler()
         {
             TryLoadTab( Mathf.Clamp( _currentTabIndex + 1, 0, ModelView.Tabs.Count - 1 ) );
+        }
+
+        private void ButtonPointerEnteredHandler( UIOption option )
+        {
+            for ( int i = 0; i < _options.Count; i++ )
+            {
+                _options[ i ].Deselect();
+            }
+            var controller = _options.Find( ( x ) => x.View == option );
+            controller.Select();
+
+            _lastOption = controller;
+        }
+
+        private void ButtonPointerExitedHandler( UIOption uiOption )
+        {
+            
+        }
+
+        private void NavigateChangedHandler( Vector2 value )
+        {
+            if ( _lastOption is OptionPercentsController percentOption )
+            {
+                if ( value.x < 0 )
+                {
+                    percentOption.Left();
+                }
+                else if ( value.x > 0 )
+                {
+                    percentOption.Right();
+                }
+            }
+            else if ( _lastOption is OptionSelectorController selectorOption )
+            {
+                if ( value.x < 0 )
+                {
+                    selectorOption.Left();
+                }
+                else if ( value.x > 0 )
+                {
+                    selectorOption.Right();
+                }
+            }
         }
         
         private void CancelButtonClickedHandler()
