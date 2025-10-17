@@ -41,28 +41,29 @@ namespace Game.Core.Player
         public void Look()
         {
             int sensYInverted = _config.LookSettings.InvertYSensitivity ? -1 : 1;
-            int sensYInvertedController = _config.LookSettings.InvertYControllerSensitivity ? 1 : -1;
+            int sensXInvertedController = !_controlsData.IsControllerInvertXToggle ? 1 : -1;
+            int sensYInvertedController = _controlsData.IsControllerInvertYToggle ? 1 : -1;
             float sensitivityMultiplier = 1;
 
-            float rawMouseX = InputManager.MouseX * _controlsData.MouseXSensitivity + InputManager.ControllerX * _controlsData.ControllerXSensitivity;
+            float rawMouseX = InputManager.MouseX * _controlsData.MouseXSensitivity + InputManager.ControllerX * _controlsData.ControllerXSensitivity * sensXInvertedController;
             float rawMouseY = InputManager.MouseY * _controlsData.MouseYSensitivity * sensYInverted + InputManager.ControllerY * _controlsData.ControllerYSensitivity * sensYInvertedController;
             float mouseX = rawMouseX * sensitivityMultiplier;
             float mouseY = rawMouseY * sensitivityMultiplier;
 
             _cameraYaw += mouseX * Time.fixedDeltaTime;
             _cameraPitch -= mouseY * Time.fixedDeltaTime;
-            _cameraPitch = Mathf.Clamp(_cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle);
+            _cameraPitch = Mathf.Clamp( _cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle );
 
             CalculateCameraRoll();
 
             const float smoothSpeed = 100f;
-            Quaternion targetHeadRot = Quaternion.Euler(_cameraPitch, _cameraYaw, _cameraRoll);
-            Quaternion targetRootRot = Quaternion.Euler(0, _cameraYaw, 0);
+            Quaternion targetHeadRot = Quaternion.Euler( _cameraPitch, _cameraYaw, _cameraRoll );
+            Quaternion targetRootRot = Quaternion.Euler( 0, _cameraYaw, 0 );
 
-            Head.localRotation = Quaternion.Lerp(Head.localRotation, targetHeadRot, Time.deltaTime * smoothSpeed);
-            Root.rotation = Quaternion.Lerp(Root.rotation, targetRootRot, Time.deltaTime * smoothSpeed);
+            Head.localRotation = Quaternion.Lerp( Head.localRotation, targetHeadRot, Time.deltaTime * smoothSpeed );
+            Root.rotation = Quaternion.Lerp( Root.rotation, targetRootRot, Time.deltaTime * smoothSpeed );
         }
-        
+
         // public void Look()
         // {
         //     int sensYInverted = _config.LookSettings.InvertYSensitivity ? -1 : 1;

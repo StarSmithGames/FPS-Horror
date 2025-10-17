@@ -38,5 +38,7 @@ namespace StarSmithGames.Localization
 		public const string UI_OPTIONS_DIALOG_MOUSE_SENSITIVITY = "ui.options_dialog.mouse_sensitivity";
 		public const string UI_OPTIONS_DIALOG_CONTROLLER_X_SENSITIVITY = "ui.options_dialog.controller_x_sensitivity";
 		public const string UI_OPTIONS_DIALOG_CONTROLLER_Y_SENSITIVITY = "ui.options_dialog.controller_y_sensitivity";
+		public const string UI_OPTIONS_DIALOG_CONTROLLER_X_INVERT = "ui.options_dialog.controller_x_invert";
+		public const string UI_OPTIONS_DIALOG_CONTROLLER_Y_INVERT = "ui.options_dialog.controller_y_invert";
 	}
 }

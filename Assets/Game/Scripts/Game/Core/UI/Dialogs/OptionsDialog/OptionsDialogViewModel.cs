@@ -41,6 +41,8 @@ namespace Game.Core.UI.OptionsDialog
         private OptionBarController _mouseSensitivityOption;
         private OptionBarController _controllerXSensitivityOption;
         private OptionBarController _controllerYSensitivityOption;
+        private OptionToggleController _controllerXInvertOption;
+        private OptionToggleController _controllerYInvertOption;
         private List< OptionController > _controlsOptions = new();
 
         private InputActionVoidWrap _inputActionCancel;
@@ -260,6 +262,16 @@ namespace Game.Core.UI.OptionsDialog
                 _controlsOptions.Add( _controllerYSensitivityOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
+                
+                _controllerXInvertOption = CreateToggle( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_X_INVERT, data.IsControllerInvertXToggle );
+                _controlsOptions.Add( _controllerXInvertOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                _controllerYInvertOption = CreateToggle( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_Y_INVERT, data.IsControllerInvertYToggle );
+                _controlsOptions.Add( _controllerYInvertOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             OptionSelectorController CreateSelector( Transform content, string nameId, int value, params string[] options )
@@ -338,6 +350,8 @@ namespace Game.Core.UI.OptionsDialog
                 controls.MouseYSensitivity = _mouseSensitivityOption.Value;
                 controls.ControllerXSensitivity = _controllerXSensitivityOption.Value;
                 controls.ControllerYSensitivity = _controllerYSensitivityOption.Value;
+                controls.IsControllerInvertXToggle = _controllerXInvertOption.IsOn;
+                controls.IsControllerInvertYToggle = _controllerYInvertOption.IsOn;
             }
             
             _dataHolder.SaveGeneral();

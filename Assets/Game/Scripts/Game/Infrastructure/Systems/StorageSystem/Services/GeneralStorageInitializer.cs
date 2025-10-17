@@ -63,6 +63,8 @@ namespace Game.Systems.StorageSystem
                 MouseYSensitivity = 4f,
                 ControllerXSensitivity = 120f,
                 ControllerYSensitivity = 80f,
+                IsControllerInvertXToggle = false,
+                IsControllerInvertYToggle = false,
             } );
         }
 

@@ -8,5 +8,7 @@ namespace Game.Systems.StorageSystem
         public float MouseYSensitivity;
         public float ControllerXSensitivity;
         public float ControllerYSensitivity;
+        public bool IsControllerInvertXToggle;
+        public bool IsControllerInvertYToggle;
     }
 }

@@ -9,7 +9,6 @@ namespace Game.Core.Player
         [ field: Range( 20, 89.7f ) ]
         [ field: SerializeField ] public float MaxCameraAngle { get; private set; } = 89.7f;
         [ field: SerializeField ] public bool InvertYSensitivity { get; private set; } = false;
-        [ field: SerializeField ] public bool InvertYControllerSensitivity { get; private set; } = false;
 
         // [Range(.1f, 1f), Tooltip("Sensitivity will be multiplied by this value when aiming"), SerializeField] private float aimingSensitivityMultiplier = .4f;
 
