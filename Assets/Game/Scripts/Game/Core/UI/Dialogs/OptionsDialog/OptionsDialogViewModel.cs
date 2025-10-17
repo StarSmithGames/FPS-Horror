@@ -22,11 +22,11 @@ namespace Game.Core.UI.OptionsDialog
         private List< OptionController > _options = new();
 
         private bool _isAudioInitialized;
-        private OptionPercentsController _masterVolumeOption;
-        private OptionPercentsController _dialogueVolumeOption;
-        private OptionPercentsController _musicVolumeOption;
-        private OptionPercentsController _sfxVolumeOption;
-        private OptionPercentsController _ambientVolumeOption;
+        private OptionBarController _masterVolumeOption;
+        private OptionBarController _dialogueVolumeOption;
+        private OptionBarController _musicVolumeOption;
+        private OptionBarController _sfxVolumeOption;
+        private OptionBarController _ambientVolumeOption;
         private List< OptionController > _audioOptions = new();
         
         private bool _isGraphicsInitialized;
@@ -38,6 +38,9 @@ namespace Game.Core.UI.OptionsDialog
         private bool _isControlsInitialized;
         private OptionToggleController _sprintOption;
         private OptionToggleController _crouchOption;
+        private OptionBarController _mouseSensitivityOption;
+        private OptionBarController _controllerXSensitivityOption;
+        private OptionBarController _controllerYSensitivityOption;
         private List< OptionController > _controlsOptions = new();
 
         private InputActionVoidWrap _inputActionCancel;
@@ -182,27 +185,27 @@ namespace Game.Core.UI.OptionsDialog
             {
                 var data = _dataHolder.GeneralStorageData.Audio.Value;
 
-                _masterVolumeOption = CreateLeftRight( content, data.MasterVolume, LocalizationIds.UI_OPTIONS_DIALOG_MASTER_VOLUME );
+                _masterVolumeOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_MASTER_VOLUME, data.MasterVolume );
                 _audioOptions.Add( _masterVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _dialogueVolumeOption = CreateLeftRight( content, data.DialogueVolume, LocalizationIds.UI_OPTIONS_DIALOG_DIALOGUE_VOLUME );
+                _dialogueVolumeOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_DIALOGUE_VOLUME, data.DialogueVolume );
                 _audioOptions.Add( _dialogueVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _musicVolumeOption = CreateLeftRight( content, data.MusicVolume, LocalizationIds.UI_OPTIONS_DIALOG_MUSIC_VOLUME );
+                _musicVolumeOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_MUSIC_VOLUME, data.MusicVolume );
                 _audioOptions.Add( _musicVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _sfxVolumeOption = CreateLeftRight( content, data.SFXVolume, LocalizationIds.UI_OPTIONS_DIALOG_SFX_VOLUME );
+                _sfxVolumeOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_SFX_VOLUME, data.SFXVolume );
                 _audioOptions.Add( _sfxVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _ambientVolumeOption = CreateLeftRight( content, data.AmbientVolume, LocalizationIds.UI_OPTIONS_DIALOG_AMBIENT_VOLUME );
+                _ambientVolumeOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_AMBIENT_VOLUME, data.AmbientVolume );
                 _audioOptions.Add( _ambientVolumeOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
@@ -213,17 +216,17 @@ namespace Game.Core.UI.OptionsDialog
                 var data = _dataHolder.GeneralStorageData.Graphics.Value;
 
                 var resolutions = Screen.resolutions.ToList();
-                _resolutionOption = CreateSelector( content, resolutions.IndexOf( Screen.currentResolution ), LocalizationIds.UI_OPTIONS_DIALOG_RESOLUTION, resolutions.Select( ( x ) => $"{x.width}x{x.height}" ).ToArray() );
+                _resolutionOption = CreateSelector( content, LocalizationIds.UI_OPTIONS_DIALOG_RESOLUTION, resolutions.IndexOf( Screen.currentResolution ), resolutions.Select( ( x ) => $"{x.width}x{x.height}" ).ToArray() );
                 _graphicsOptions.Add( _resolutionOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _fullScreenOption = CreateToggle( content, data.IsVsync, LocalizationIds.UI_OPTIONS_DIALOG_FULL_SCREEN );
+                _fullScreenOption = CreateToggle( content, LocalizationIds.UI_OPTIONS_DIALOG_FULL_SCREEN, data.IsFullScreen );
                 _graphicsOptions.Add( _fullScreenOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
 
-                _vsyncOption = CreateToggle( content, data.IsVsync, LocalizationIds.UI_OPTIONS_DIALOG_VSYNC );
+                _vsyncOption = CreateToggle( content, LocalizationIds.UI_OPTIONS_DIALOG_VSYNC, data.IsVsync );
                 _graphicsOptions.Add( _vsyncOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
@@ -233,18 +236,33 @@ namespace Game.Core.UI.OptionsDialog
             {
                 var data = _dataHolder.GeneralStorageData.Controls.Value;
 
-                _sprintOption = CreateToggle( content, data.IsSprintToggle, LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_SPRINT );
+                _sprintOption = CreateToggle( content, LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_SPRINT, data.IsSprintToggle );
                 _controlsOptions.Add( _sprintOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _crouchOption = CreateToggle( content, data.IsCrouchToggle, LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_CROUCH );
+                _crouchOption = CreateToggle( content, LocalizationIds.UI_OPTIONS_DIALOG_TOGGLE_CROUCH, data.IsCrouchToggle );
                 _controlsOptions.Add( _crouchOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                _mouseSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_MOUSE_SENSITIVITY, data.MouseXSensitivity, 2, 10, postfix: "" );
+                _controlsOptions.Add( _mouseSensitivityOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                _controllerXSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_X_SENSITIVITY, data.ControllerXSensitivity, 35, 100, postfix: "" );
+                _controlsOptions.Add( _controllerXSensitivityOption );
+                await UniTask.Yield();
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                _controllerYSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_Y_SENSITIVITY, data.ControllerYSensitivity, 35, 100, postfix: "" );
+                _controlsOptions.Add( _controllerYSensitivityOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
             }
 
-            OptionSelectorController CreateSelector( Transform content, int value, string nameId, params string[] options )
+            OptionSelectorController CreateSelector( Transform content, string nameId, int value, params string[] options )
             {
                 OptionSelectorController option = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), value );
                 option.SetName( _localizationSystem.Translate( nameId ) );
@@ -257,9 +275,9 @@ namespace Game.Core.UI.OptionsDialog
                 return option;
             }
             
-            OptionPercentsController CreateLeftRight( Transform content, int value, string nameId )
+            OptionBarController CreateBar( Transform content, string nameId, float value, float min = 0, float max = 100, float step = 1, string postfix = "%" )
             {
-                OptionPercentsController option = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), value );
+                OptionBarController option = new( GameObject.Instantiate( ModelView.OptionLeftRightPrefab, content ), value, min, max, step, postfix );
                 option.SetName( _localizationSystem.Translate( nameId ) );
                 option.Initialize();
                 option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
@@ -270,7 +288,7 @@ namespace Game.Core.UI.OptionsDialog
                 return option;
             }
 
-            OptionToggleController CreateToggle( Transform content, bool value, string nameId )
+            OptionToggleController CreateToggle( Transform content, string nameId, bool value )
             {
                 OptionToggleController option = new( GameObject.Instantiate( ModelView.OptionTogglePrefab, content ), value );
                 option.SetName( _localizationSystem.Translate( nameId ) );
@@ -294,11 +312,11 @@ namespace Game.Core.UI.OptionsDialog
             if ( _isAudioInitialized )
             {
                 var audio = _dataHolder.GeneralStorageData.Audio.Value;
-                audio.MasterVolume = _masterVolumeOption.Value;
-                audio.DialogueVolume = _dialogueVolumeOption.Value;
-                audio.MusicVolume = _musicVolumeOption.Value;
-                audio.SFXVolume = _sfxVolumeOption.Value;
-                audio.AmbientVolume = _ambientVolumeOption.Value;
+                audio.MasterVolume = (int)_masterVolumeOption.Value;
+                audio.DialogueVolume = (int)_dialogueVolumeOption.Value;
+                audio.MusicVolume = (int)_musicVolumeOption.Value;
+                audio.SFXVolume = (int)_sfxVolumeOption.Value;
+                audio.AmbientVolume = (int)_ambientVolumeOption.Value;
             }
 
             if ( _isGraphicsInitialized )
@@ -316,6 +334,10 @@ namespace Game.Core.UI.OptionsDialog
                 var controls = _dataHolder.GeneralStorageData.Controls.Value;
                 controls.IsSprintToggle = _sprintOption.IsOn;
                 controls.IsCrouchToggle = _crouchOption.IsOn;
+                controls.MouseXSensitivity = _mouseSensitivityOption.Value;
+                controls.MouseYSensitivity = _mouseSensitivityOption.Value;
+                controls.ControllerXSensitivity = _controllerXSensitivityOption.Value;
+                controls.ControllerYSensitivity = _controllerYSensitivityOption.Value;
             }
             
             _dataHolder.SaveGeneral();
@@ -363,7 +385,7 @@ namespace Game.Core.UI.OptionsDialog
 
         private void NavigateChangedHandler( Vector2 value )
         {
-            if ( _lastOption is OptionPercentsController percentOption )
+            if ( _lastOption is OptionBarController percentOption )
             {
                 if ( value.x < 0 )
                 {

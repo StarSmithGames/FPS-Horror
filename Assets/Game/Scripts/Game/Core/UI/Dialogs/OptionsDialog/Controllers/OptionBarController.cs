@@ -3,16 +3,25 @@ using UnityEngine;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class OptionPercentsController : OptionController
+    public sealed class OptionBarController : OptionController
     {
-        public int Value { get; private set; }
+        public float Value { get; private set; }
+        public float Min { get; }
+        public float Max { get; }
+
+        private float _step;
+        private string _postfix;
         
         private readonly UIOptionLeftRight _view;
         
-        public OptionPercentsController( UIOptionLeftRight view, int value ) : base( view )
+        public OptionBarController( UIOptionLeftRight view, float value, float min = 0, float max = 100, float step = 1, string postfix = "%" ) : base( view )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             Value = value;
+            Min = min;
+            Max = max;
+            _step = step;
+            _postfix = postfix;
         }
 
         public void Initialize()
@@ -35,7 +44,7 @@ namespace Game.Core.UI.OptionsDialog
 
         public void Left()
         {
-            Value = Mathf.Clamp( Value - 1, 0, 100 );
+            Value = Mathf.Clamp( Value - _step, Min, Max );
             
             RefreshUI();
 
@@ -44,7 +53,7 @@ namespace Game.Core.UI.OptionsDialog
 
         public void Right()
         {
-            Value = Mathf.Clamp( Value + 1, 0, 100 );
+            Value = Mathf.Clamp( Value + _step, Min, Max );
             
             RefreshUI();
             
@@ -53,7 +62,7 @@ namespace Game.Core.UI.OptionsDialog
 
         private void RefreshUI()
         {
-            _view.SetText( $"{Value}%" );
+            _view.SetText( $"{Value}{_postfix}" );
         }
 
         private void LeftButtonClickedHandler()

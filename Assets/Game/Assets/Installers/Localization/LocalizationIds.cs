@@ -2,6 +2,12 @@ namespace StarSmithGames.Localization
 {
 	public sealed class LocalizationIds
 	{
+		public const string ITEM_DOOR = "item.door";
+		public const string ITEM_DOOR2 = "item.door2";
+		public const string ITEM_DRAWER = "item.drawer";
+		public const string ITEM_PAPER_1_NAME = "item.paper_1.name";
+		public const string ITEM_PAPER_1_TEXT = "item.paper_1.text";
+		public const string ITEM_FUSE_NAME = "item.fuse.name";
 		public const string UI_CONTROL_INTERACT = "ui.control.interact";
 		public const string UI_CONTROL_INSPECT = "ui.control.inspect";
 		public const string UI_CONTROL_TAKE = "ui.control.take";
@@ -29,11 +35,8 @@ namespace StarSmithGames.Localization
 		public const string UI_OPTIONS_DIALOG_VSYNC = "ui.options_dialog.vsync";
 		public const string UI_OPTIONS_DIALOG_TOGGLE_SPRINT = "ui.options_dialog.toggle_sprint";
 		public const string UI_OPTIONS_DIALOG_TOGGLE_CROUCH = "ui.options_dialog.toggle_crouch";
-		public const string ITEM_DOOR = "item.door";
-		public const string ITEM_DOOR2 = "item.door2";
-		public const string ITEM_DRAWER = "item.drawer";
-		public const string ITEM_PAPER_1_NAME = "item.paper_1.name";
-		public const string ITEM_PAPER_1_TEXT = "item.paper_1.text";
-		public const string ITEM_FUSE_NAME = "item.fuse.name";
+		public const string UI_OPTIONS_DIALOG_MOUSE_SENSITIVITY = "ui.options_dialog.mouse_sensitivity";
+		public const string UI_OPTIONS_DIALOG_CONTROLLER_X_SENSITIVITY = "ui.options_dialog.controller_x_sensitivity";
+		public const string UI_OPTIONS_DIALOG_CONTROLLER_Y_SENSITIVITY = "ui.options_dialog.controller_y_sensitivity";
 	}
 }

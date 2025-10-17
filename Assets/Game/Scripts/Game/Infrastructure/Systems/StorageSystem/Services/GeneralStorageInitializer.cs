@@ -59,6 +59,10 @@ namespace Game.Systems.StorageSystem
             {
                 IsSprintToggle = false,
                 IsCrouchToggle = true,
+                MouseXSensitivity = 4f,
+                MouseYSensitivity = 4f,
+                ControllerXSensitivity = 75f,
+                ControllerYSensitivity = 60f,
             } );
         }
 

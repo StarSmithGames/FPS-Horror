@@ -1,3 +1,4 @@
+using Game.Systems.StorageSystem;
 using System;
 using UnityEngine;
 using InputManager = Game.Managers.InputManager.InputManager;
@@ -13,13 +14,10 @@ namespace Game.Core.Player
         private float _cameraYaw;
         private float _cameraRoll;
 
-        private float _currentSensX = 4f;
-        private float _currentSensY = 4f;
-        private float _currentControllerSensX = 35f;
-        private float _currentControllerSensY = 35f;
-
         private float YawOffset => 0;
         private float PitchOffset => 0;
+
+        private ControlsData _controlsData;
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
@@ -28,12 +26,16 @@ namespace Game.Core.Player
         public PlayerLookController(
             PlayerObject view,
             PlayerConfig config,
-            PlayerStates states
+            PlayerStates states,
+            
+            DataHolder dataHolder
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
+
+            _controlsData = dataHolder.GeneralStorageData.Controls.Value;
         }
 
         public void Look()
@@ -43,8 +45,8 @@ namespace Game.Core.Player
             float sensitivityMultiplier = 1; //(weaponController.IsAiming) ? aimingSensitivityMultiplier : 1;
 
             // Grab the Inputs from the user.
-            float rawMouseX = InputManager.GatherRawMouseX( _currentSensX, _currentControllerSensX );
-            float rawMouseY = InputManager.GatherRawMouseY( sensYInverted, sensYInvertedController, _currentSensY, _currentControllerSensY );
+            float rawMouseX = InputManager.GatherRawMouseX( _controlsData.MouseXSensitivity, _controlsData.ControllerXSensitivity );
+            float rawMouseY = InputManager.GatherRawMouseY( sensYInverted, sensYInvertedController, _controlsData.MouseYSensitivity, _controlsData.ControllerYSensitivity );
             float mouseX = rawMouseX * sensitivityMultiplier;
             float mouseY = rawMouseY * sensitivityMultiplier;
 

@@ -166,8 +166,6 @@ namespace Game.Core.UI.PauseScreen
             _inputActionCancel.Enable();
             EventSystem.current.SetSelectedGameObject( _lastOption.gameObject );
             
-            Debug.LogError( "HERER " + result );
-            
             if ( result )
             {
                 Application.Quit();
