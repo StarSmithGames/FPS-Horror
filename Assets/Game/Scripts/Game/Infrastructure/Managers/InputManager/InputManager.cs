@@ -76,10 +76,5 @@ namespace Game.Managers.InputManager
                 await UniTask.Yield();
             }
         }
-
-        public static float GatherRawMouseX( float currentSensX, float currentControllerSensX ) => ( MouseX * currentSensX * Time.fixedDeltaTime + ControllerX * Time.fixedDeltaTime * currentControllerSensX );
-        public static float GatherRawMouseY( int sensYInverted, int sensYInvertedController, float currentSensY, float currentControllerSensY ) => ( MouseY * currentSensY * sensYInverted * Time.fixedDeltaTime + ControllerY * sensYInvertedController * currentControllerSensY * Time.fixedDeltaTime );
-
-
     }
 }

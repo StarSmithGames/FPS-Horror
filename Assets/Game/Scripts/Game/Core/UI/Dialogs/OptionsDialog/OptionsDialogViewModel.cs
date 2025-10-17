@@ -251,12 +251,12 @@ namespace Game.Core.UI.OptionsDialog
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _controllerXSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_X_SENSITIVITY, data.ControllerXSensitivity, 35, 100, postfix: "" );
+                _controllerXSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_X_SENSITIVITY, data.ControllerXSensitivity, 35, 150, postfix: "" );
                 _controlsOptions.Add( _controllerXSensitivityOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                _controllerYSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_Y_SENSITIVITY, data.ControllerYSensitivity, 35, 100, postfix: "" );
+                _controllerYSensitivityOption = CreateBar( content, LocalizationIds.UI_OPTIONS_DIALOG_CONTROLLER_Y_SENSITIVITY, data.ControllerYSensitivity, 35, 150, postfix: "" );
                 _controlsOptions.Add( _controllerYSensitivityOption );
                 await UniTask.Yield();
                 cancellationToken.ThrowIfCancellationRequested();

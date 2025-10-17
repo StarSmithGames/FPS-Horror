@@ -42,26 +42,51 @@ namespace Game.Core.Player
         {
             int sensYInverted = _config.LookSettings.InvertYSensitivity ? -1 : 1;
             int sensYInvertedController = _config.LookSettings.InvertYControllerSensitivity ? 1 : -1;
-            float sensitivityMultiplier = 1; //(weaponController.IsAiming) ? aimingSensitivityMultiplier : 1;
+            float sensitivityMultiplier = 1;
 
-            // Grab the Inputs from the user.
-            float rawMouseX = InputManager.GatherRawMouseX( _controlsData.MouseXSensitivity, _controlsData.ControllerXSensitivity );
-            float rawMouseY = InputManager.GatherRawMouseY( sensYInverted, sensYInvertedController, _controlsData.MouseYSensitivity, _controlsData.ControllerYSensitivity );
+            float rawMouseX = InputManager.MouseX * _controlsData.MouseXSensitivity + InputManager.ControllerX * _controlsData.ControllerXSensitivity;
+            float rawMouseY = InputManager.MouseY * _controlsData.MouseYSensitivity * sensYInverted + InputManager.ControllerY * _controlsData.ControllerYSensitivity * sensYInvertedController;
             float mouseX = rawMouseX * sensitivityMultiplier;
             float mouseY = rawMouseY * sensitivityMultiplier;
 
-            _cameraYaw = Head.localRotation.eulerAngles.y + mouseX + YawOffset * Time.deltaTime;//YawOffset = weaponRecoil.RecoilYawOffset
-            _cameraPitch -= mouseY - PitchOffset * Time.deltaTime;//PitchOffset = weaponRecoil.RecoilPitchOffset 
-            
-            // Make sure we dont over- or under-rotate.
-            // The reason why the value is 89.7 instead of 90 is to prevent errors with the wallrun
-            _cameraPitch = Mathf.Clamp( _cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle );
+            _cameraYaw += mouseX * Time.fixedDeltaTime;
+            _cameraPitch -= mouseY * Time.fixedDeltaTime;
+            _cameraPitch = Mathf.Clamp(_cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle);
 
             CalculateCameraRoll();
-            SetRotation( _cameraPitch, _cameraYaw, _cameraRoll );
 
-            // HandleAimAssist();
+            const float smoothSpeed = 100f;
+            Quaternion targetHeadRot = Quaternion.Euler(_cameraPitch, _cameraYaw, _cameraRoll);
+            Quaternion targetRootRot = Quaternion.Euler(0, _cameraYaw, 0);
+
+            Head.localRotation = Quaternion.Lerp(Head.localRotation, targetHeadRot, Time.deltaTime * smoothSpeed);
+            Root.rotation = Quaternion.Lerp(Root.rotation, targetRootRot, Time.deltaTime * smoothSpeed);
         }
+        
+        // public void Look()
+        // {
+        //     int sensYInverted = _config.LookSettings.InvertYSensitivity ? -1 : 1;
+        //     int sensYInvertedController = _config.LookSettings.InvertYControllerSensitivity ? 1 : -1;
+        //     float sensitivityMultiplier = 1; //(weaponController.IsAiming) ? aimingSensitivityMultiplier : 1;
+        //
+        //     // Grab the Inputs from the user.
+        //     float rawMouseX = InputManager.MouseX * _controlsData.MouseXSensitivity + InputManager.ControllerX * _controlsData.ControllerXSensitivity;
+        //     float rawMouseY =  InputManager.MouseY * _controlsData.MouseYSensitivity * sensYInverted + InputManager.ControllerY * _controlsData.ControllerYSensitivity * sensYInvertedController;
+        //     float mouseX = rawMouseX * sensitivityMultiplier;
+        //     float mouseY = rawMouseY * sensitivityMultiplier;
+        //
+        //     _cameraYaw = Head.localRotation.eulerAngles.y + mouseX * Time.fixedDeltaTime + YawOffset * Time.fixedDeltaTime;//YawOffset = weaponRecoil.RecoilYawOffset
+        //     _cameraPitch -= mouseY * Time.fixedDeltaTime - PitchOffset * Time.fixedDeltaTime;//PitchOffset = weaponRecoil.RecoilPitchOffset 
+        //     
+        //     // Make sure we dont over- or under-rotate.
+        //     // The reason why the value is 89.7 instead of 90 is to prevent errors with the wallrun
+        //     _cameraPitch = Mathf.Clamp( _cameraPitch, -_config.LookSettings.MaxCameraAngle, _config.LookSettings.MaxCameraAngle );
+        //
+        //     CalculateCameraRoll();
+        //     SetRotation( _cameraPitch, _cameraYaw, _cameraRoll );
+        //
+        //     // HandleAimAssist();
+        // }
 
         public void SetRotation( float x, float y, float z )
         {

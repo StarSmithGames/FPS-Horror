@@ -90,7 +90,6 @@ namespace Game.Core.Player
 
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
-            LastTick( _cancellationTokenSource.Token ).Forget();
             FixedTick( _cancellationTokenSource.Token ).Forget();
 
             _inputActionsController.Enable();
@@ -134,25 +133,17 @@ namespace Game.Core.Player
                 await UniTask.Yield( PlayerLoopTiming.Update );
             }
         }
-        
-        private async UniTask LastTick( CancellationToken cancellationToken = default )
-        {
-            while ( !cancellationToken.IsCancellationRequested )
-            {
-                if ( !_states.IsBlocked )
-                {
-                    _lookController.Look();
-                }
-
-                await UniTask.Yield( PlayerLoopTiming.LastUpdate );
-            }
-        }
 
         private async UniTask FixedTick( CancellationToken cancellationToken = default )
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
                 _moveController.Movement( _crouchController.IsSliding(), _moveInput );
+                
+                if ( !_states.IsBlocked )
+                {
+                    _lookController.Look();
+                }
                 
                 await UniTask.Yield( PlayerLoopTiming.FixedUpdate );
             }
