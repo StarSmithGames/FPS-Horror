@@ -87,6 +87,7 @@ namespace Game.Core.UI.OptionsDialog
             
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
             
             for ( int i = 0; i < ModelView.Tabs.Count; i++ )
             {
@@ -102,7 +103,7 @@ namespace Game.Core.UI.OptionsDialog
         protected override void OnViewShowingChanged()
         {
             if ( !IsShowing ) return;
-
+            
             for ( int i = 0; i < ModelView.Contents.Count; i++ )
             {
                 ModelView.Contents[ i ].DestroyChildren();

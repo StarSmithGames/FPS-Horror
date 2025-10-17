@@ -37,6 +37,7 @@ namespace Game.Managers.InputManager
 
         public static void RemoveInputActionWrap( InputActionWrap wrap )
         {
+            wrap.Dispose();
             _inputActions[ wrap.Input ].Remove( wrap );
             if ( _inputActions[ wrap.Input ].Count == 0 )
             {

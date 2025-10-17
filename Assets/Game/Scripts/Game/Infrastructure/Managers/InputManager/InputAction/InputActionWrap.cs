@@ -12,6 +12,11 @@ namespace Game.Managers.InputManager
             Input = input ?? throw new ArgumentNullException( nameof(input) );
         }
 
+        public virtual void Dispose()
+        {
+            
+        }
+        
         public void Enable()
         {
             Input.started += InputStartedHandler;

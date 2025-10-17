@@ -5,15 +5,24 @@ namespace Game.Managers.InputManager
 {
     public sealed class InputActionVoidWrap : InputActionWrap
     {
-        private readonly Action _onStarted;
-        private readonly Action _onPerformed;
-        private readonly Action _onCanceled;
+        private Action _onStarted;
+        private Action _onPerformed;
+        private Action _onCanceled;
         
         public InputActionVoidWrap( InputAction input, Action onPerformed = null, Action onStarted = null, Action onCanceled = null ) : base( input )
         {
             _onStarted = onStarted;
             _onPerformed = onPerformed;
             _onCanceled = onCanceled;
+        }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _onStarted = null;
+            _onPerformed = null;
+            _onCanceled = null;
         }
 
         protected override void OnStarted()

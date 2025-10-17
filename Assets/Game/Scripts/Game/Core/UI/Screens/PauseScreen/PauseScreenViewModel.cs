@@ -22,7 +22,6 @@ namespace Game.Core.UI.PauseScreen
         private InputActionVoidWrap _inputActionCancel;
 
         private UIOption _lastOption;
-        private QuitGameDialogViewModel _quitGameDialog;
         
         private readonly GameManager _gameManager;
         private readonly PauseManager _pauseManager;
@@ -57,12 +56,8 @@ namespace Game.Core.UI.PauseScreen
 
             GamepadDetector.OnChanged += GamepadChangedHandler;
             
-            _inputActionNavigate = InputActionManager.CreateInputActionWrap< Vector2 >( InputManager.Inputs.UI.Navigate );
-            // _inputActionSubmit = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Submit, SubmitButtonClickedHandler );
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
             _inputActionCancel.Enable();
-            // _inputActionSubmit.Enable();
-            _inputActionNavigate.Enable();
         }
 
         protected override void UnSubscribeView()
@@ -80,8 +75,6 @@ namespace Game.Core.UI.PauseScreen
             GamepadDetector.OnChanged -= GamepadChangedHandler;
             
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
-            // InputActionManager.RemoveInputActionWrap( _inputActionSubmit );
-            InputActionManager.RemoveInputActionWrap( _inputActionNavigate );
         }
 
         protected override void OnViewShowingChanged()
@@ -143,19 +136,9 @@ namespace Game.Core.UI.PauseScreen
             HideViewAndDispose();
         }
         
-        private void SubmitButtonClickedHandler()
-        {
-            // if ( _lastOption is UIOptionMenuButton )
-            // {
-            //     _lastOption.Submit();
-            // }
-        }
-        
         private void ButtonClickedHandler( UIOption option )
         {
             _inputActionCancel.Disable();
-            _inputActionNavigate.Disable();
-            // _inputActionSubmit.Disable();
             
             var index = _buttons.IndexOf( (UIOptionMenuButton)option );
             if ( index == 0 )
@@ -170,18 +153,34 @@ namespace Game.Core.UI.PauseScreen
             }
             else if ( index == 2 )
             {
-                _quitGameDialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
-                _quitGameDialog.OnShowingChanged += DialogShowingChangedHandler;
-                _quitGameDialog.ShowView();
+                var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< QuitGameDialogViewModel >();
+                dialog.OnAcceptRejectShowingChanged += QuitGameShowingChangedHandler;
+                dialog.ShowView();
             }
         }
 
+        private void QuitGameShowingChangedHandler( IViewModel dialog, bool result )
+        {
+            ( (QuitGameDialogViewModel)dialog ).OnAcceptRejectShowingChanged -= QuitGameShowingChangedHandler;
+
+            _inputActionCancel.Enable();
+            EventSystem.current.SetSelectedGameObject( _lastOption.gameObject );
+            
+            Debug.LogError( "HERER " + result );
+            
+            if ( result )
+            {
+                Application.Quit();
+            }
+        }
+        
         private void DialogShowingChangedHandler( IViewModel dialog )
         {
             if ( dialog.IsShowing ) return;
             dialog.OnShowingChanged -= DialogShowingChangedHandler;
 
             _inputActionCancel.Enable();
+            EventSystem.current.SetSelectedGameObject( _lastOption.gameObject );
         }
     }
 }

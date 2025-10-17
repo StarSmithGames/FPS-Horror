@@ -1,7 +1,6 @@
 using Game.Core.UI.OptionsDialog;
 using Game.Managers.CursorManager;
 using Game.Managers.InputManager;
-using Game.SceneSystem;
 using PuzzlescapeGames.VVM;
 using System;
 using System.Collections.Generic;
@@ -15,6 +14,8 @@ namespace Game.Core.UI.MenuScreen
     {
         private List< UIOptionMenuButton > _buttons = new( 3 );
 
+        private UIOption _lastOption;
+        
         private readonly GameBoostrap _gameBoostrap;
         private readonly UIRootGame _uiRootGame;
         
@@ -45,9 +46,6 @@ namespace Game.Core.UI.MenuScreen
 
             GamepadDetector.OnChanged += GamepadChangedHandler;
             
-            InputManager.Inputs.UI.Navigate.Enable();
-            InputManager.Inputs.UI.Submit.Enable();
-            
             CursorManager.Enable();
         }
 
@@ -64,9 +62,6 @@ namespace Game.Core.UI.MenuScreen
             }
             
             GamepadDetector.OnChanged -= GamepadChangedHandler;
-            
-            InputManager.Inputs.UI.Navigate.Disable();
-            InputManager.Inputs.UI.Submit.Disable();
             
             CursorManager.Disable();
         }
@@ -102,6 +97,8 @@ namespace Game.Core.UI.MenuScreen
                 _buttons[ i ].Deselect();
             }
             option.Select();
+            
+            _lastOption = option;
         }
 
         private void ButtonPointerExitedHandler( UIOption option )
@@ -121,12 +118,22 @@ namespace Game.Core.UI.MenuScreen
             }
             else if ( index == 1 )
             {
-                _uiRootGame.DialogAggregator.ShowAndCreateIfNotExist< OptionsDialogViewModel >();
+                var dialog = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< OptionsDialogViewModel >();
+                dialog.OnShowingChanged += DialogShowingChangedHandler;
+                dialog.ShowView();
             }
             else if ( index == 2 )
             {
                 Application.Quit();
             }
+        }
+        
+        private void DialogShowingChangedHandler( IViewModel dialog )
+        {
+            if ( dialog.IsShowing ) return;
+            dialog.OnShowingChanged -= DialogShowingChangedHandler;
+
+            EventSystem.current.SetSelectedGameObject( _lastOption.gameObject );
         }
     }
 }
