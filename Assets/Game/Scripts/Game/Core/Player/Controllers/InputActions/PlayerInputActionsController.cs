@@ -1,4 +1,6 @@
+using Game.Core.Entity;
 using Game.Core.UI;
+using Game.Core.UI.InspectDialog;
 using Game.Core.UI.PauseScreen;
 using Game.Managers.InputManager;
 using Game.Systems.StorageSystem;
@@ -15,7 +17,10 @@ namespace Game.Core.Player
         private InputActionVoidWrap _inputActionCrouch;
         private InputActionVoidWrap _inputActionJump;
         private InputActionVoidWrap _inputActionLighter;
+        
+        private InspectDialogViewModel _inspectDialogViewModel;
 
+        private readonly PlayerObject _view;
         private readonly PlayerStates _states;
         private readonly PlayerCrouchController _crouchController;
         private readonly PlayerJumpController _jumpController;
@@ -24,6 +29,7 @@ namespace Game.Core.Player
         private readonly DataHolder _dataHolder;
         
         public PlayerInputActionsController(
+            PlayerObject view,
             PlayerStates states,
             PlayerCrouchController crouchController,
             PlayerJumpController jumpController,
@@ -32,6 +38,7 @@ namespace Game.Core.Player
             DataHolder dataHolder
             )
         {
+            _view = view ?? throw new ArgumentNullException( nameof(view) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
@@ -77,8 +84,30 @@ namespace Game.Core.Player
             _inputActionLighter.Disable();
         }
 
+        #region Inspection
+        public void InspectItem( ItemObject item )
+        {
+            _states.IsBlocked = true;
+
+            _inspectDialogViewModel = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< InspectDialogViewModel >();
+            _inspectDialogViewModel.Set( item, _view.CameraFPS );
+            _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
+            _inspectDialogViewModel.ShowView();
+        }
+
+        private void InspectCompletedHandler()
+        {
+            _inspectDialogViewModel.OnCancelButtonClicked -= InspectCompletedHandler;
+            _inspectDialogViewModel = null;
+            
+            _states.IsBlocked = false;
+        }
+        #endregion
+
         private void MenuClickedHandler()
         {
+            if ( _inspectDialogViewModel != null ) return;
+            
             _inputActionMenu.Disable();
             
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< PauseScreenViewModel >();

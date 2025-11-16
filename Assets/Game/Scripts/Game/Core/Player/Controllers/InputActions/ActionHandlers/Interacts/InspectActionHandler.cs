@@ -12,26 +12,17 @@ namespace Game.Core.Player
 {
     public sealed class InspectActionHandler : QuickActionHandler
     {
-        private List< ContextMenuOperation > _contextMenuOperations;
-
         private ItemObject _item;
-        private InspectDialogViewModel _inspectDialogViewModel;
 
-        private readonly PlayerObject _view;
-        private readonly PlayerStates _states;
-        private readonly UIRootGame _uiRootGame;
+        private readonly PlayerController _playerController;
         
         public InspectActionHandler(
-            PlayerObject view,
-            PlayerStates states,
-            UIRootGame uiRootGame,
+            PlayerController playerController,
             InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
             ) : base( inputKeyActionsSettings.InspectAction )
         {
-            _view = view ?? throw new ArgumentNullException( nameof(view) );
-            _states = states ?? throw new ArgumentNullException( nameof(states) );
-            _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
             
             if ( ContextMenuOperation == null )
             {
@@ -57,22 +48,9 @@ namespace Game.Core.Player
         {
             if ( !IsEnable ) return;
             
+            _playerController.ServiceLocator.GetAs< PlayerInputActionsController >().InspectItem( _item );
+            
             base.Completed();
-            
-            _states.IsBlocked = true;
-
-            _inspectDialogViewModel = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< InspectDialogViewModel >();
-            _inspectDialogViewModel.Set( _item, _view.CameraFPS );
-            _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
-            _inspectDialogViewModel.ShowView();
-        }
-
-        private void InspectCompletedHandler()
-        {
-            _inspectDialogViewModel.OnCancelButtonClicked -= InspectCompletedHandler;
-            _inspectDialogViewModel = null;
-            
-            _states.IsBlocked = false;
         }
     }
 }

@@ -1,4 +1,3 @@
-using Game.Core.Entity;
 using Game.Core.World.InteractionSystem;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
@@ -37,6 +36,7 @@ namespace Game.Core.Player
         public override void Disable()
         {
             _interactable = null;
+            
             base.Disable();
         }
         

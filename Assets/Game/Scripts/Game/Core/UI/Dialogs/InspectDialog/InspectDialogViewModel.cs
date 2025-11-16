@@ -32,8 +32,8 @@ namespace Game.Core.UI.InspectDialog
         {
             _inputKeyActionsSettings = inputKeyActionsSettings ?? throw new ArgumentNullException( nameof(inputKeyActionsSettings) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
-            _inputActionRead = new( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
-            _inputActionCancel = new( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
+            _inputActionRead = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
+            _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
         public void Set( ItemObject item, Camera camera )
@@ -63,8 +63,8 @@ namespace Game.Core.UI.InspectDialog
             ModelView.CancelButton1.OnButtonClicked -= CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked -= CancelButtonClickedHandler;
             
-            _inputActionRead.Disable();
-            _inputActionCancel.Disable();
+            InputActionManager.RemoveInputActionWrap( _inputActionRead );
+            InputActionManager.RemoveInputActionWrap( _inputActionCancel );
             
             CursorManager.Disable();
         }

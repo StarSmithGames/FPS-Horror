@@ -85,6 +85,7 @@ namespace Game.Core.Player
             }
         }
 
+        //TODO very hard
         private void Vision()
         {
             bool result = false;
