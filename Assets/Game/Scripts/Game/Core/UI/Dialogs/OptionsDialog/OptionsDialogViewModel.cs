@@ -20,6 +20,7 @@ namespace Game.Core.UI.OptionsDialog
         private GameplayTabController _gameplayTabController;
         private AudioTabController _audioTabController;
         private GraphicsTabController _graphicsTabController;
+        private ControlsTabController _controlsTabController;
 
         private InputActionVoidWrap _inputActionCancel;
         private InputActionVoidWrap _inputActionLB;
@@ -76,6 +77,7 @@ namespace Game.Core.UI.OptionsDialog
             _gameplayTabController?.Dispose();
             _audioTabController?.Dispose();
             _graphicsTabController?.Dispose();
+            _controlsTabController?.Dispose();
 
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
             InputActionManager.RemoveInputActionWrap( _inputActionLB );
@@ -124,11 +126,12 @@ namespace Game.Core.UI.OptionsDialog
         
         private async UniTask LoadOptions( int index, CancellationToken cancellationToken = default )
         {
-            for ( int i = 0; i < ModelView.Contents.Count; i++ )
+            for ( int i = 0; i < ModelView.TabsRoots.Count; i++ )
             {
-                ModelView.Contents[ i ].gameObject.SetActive( false );
+                ModelView.TabsRoots[ i ].gameObject.SetActive( false );
             }
-            ModelView.Contents[ index ].gameObject.SetActive( true );
+            ModelView.TabsRoots[ index ].gameObject.SetActive( true );
+            ModelView.ScrollRect.content = (RectTransform)ModelView.TabsRoots[ index ];
 
             if ( index == 0 )
             {
@@ -163,7 +166,12 @@ namespace Game.Core.UI.OptionsDialog
             }
             else if ( index == 4 )
             {
-
+                if ( _controlsTabController == null )
+                {
+                    _controlsTabController = new( ModelView.TabsSettings, _dataHolder, _localizationSystem );
+                    _controlsTabController.Subscribe();
+                }
+                _controlsTabController.InitializeAndLoad( ModelView.Contents[ index ], cancellationToken ).Forget();
             }
         }
 
@@ -172,6 +180,7 @@ namespace Game.Core.UI.OptionsDialog
             _gameplayTabController?.Save();
             _audioTabController?.Save();
             _graphicsTabController?.Save();
+            _controlsTabController?.Save();
             
             _dataHolder.SaveGeneral();
         }
@@ -201,11 +210,12 @@ namespace Game.Core.UI.OptionsDialog
             bool isGameplay = _gameplayTabController != null && _gameplayTabController.IsDirty();
             bool isAudio = _audioTabController != null && _audioTabController.IsDirty();
             bool isGraphics = _graphicsTabController != null && _graphicsTabController.IsDirty();
-
+            bool isControls = _controlsTabController != null && _controlsTabController.IsDirty();
             
             if ( isGameplay ||
                  isAudio ||
-                 isGraphics )
+                 isGraphics ||
+                 isControls )
             {
                 _inputActionCancel.Disable();
             

@@ -7,5 +7,6 @@ namespace Game.Core.UI.OptionsDialog
     {
         [ field: SerializeField ] public UIOptionToggle OptionTogglePrefab { get; private set; }
         [ field: SerializeField ] public UIOptionLeftRight OptionLeftRightPrefab { get; private set; }
+        [ field: SerializeField ] public UIOptionKey OptionKeyPrefab { get; private set; }
     }
 }

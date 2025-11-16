@@ -104,6 +104,19 @@ namespace Game.Core.UI.OptionsDialog
 
             return option;
         }
+
+        protected OptionKeyController CreateKey( Transform content, string nameId )
+        {
+            OptionKeyController option = new( GameObject.Instantiate( _settings.OptionKeyPrefab, content ) );
+            option.SetName( nameId ); //_localizationSystem.Translate( nameId ) );
+            option.Initialize();
+            option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
+            option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+
+            Options.Add( option );
+
+            return option;
+        }
         
         private void ButtonPointerEnteredHandler( UIOption option )
         {
