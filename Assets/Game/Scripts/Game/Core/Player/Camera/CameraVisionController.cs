@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Game.Core.World.InteractionSystem;
 using System;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -86,35 +87,42 @@ namespace Game.Core.Player
 
         private void Vision()
         {
+            bool result = false;
+            
             RaycastHit hit;
             Ray ray = new Ray( _head.position, _head.forward );
 
             // Каст для всего окружения (то, что может блокировать обзор: стены, двери, и т.п.)
             if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.MaxRayDistance, _config.CameraVisionSettings.DefaultLayers ) )
             {
-                RaycastHit interactHit;
-
-                // Каст для интерактивных объектов, НО НЕ ДАЛЬШЕ ПРЕПЯТСТВИЯ
-                if ( Physics.Raycast( ray, out interactHit, Mathf.Min( _config.CameraVisionSettings.RayDistance, hit.distance ), _config.CameraVisionSettings.InteractLayers ) )
-                {
-                    CurrentObservable = interactHit.transform.GetComponentInParent< IObservable >();
-                }
-                else
-                {
-                    CurrentObservable = null;
-                }
-
                 _lastHitPoint = hit.point;
 
                 Collider[] collidersIntersects = Physics.OverlapSphere( _lastHitPoint, _config.CameraVisionSettings.SphereRadius, _config.CameraVisionSettings.InteractLayers );
-                OnObservablesChanged?.Invoke( CurrentObservable != null || collidersIntersects.Length > 0 );
+                result = CurrentObservable != null || collidersIntersects.Length > 0;
+            }
+
+            // Каст для интерактивных объектов, НО НЕ ДАЛЬШЕ ПРЕПЯТСТВИЯ
+            var colliders = Physics.OverlapSphere( hit.point, 0.025f, _config.CameraVisionSettings.InteractLayers );
+            if ( colliders is { Length: > 0 } )
+            {
+                for ( int i = 0; i < colliders.Length; i++ )
+                {
+                    var observable = colliders[ i ].transform.GetComponentInParent< IObservable >();
+                    if ( observable != null )
+                    {
+                        CurrentObservable = observable;
+                        break;
+                    }
+                }
+                
+                OnObservablesChanged?.Invoke( result );
             }
             else
             {
                 CurrentObservable = null;
-                OnObservablesChanged?.Invoke( false );
+                OnObservablesChanged?.Invoke( result );
             }
-
+            
             // Debug.DrawLine(_head.position, _head.position + (_head.forward * _config.CameraVisionSettings.RayDistance), Color.blue);
         }
     }
