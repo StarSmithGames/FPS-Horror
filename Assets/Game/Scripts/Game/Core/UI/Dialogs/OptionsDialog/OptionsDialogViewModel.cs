@@ -79,7 +79,7 @@ namespace Game.Core.UI.OptionsDialog
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
             _inputActionLB = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.LB, LBButtonClickedHandler );
             _inputActionRB = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.RB, RBButtonClickedHandler );
-            _inputActionNavigate = InputActionManager.CreateInputActionWrap< Vector2 >( InputManager.Inputs.UI.Navigate, onPerformed: NavigateChangedHandler );
+            _inputActionNavigate = InputActionManager.CreateInputActionWrap< Vector2 >( InputManager.Inputs.UI.Navigate, NavigateChangedHandler );
             _inputActionCancel.Enable();
             _inputActionLB.Enable();
             _inputActionRB.Enable();

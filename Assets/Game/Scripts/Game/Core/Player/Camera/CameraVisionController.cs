@@ -88,29 +88,26 @@ namespace Game.Core.Player
         {
             RaycastHit hit;
             Ray ray = new Ray( _head.position, _head.forward );
+
+            // Каст для всего окружения (то, что может блокировать обзор: стены, двери, и т.п.)
             if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.MaxRayDistance, _config.CameraVisionSettings.DefaultLayers ) )
             {
-                _lastHitPoint = hit.point;
+                RaycastHit interactHit;
 
-                Collider[] collidersIntersects = Physics.OverlapSphere( _lastHitPoint, _config.CameraVisionSettings.SphereRadius, _config.CameraVisionSettings.InteractLayers );
-                // for ( int i = 0; i < collidersIntersects.Length; i++ )
-                // {
-                //     if ( collidersIntersects[ i ] != null )
-                //     {
-                //         Debug.DrawLine( _lastHitPoint, collidersIntersects[ i ].transform.position );
-                //     }
-                // }
-                    
-                //каст для интерактивных объектов
-                if ( Physics.Raycast( ray, out hit, _config.CameraVisionSettings.RayDistance, _config.CameraVisionSettings.InteractLayers ) )
+                // Каст для интерактивных объектов, НО НЕ ДАЛЬШЕ ПРЕПЯТСТВИЯ
+                if ( Physics.Raycast( ray, out interactHit, Mathf.Min( _config.CameraVisionSettings.RayDistance, hit.distance ), _config.CameraVisionSettings.InteractLayers ) )
                 {
-                    CurrentObservable = hit.transform.GetComponentInParent< IObservable >();
+                    CurrentObservable = interactHit.transform.GetComponentInParent< IObservable >();
                 }
                 else
                 {
                     CurrentObservable = null;
                 }
-                OnObservablesChanged?.Invoke( collidersIntersects.Length > 0 );
+
+                _lastHitPoint = hit.point;
+
+                Collider[] collidersIntersects = Physics.OverlapSphere( _lastHitPoint, _config.CameraVisionSettings.SphereRadius, _config.CameraVisionSettings.InteractLayers );
+                OnObservablesChanged?.Invoke( CurrentObservable != null || collidersIntersects.Length > 0 );
             }
             else
             {
@@ -118,7 +115,7 @@ namespace Game.Core.Player
                 OnObservablesChanged?.Invoke( false );
             }
 
-            // Debug.DrawLine( _head.position, _head.position + ( _head.forward * _config.CameraVisionSettings.RayDistance ), Color.blue );
+            // Debug.DrawLine(_head.position, _head.position + (_head.forward * _config.CameraVisionSettings.RayDistance), Color.blue);
         }
     }
 }

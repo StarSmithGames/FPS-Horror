@@ -19,26 +19,18 @@ namespace Game.Managers.InputManager
         
         public void Enable()
         {
-            Input.started += InputStartedHandler;
             Input.performed += InputPerformedHandler;
             Input.canceled += InputCanceledHandler;
         }
 
         public void Disable()
         {
-            Input.started -= InputStartedHandler;
             Input.performed -= InputPerformedHandler;
             Input.canceled -= InputCanceledHandler;
         }
 
-        protected abstract void OnStarted();
         protected abstract void OnPerformed();
         protected abstract void OnCanceled();
-
-        private void InputStartedHandler( InputAction.CallbackContext context )
-        {
-            OnStarted();
-        }
         
         private void InputPerformedHandler( InputAction.CallbackContext context )
         {

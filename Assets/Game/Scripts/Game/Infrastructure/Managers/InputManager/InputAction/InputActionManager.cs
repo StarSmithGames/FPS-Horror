@@ -8,9 +8,9 @@ namespace Game.Managers.InputManager
     {
         private static Dictionary< InputAction, List< InputActionWrap > > _inputActions = new();
         
-        public static InputActionVoidWrap CreateInputActionWrap( InputAction inputAction, Action onPerformed = null, Action onStarted = null, Action onCanceled = null )
+        public static InputActionVoidWrap CreateInputActionWrap( InputAction inputAction, Action onPerformed = null, Action onCanceled = null )
         {
-            var wrap = new InputActionVoidWrap( inputAction, onPerformed, onStarted, onCanceled );
+            var wrap = new InputActionVoidWrap( inputAction, onPerformed, onCanceled );
             wrap.Input.Enable();
             if ( _inputActions.TryGetValue( inputAction, out var list ) )
             {
@@ -21,10 +21,10 @@ namespace Game.Managers.InputManager
             return wrap;
         }
         
-        public static InputActionValueWrap< T > CreateInputActionWrap< T >( InputAction inputAction, Action< T > onPerformed = null, Action< T > onStarted = null, Action< T > onCanceled = null )
+        public static InputActionValueWrap< T > CreateInputActionWrap< T >( InputAction inputAction, Action< T > onPerformed = null, Action< T > onCanceled = null )
             where T : struct
         {
-            var wrap = new InputActionValueWrap< T >( inputAction, onPerformed, onStarted, onCanceled );
+            var wrap = new InputActionValueWrap< T >( inputAction, onPerformed, onCanceled );
             wrap.Input.Enable();
             if ( _inputActions.TryGetValue( inputAction, out var list ) )
             {
