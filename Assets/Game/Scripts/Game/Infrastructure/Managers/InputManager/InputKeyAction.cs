@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,9 +29,14 @@ namespace Game.Managers.InputManager
         {
             for ( int i = 0; i < InputAction.bindings.Count; i++ )
             {
-                if ( InputAction.bindings[ i ].path.StartsWith( "<Keyboard>" ) )
+                var binding = InputAction.bindings[i];
+
+                if (binding.path.StartsWith("<Keyboard>"))
                 {
-                    return InputAction.GetBindingDisplayString( i, InputBinding.DisplayStringOptions.DontIncludeInteractions );
+                    string path = binding.effectivePath;
+                    var keyName = path.Substring( path.LastIndexOf( '/' ) + 1 ).ToUpper();
+
+                    return keyName.Length > 1 ? string.Concat( keyName.Take( 3 ) ) : keyName;
                 }
             }
         

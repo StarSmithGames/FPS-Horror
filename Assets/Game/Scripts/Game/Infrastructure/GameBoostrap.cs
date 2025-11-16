@@ -8,6 +8,7 @@ using Game.StoryFlow;
 using PuzzlescapeGames.Services.UITransitionService;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Game
@@ -47,10 +48,17 @@ namespace Game
             
             InputManager.Initialize();
 
-            _menuScreenViewModel = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< MenuScreenViewModel >();
-            _menuScreenViewModel.ShowView();
-            
-            _gameManager.SetState( GameState.Menu );
+            if ( !IsTestScene() )
+            {
+                _menuScreenViewModel = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< MenuScreenViewModel >();
+                _menuScreenViewModel.ShowView();
+                
+                _gameManager.SetState( GameState.Menu );
+            }
+            else
+            {
+                QuickStart();
+            }
         }
 
         public void Dispose()
@@ -68,25 +76,49 @@ namespace Game
                 {
                     _menuScreenViewModel.HideView();
                     CursorManager.Disable();
-            
-#if UNITY_EDITOR
-                    if ( _gameConfig.EditorLevelPrefab != null )
-                    {
-                        var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
-                        _storyManager.CreateAndStartStory( level );
 
-                        var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
-                        var player = playerInstaller.GetComponentInChildren< PlayerObject >();
-                        player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
-                        player.Controller.Initialize();
+                    if ( !IsTestScene() )
+                    {
+                        if ( _gameConfig.EditorLevelPrefab != null )
+                        {
+                            var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
+                            _storyManager.CreateAndStartStory( level );
+
+                            var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
+                            var player = playerInstaller.GetComponentInChildren< PlayerObject >();
+                            player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
+                            player.Controller.Initialize();
+                        }
                     }
-#endif
+                    
                 }
                 catch ( Exception e )
                 {
                     Debug.LogError( e );
                 }
             } );
+        }
+
+        private void QuickStart()
+        {
+            _gameManager.SetState( GameState.Game );
+            CursorManager.Disable();
+
+            LevelObject level = GameObject.FindAnyObjectByType< LevelObject >();
+            _storyManager.CreateAndStartStory( level );
+
+            var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
+            var player = playerInstaller.GetComponentInChildren< PlayerObject >();
+            player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
+            player.Controller.Initialize();
+        }
+
+        private bool IsTestScene()
+        {
+#if UNITY_EDITOR
+            return SceneManager.GetActiveScene().name.Contains( "test", StringComparison.InvariantCultureIgnoreCase );
+#endif
+            return false;
         }
     }
 }
