@@ -38,12 +38,17 @@ namespace Game.Systems.StorageSystem
         {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 60;
-            storage.Graphics.SetData( new GraphicsData()
+
+            storage.Gameplay.SetData( new GameplayData()
             {
-                ResolutionWidth = Screen.currentResolution.width,
-                ResolutionHeight = Screen.currentResolution.height,
-                IsFullScreen = Screen.fullScreen,
-                IsVsync = QualitySettings.vSyncCount == 1,
+                IsSprintToggle = false,
+                IsCrouchToggle = true,
+                MouseXSensitivity = 4f,
+                MouseYSensitivity = 4f,
+                ControllerXSensitivity = 120f,
+                ControllerYSensitivity = 80f,
+                IsControllerInvertXToggle = false,
+                IsControllerInvertYToggle = false,
             } );
             
             storage.Audio.SetData( new AudioData()
@@ -55,16 +60,17 @@ namespace Game.Systems.StorageSystem
                 AmbientVolume = 100,
             } );
             
+            storage.Graphics.SetData( new GraphicsData()
+            {
+                ResolutionWidth = Screen.currentResolution.width,
+                ResolutionHeight = Screen.currentResolution.height,
+                IsFullScreen = Screen.fullScreen,
+                IsVsync = QualitySettings.vSyncCount == 1,
+            } );
+            
             storage.Controls.SetData( new ControlsData()
             {
-                IsSprintToggle = false,
-                IsCrouchToggle = true,
-                MouseXSensitivity = 4f,
-                MouseYSensitivity = 4f,
-                ControllerXSensitivity = 120f,
-                ControllerYSensitivity = 80f,
-                IsControllerInvertXToggle = false,
-                IsControllerInvertYToggle = false,
+
             } );
         }
 

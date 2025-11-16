@@ -9,7 +9,16 @@ namespace Game.Core.UI.OptionsDialog
         [ field: SerializeField ] public List< UITab > Tabs { get; private set; } = new();
         [ field: SerializeField ] public List< Transform > Contents { get; private set; }
         [ field: Space ]
-        [ field: SerializeField ] public UIOptionToggle OptionTogglePrefab { get; private set; }
-        [ field: SerializeField ] public UIOptionLeftRight OptionLeftRightPrefab { get; private set; }
+        [ field: SerializeField ] public TabsSettings TabsSettings { get; private set; }
+        [ Space ]
+        [ SerializeField ] private List< UIGamepadTip > _gamepadTips = new();
+
+        public void SetTips( int type )
+        {
+            for ( int i = 0; i < _gamepadTips.Count; i++ )
+            {
+                _gamepadTips[ i ].SetType( type );
+            }
+        }
     }
 }

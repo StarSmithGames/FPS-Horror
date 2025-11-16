@@ -17,7 +17,7 @@ namespace Game.Core.Player
         private float YawOffset => 0;
         private float PitchOffset => 0;
 
-        private ControlsData _controlsData;
+        private GameplayData _gameplayData;
         
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
@@ -35,18 +35,18 @@ namespace Game.Core.Player
             _config = config ?? throw new ArgumentNullException( nameof(config) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
 
-            _controlsData = dataHolder.GeneralStorageData.Controls.Value;
+            _gameplayData = dataHolder.GeneralStorageData.Gameplay.Value;
         }
 
         public void Look()
         {
             int sensYInverted = _config.LookSettings.InvertYSensitivity ? -1 : 1;
-            int sensXInvertedController = !_controlsData.IsControllerInvertXToggle ? 1 : -1;
-            int sensYInvertedController = _controlsData.IsControllerInvertYToggle ? 1 : -1;
+            int sensXInvertedController = !_gameplayData.IsControllerInvertXToggle ? 1 : -1;
+            int sensYInvertedController = _gameplayData.IsControllerInvertYToggle ? 1 : -1;
             float sensitivityMultiplier = 1;
 
-            float rawMouseX = InputManager.MouseX * _controlsData.MouseXSensitivity + InputManager.ControllerX * _controlsData.ControllerXSensitivity * sensXInvertedController;
-            float rawMouseY = InputManager.MouseY * _controlsData.MouseYSensitivity * sensYInverted + InputManager.ControllerY * _controlsData.ControllerYSensitivity * sensYInvertedController;
+            float rawMouseX = InputManager.MouseX * _gameplayData.MouseXSensitivity + InputManager.ControllerX * _gameplayData.ControllerXSensitivity * sensXInvertedController;
+            float rawMouseY = InputManager.MouseY * _gameplayData.MouseYSensitivity * sensYInverted + InputManager.ControllerY * _gameplayData.ControllerYSensitivity * sensYInvertedController;
             float mouseX = rawMouseX * sensitivityMultiplier;
             float mouseY = rawMouseY * sensitivityMultiplier;
 

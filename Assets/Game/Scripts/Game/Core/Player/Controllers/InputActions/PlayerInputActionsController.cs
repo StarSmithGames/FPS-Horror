@@ -126,7 +126,7 @@ namespace Game.Core.Player
         #region Player
         private void SpringStartHandler()
         {
-            if ( _dataHolder.GeneralStorageData.Controls.Value.IsSprintToggle )
+            if ( _dataHolder.GeneralStorageData.Gameplay.Value.IsSprintToggle )
             {
                 _states.IsSprinting = !_states.IsSprinting;
             }
@@ -138,7 +138,7 @@ namespace Game.Core.Player
         
         private void SpringStopHandler()
         {
-            if ( _dataHolder.GeneralStorageData.Controls.Value.IsSprintToggle )
+            if ( _dataHolder.GeneralStorageData.Gameplay.Value.IsSprintToggle )
             {
                 
             }
@@ -150,7 +150,7 @@ namespace Game.Core.Player
 
         private void CrouchStartHandler()
         {
-            if ( _dataHolder.GeneralStorageData.Controls.Value.IsCrouchToggle )
+            if ( _dataHolder.GeneralStorageData.Gameplay.Value.IsCrouchToggle )
             {
                 if ( _states.IsCrouching )
                 {
@@ -171,7 +171,7 @@ namespace Game.Core.Player
         
         private void CrouchStopHandler()
         {
-            if ( _dataHolder.GeneralStorageData.Controls.Value.IsCrouchToggle )
+            if ( _dataHolder.GeneralStorageData.Gameplay.Value.IsCrouchToggle )
             {
                 
             }
