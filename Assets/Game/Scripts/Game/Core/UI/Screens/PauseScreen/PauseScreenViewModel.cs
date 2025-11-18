@@ -49,8 +49,8 @@ namespace Game.Core.UI.PauseScreen
             for ( int i = 0; i < _buttons.Count; i++ )
             {
                 var button = _buttons[ i ];
-                button.OnButtonPointerEntered += ButtonPointerEnteredHandler;
-                button.OnButtonPointerExited += ButtonPointerExitedHandler;
+                button.OnPointerEntered += ButtonPointerEnteredHandler;
+                button.OnPointerExited += ButtonPointerExitedHandler;
                 button.OnButtonClicked += ButtonClickedHandler;
             }
 
@@ -67,8 +67,8 @@ namespace Game.Core.UI.PauseScreen
             for ( int i = 0; i < _buttons.Count; i++ )
             {
                 var button = _buttons[ i ];
-                button.OnButtonPointerEntered -= ButtonPointerEnteredHandler;
-                button.OnButtonPointerExited -= ButtonPointerExitedHandler;
+                button.OnPointerEntered -= ButtonPointerEnteredHandler;
+                button.OnPointerExited -= ButtonPointerExitedHandler;
                 button.OnButtonClicked -= ButtonClickedHandler;
             }
             

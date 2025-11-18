@@ -28,7 +28,7 @@ namespace Game.Core.UI.Dialogs
 
             for ( int i = 0; i < ModelView.Buttons.Count; i++ )
             {
-                ModelView.Buttons[ i ].OnButtonPointerEntered += ButtonPointerEnteredHandler;
+                ModelView.Buttons[ i ].OnPointerEntered += ButtonPointerEnteredHandler;
             }
             EventSystem.current.SetSelectedGameObject( ModelView.Buttons.Last().gameObject );
         }
@@ -42,7 +42,7 @@ namespace Game.Core.UI.Dialogs
             
             for ( int i = 0; i < ModelView.Buttons.Count; i++ )
             {
-                ModelView.Buttons[ i ].OnButtonPointerEntered -= ButtonPointerEnteredHandler;
+                ModelView.Buttons[ i ].OnPointerEntered -= ButtonPointerEnteredHandler;
             }
             
             InputActionManager.RemoveInputActionWrap( _inputActionSubmit );

@@ -18,7 +18,7 @@ namespace Game.Core.UI.OptionsDialog
         protected bool _isInitialized;
         private InputActionValueWrap< Vector2 > _inputActionNavigate;
         
-        private readonly TabsSettings _settings;
+        protected readonly TabsSettings _settings;
         private readonly ILocalizationSystem _localizationSystem;
 
         public TabController(
@@ -71,8 +71,8 @@ namespace Game.Core.UI.OptionsDialog
             OptionSelectorController option = new( GameObject.Instantiate( _settings.OptionLeftRightPrefab, content ), value );
             option.SetName( _localizationSystem.Translate( nameId ) );
             option.Initialize( options );
-            option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
-            option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+            option.OnPointerEntered += PointerEnteredHandler;
+            option.OnPointerExited += PointerExitedHandler;
                 
             Options.Add( option );
 
@@ -84,8 +84,8 @@ namespace Game.Core.UI.OptionsDialog
             OptionBarController option = new( GameObject.Instantiate( _settings.OptionLeftRightPrefab, content ), value, min, max, step, postfix );
             option.SetName( _localizationSystem.Translate( nameId ) );
             option.Initialize();
-            option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
-            option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+            option.OnPointerEntered += PointerEnteredHandler;
+            option.OnPointerExited += PointerExitedHandler;
                 
             Options.Add( option );
 
@@ -97,8 +97,8 @@ namespace Game.Core.UI.OptionsDialog
             OptionToggleController option = new( GameObject.Instantiate( _settings.OptionTogglePrefab, content ), value );
             option.SetName( _localizationSystem.Translate( nameId ) );
             option.Initialize();
-            option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
-            option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+            option.OnPointerEntered += PointerEnteredHandler;
+            option.OnPointerExited += PointerExitedHandler;
 
             Options.Add( option );
 
@@ -110,30 +110,33 @@ namespace Game.Core.UI.OptionsDialog
             OptionKeyController option = new( GameObject.Instantiate( _settings.OptionKeyPrefab, content ) );
             option.SetName( nameId ); //_localizationSystem.Translate( nameId ) );
             option.Initialize();
-            option.View.OnButtonPointerEntered += ButtonPointerEnteredHandler;
-            option.View.OnButtonPointerExited += ButtonPointerExitedHandler;
+            option.OnPointerEntered += PointerClickedHandler;
+            option.OnPointerEntered += PointerEnteredHandler;
+            option.OnPointerExited += PointerExitedHandler;
 
             Options.Add( option );
 
             return option;
         }
         
-        private void ButtonPointerEnteredHandler( UIOption option )
+        private void PointerEnteredHandler( OptionController option )
         {
             for ( int i = 0; i < Options.Count; i++ )
             {
                 Options[ i ].Deselect();
             }
-            var controller = Options.Find( ( x ) => x.View == option );
-            controller.Select();
+            option.Select();
 
-            _lastOption = controller;
+            _lastOption = option;
         }
 
-        private void ButtonPointerExitedHandler( UIOption uiOption )
+        private void PointerExitedHandler( OptionController uiOption )
         {
             
         }
+        
+        protected virtual void PointerClickedHandler( OptionController uiOption ) {}
+
         
         private void NavigateChangedHandler( Vector2 value )
         {

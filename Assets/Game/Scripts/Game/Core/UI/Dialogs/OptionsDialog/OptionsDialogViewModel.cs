@@ -131,8 +131,11 @@ namespace Game.Core.UI.OptionsDialog
                 ModelView.TabsRoots[ i ].gameObject.SetActive( false );
             }
             ModelView.TabsRoots[ index ].gameObject.SetActive( true );
-            ModelView.ScrollRect.content = (RectTransform)ModelView.TabsRoots[ index ];
-
+            ModelView.SetScrollRectContent( (RectTransform)ModelView.TabsRoots[ index ] );
+            ModelView.EnterKey.Enable( false );
+            
+            // ModelView.EnableControlTip( false );
+            
             if ( index == 0 )
             {
                 
@@ -172,6 +175,8 @@ namespace Game.Core.UI.OptionsDialog
                     _controlsTabController.Subscribe();
                 }
                 _controlsTabController.InitializeAndLoad( ModelView.Contents[ index ], cancellationToken ).Forget();
+                
+                // ModelView.EnableControlTip( true );
             }
         }
 
@@ -188,6 +193,7 @@ namespace Game.Core.UI.OptionsDialog
         private void GamepadChangedHandler()
         {
             ModelView.SetTips( GamepadDetector.IsConnected ? 0 : -1 );
+            ModelView.SetControlTip( GamepadDetector.IsConnected ? 0 : -1 );
         }
 
         private void OnTabButtonClickedHandler( UITab tab )

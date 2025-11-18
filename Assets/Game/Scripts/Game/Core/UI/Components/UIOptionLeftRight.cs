@@ -39,18 +39,9 @@ namespace Game.Core.UI
             }
         }
         
-        public override void Select()
+        public void SetBackColor( Color color )
         {
-            base.Select();
-            
-            _back.color = new( 1, 1, 1, 0.3f );
-        }
-
-        public override void Deselect()
-        {
-            base.Deselect();
-
-            _back.color = new( 1, 1, 1, 0.0f );
+            _back.color = color;
         }
         
         public void OnLeftButtonClick()

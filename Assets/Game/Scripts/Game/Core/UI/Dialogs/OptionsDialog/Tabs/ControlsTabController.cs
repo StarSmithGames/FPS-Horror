@@ -17,7 +17,6 @@ namespace Game.Core.UI.OptionsDialog
         private OptionKeyController _crouch;
         private OptionKeyController _interact;
         private OptionKeyController _reloadWeapon;
-
         
         private readonly ControlsData _data;
         
@@ -46,6 +45,15 @@ namespace Game.Core.UI.OptionsDialog
             _crouch = CreateKey( content, "Crouch" );
             _interact = CreateKey( content, "Interact" );
             _reloadWeapon = CreateKey( content, "Reload weapon" );
+        }
+
+        protected override void PointerClickedHandler( OptionController option )
+        {
+            base.PointerClickedHandler( option );
+
+            var index = Options.IndexOf( option );
+
+            // _settings.EnterKey.Show();
         }
     }
 }

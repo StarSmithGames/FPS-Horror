@@ -19,6 +19,8 @@ namespace Game.Core.UI.OptionsDialog
 
         public void Initialize( params string[] options )
         {
+            base.Initialize();
+            
             _options = options;
 
             IsDirty = false;
@@ -31,8 +33,10 @@ namespace Game.Core.UI.OptionsDialog
             RefreshUI();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
+            
             _view.OnLeftButtonClicked -= LeftButtonClickedHandler;
             _view.OnRightButtonClicked -= RightButtonClickedHandler;
         }

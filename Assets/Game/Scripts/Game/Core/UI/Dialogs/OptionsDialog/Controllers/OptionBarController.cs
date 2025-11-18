@@ -24,8 +24,10 @@ namespace Game.Core.UI.OptionsDialog
             _postfix = postfix;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
+            base.Initialize();
+            
             IsDirty = false;
             
             _view.OnLeftButtonClicked += LeftButtonClickedHandler;
@@ -36,10 +38,25 @@ namespace Game.Core.UI.OptionsDialog
             RefreshUI();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _view.OnLeftButtonClicked -= LeftButtonClickedHandler;
             _view.OnRightButtonClicked -= RightButtonClickedHandler;
+        }
+        
+        public override void Select()
+        {
+            base.Select();
+            
+            _view.SetBackColor( new( 1, 1, 1, 0.3f ) );
+        }
+
+        public override void Deselect()
+        {
+            base.Deselect();
+
+            _view.SetBackColor( new( 1, 1, 1, 0.0f ) );
         }
 
         public void Left()
