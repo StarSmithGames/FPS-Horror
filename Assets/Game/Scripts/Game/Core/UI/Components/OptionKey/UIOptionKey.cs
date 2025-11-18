@@ -5,9 +5,9 @@ namespace Game.Core.UI
 {
     public sealed class UIOptionKey : UIOption
     {
-        [ SerializeField ] private UIKeyBox _keyboard;
-        [ SerializeField ] private UIKeyBox _mouse;
-        [ SerializeField ] private UIKeyBox _gamepad;
+        [ field: SerializeField ] public UIKeyBox Keyboard { get; private set; }
+        [ field: SerializeField ] public UIKeyBox Mouse { get; private set; }
+        [ field: SerializeField ] public UIKeyBox Gamepad { get; private set; }
         [ SerializeField ] private Image _back;
 
         public void SetBackColor( Color color )

@@ -40,6 +40,20 @@ namespace Game.Core.UI.OptionsDialog
             _view.OnLeftButtonClicked -= LeftButtonClickedHandler;
             _view.OnRightButtonClicked -= RightButtonClickedHandler;
         }
+        
+        public override void Select()
+        {
+            base.Select();
+            
+            _view.SetBackColor( new( 1, 1, 1, 0.3f ) );
+        }
+
+        public override void Deselect()
+        {
+            base.Deselect();
+
+            _view.SetBackColor( new( 1, 1, 1, 0.0f ) );
+        }
 
         private void RefreshUI()
         {

@@ -71,6 +71,7 @@ namespace Game.Core.UI.OptionsDialog
             OptionSelectorController option = new( GameObject.Instantiate( _settings.OptionLeftRightPrefab, content ), value );
             option.SetName( _localizationSystem.Translate( nameId ) );
             option.Initialize( options );
+            option.OnButtonClicked += ButtonClickedHandler;
             option.OnPointerEntered += PointerEnteredHandler;
             option.OnPointerExited += PointerExitedHandler;
                 
@@ -84,6 +85,7 @@ namespace Game.Core.UI.OptionsDialog
             OptionBarController option = new( GameObject.Instantiate( _settings.OptionLeftRightPrefab, content ), value, min, max, step, postfix );
             option.SetName( _localizationSystem.Translate( nameId ) );
             option.Initialize();
+            option.OnButtonClicked += ButtonClickedHandler;
             option.OnPointerEntered += PointerEnteredHandler;
             option.OnPointerExited += PointerExitedHandler;
                 
@@ -97,6 +99,7 @@ namespace Game.Core.UI.OptionsDialog
             OptionToggleController option = new( GameObject.Instantiate( _settings.OptionTogglePrefab, content ), value );
             option.SetName( _localizationSystem.Translate( nameId ) );
             option.Initialize();
+            option.OnButtonClicked += ButtonClickedHandler;
             option.OnPointerEntered += PointerEnteredHandler;
             option.OnPointerExited += PointerExitedHandler;
 
@@ -110,7 +113,7 @@ namespace Game.Core.UI.OptionsDialog
             OptionKeyController option = new( GameObject.Instantiate( _settings.OptionKeyPrefab, content ) );
             option.SetName( nameId ); //_localizationSystem.Translate( nameId ) );
             option.Initialize();
-            option.OnPointerEntered += PointerClickedHandler;
+            option.OnButtonClicked += ButtonClickedHandler;
             option.OnPointerEntered += PointerEnteredHandler;
             option.OnPointerExited += PointerExitedHandler;
 
@@ -119,7 +122,7 @@ namespace Game.Core.UI.OptionsDialog
             return option;
         }
         
-        private void PointerEnteredHandler( OptionController option )
+        protected virtual void PointerEnteredHandler( OptionController option )
         {
             for ( int i = 0; i < Options.Count; i++ )
             {
@@ -130,14 +133,10 @@ namespace Game.Core.UI.OptionsDialog
             _lastOption = option;
         }
 
-        private void PointerExitedHandler( OptionController uiOption )
-        {
-            
-        }
+        protected virtual void PointerExitedHandler( OptionController uiOption ) {}
         
-        protected virtual void PointerClickedHandler( OptionController uiOption ) {}
+        protected virtual void ButtonClickedHandler( OptionController uiOption ) {}
 
-        
         private void NavigateChangedHandler( Vector2 value )
         {
             if ( _lastOption is OptionBarController percentOption )

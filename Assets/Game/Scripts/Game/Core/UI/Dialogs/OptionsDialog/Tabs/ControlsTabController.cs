@@ -46,14 +46,5 @@ namespace Game.Core.UI.OptionsDialog
             _interact = CreateKey( content, "Interact" );
             _reloadWeapon = CreateKey( content, "Reload weapon" );
         }
-
-        protected override void PointerClickedHandler( OptionController option )
-        {
-            base.PointerClickedHandler( option );
-
-            var index = Options.IndexOf( option );
-
-            // _settings.EnterKey.Show();
-        }
     }
 }
