@@ -108,11 +108,14 @@ namespace Game.Core.UI.OptionsDialog
             return option;
         }
 
-        protected OptionKeyController CreateKey( Transform content, string nameId )
+        protected OptionKeyController CreateKey( Transform content, string nameId, string keyboardKey = null, string mouseKey = null, string gamepadKey = null )
         {
             OptionKeyController option = new( GameObject.Instantiate( _settings.OptionKeyPrefab, content ) );
             option.SetName( nameId ); //_localizationSystem.Translate( nameId ) );
             option.Initialize();
+            option.ViewKey.Keyboard.SetKey( keyboardKey );
+            option.ViewKey.Mouse.SetKey( mouseKey );
+            option.ViewKey.Gamepad.SetKey( gamepadKey );
             option.OnButtonClicked += ButtonClickedHandler;
             option.OnPointerEntered += PointerEnteredHandler;
             option.OnPointerExited += PointerExitedHandler;

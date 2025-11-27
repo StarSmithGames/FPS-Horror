@@ -27,16 +27,19 @@ namespace Game.Core.UI.OptionsDialog
         private InputActionVoidWrap _inputActionRB;
         
         private readonly UIRootGame _uiRootGame;
+        private readonly InputKeyActionsSettings _inputKeyActionsSettings;
         private readonly DataHolder _dataHolder;
         private readonly ILocalizationSystem _localizationSystem;
         
         public OptionsDialogViewModel(
             UIRootGame uiRootGame,
+            InputKeyActionsSettings inputKeyActionsSettings,
             DataHolder dataHolder,
             ILocalizationSystem localizationSystem
             )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _inputKeyActionsSettings = inputKeyActionsSettings ?? throw new ArgumentNullException( nameof(inputKeyActionsSettings) );
             _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
@@ -134,7 +137,7 @@ namespace Game.Core.UI.OptionsDialog
             ModelView.SetScrollRectContent( (RectTransform)ModelView.TabsRoots[ index ] );
             ModelView.EnterKey.Enable( false );
             
-            // ModelView.EnableControlTip( false );
+            ModelView.EnableControlTip( false );
             
             if ( index == 0 )
             {
@@ -171,12 +174,12 @@ namespace Game.Core.UI.OptionsDialog
             {
                 if ( _controlsTabController == null )
                 {
-                    _controlsTabController = new( ModelView.TabsSettings, _dataHolder, _localizationSystem );
+                    _controlsTabController = new( ModelView.TabsSettings, _inputKeyActionsSettings, _dataHolder, _localizationSystem );
                     _controlsTabController.Subscribe();
                 }
                 _controlsTabController.InitializeAndLoad( ModelView.Contents[ index ], cancellationToken ).Forget();
                 
-                // ModelView.EnableControlTip( true );
+                ModelView.EnableControlTip( true );
             }
         }
 
@@ -193,7 +196,7 @@ namespace Game.Core.UI.OptionsDialog
         private void GamepadChangedHandler()
         {
             ModelView.SetTips( GamepadDetector.IsConnected ? 0 : -1 );
-            ModelView.SetControlTip( GamepadDetector.IsConnected ? 0 : -1 );
+            ModelView.SetControlTip( 0 );
         }
 
         private void OnTabButtonClickedHandler( UITab tab )
