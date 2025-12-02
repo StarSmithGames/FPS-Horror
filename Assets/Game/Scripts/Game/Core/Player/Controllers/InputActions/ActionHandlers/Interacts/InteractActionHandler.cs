@@ -3,6 +3,7 @@ using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
 using StarSmithGames.Localization;
 using System;
+using UnityEngine;
 
 namespace Game.Core.Player
 {
@@ -44,6 +45,7 @@ namespace Game.Core.Player
         {
             if ( !IsEnable ) return;
 
+            Debug.LogError( "Interact" );
             _interactable.Interact( _playerController );
             
             base.Completed();

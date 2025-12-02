@@ -98,6 +98,7 @@ namespace Game.Core.UI.InspectDialog
                 ModelView.ReadButton.gameObject.SetActive( true );
             }
             
+            _item.SetLayer( LayersParams.ABOVE );
             _inspectionSystem.StartInspection( _item );
         }
 
@@ -128,6 +129,7 @@ namespace Game.Core.UI.InspectDialog
             }
             
             _inspectionSystem.StopInspection();
+            _item.ResetLayer();
             
             OnCancelButtonClicked?.Invoke();
             
