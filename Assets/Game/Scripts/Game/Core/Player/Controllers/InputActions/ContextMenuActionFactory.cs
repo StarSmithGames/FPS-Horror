@@ -5,12 +5,12 @@ namespace Game.Core.Player
 {
     public sealed class ContextMenuActionFactory
     {
-        private ActionHandlerComposite _open;
-        private ActionHandlerComposite _pull;
-        private ActionHandlerComposite _inspect;
-        private ActionHandlerComposite _item;
-        private ActionHandlerComposite _itemNote;
-        private ActionHandlerComposite _puzzleUse;
+        private ActionHandlerComposite _open = null;
+        private ActionHandlerComposite _pull = null;
+        private ActionHandlerComposite _inspect = null;
+        private ActionHandlerComposite _item = null;
+        private ActionHandlerComposite _itemNote = null;
+        private ActionHandlerComposite _puzzleUse = null;
 
         private readonly DiContainer _diContainer;
         

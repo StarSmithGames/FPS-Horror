@@ -11,13 +11,7 @@ namespace Game.Managers.InputManager
         public static InputActionVoidWrap CreateInputActionWrap( InputAction inputAction, Action onPerformed = null, Action onCanceled = null )
         {
             var wrap = new InputActionVoidWrap( inputAction, onPerformed, onCanceled );
-            wrap.Input.Enable();
-            if ( _inputActions.TryGetValue( inputAction, out var list ) )
-            {
-                list.Add( wrap );
-                return wrap;
-            }
-            _inputActions.Add( inputAction, new(){ wrap } );
+            AddInputActionWrap( wrap );
             return wrap;
         }
         
@@ -25,22 +19,31 @@ namespace Game.Managers.InputManager
             where T : struct
         {
             var wrap = new InputActionValueWrap< T >( inputAction, onPerformed, onCanceled );
-            wrap.Input.Enable();
-            if ( _inputActions.TryGetValue( inputAction, out var list ) )
-            {
-                list.Add( wrap );
-                return wrap;
-            }
-            _inputActions.Add( inputAction, new(){ wrap } );
+            AddInputActionWrap( wrap );
             return wrap;
         }
 
+        public static void AddInputActionWrap( InputActionWrap wrap )
+        {
+            wrap.Enable();
+            wrap.Input.Enable();
+            if ( _inputActions.TryGetValue( wrap.Input, out var list ) )
+            {
+                if ( list.Contains( wrap ) ) return;
+                list.Add( wrap );
+                return;
+            }
+            _inputActions.Add( wrap.Input, new(){ wrap } );
+        }
+        
         public static void RemoveInputActionWrap( InputActionWrap wrap )
         {
-            wrap.Dispose();
+            if ( !_inputActions.ContainsKey( wrap.Input ) ) return;
+            
             _inputActions[ wrap.Input ].Remove( wrap );
             if ( _inputActions[ wrap.Input ].Count == 0 )
             {
+                wrap.Disable();
                 wrap.Input.Disable();
                 _inputActions.Remove( wrap.Input );
             }

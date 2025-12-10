@@ -9,11 +9,15 @@ namespace Game.Core.Player
         public event Action< ContextMenuActionHandler > OnCompleted;
         
         public bool IsEnable { get; protected set; }
-        
-        public ContextMenuOperation ContextMenuOperation { get; protected set; }
+
+        public ContextMenuOperation ContextMenuOperation { get; protected set; } = new();
 
         public virtual void Initialize( IObservable target ) {}
-        
+        public virtual void Dispose()
+        {
+            Disable();
+        }
+
         public abstract void Enable( UIInfoButton ui );
         public abstract void Disable();
         

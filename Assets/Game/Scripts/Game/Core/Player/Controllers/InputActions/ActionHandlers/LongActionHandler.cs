@@ -19,8 +19,8 @@ namespace Game.Core.Player
 
         public override void Enable( UIInfoButton ui )
         {
-            _ui = ui;
             _provider.Enable();
+            _ui = ui;
             
             IsEnable = true;
         }
