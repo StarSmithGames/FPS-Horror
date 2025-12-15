@@ -19,7 +19,7 @@ namespace Game.Core.Player
         private InputActionVoidWrap _inputActionJump;
         private InputActionVoidWrap _inputActionLighter;
         private InputActionVoidWrap _inputActionInventory;
-        
+
         private InspectDialogViewModel _inspectDialogViewModel;
 
         private readonly PlayerObject _view;
@@ -198,11 +198,11 @@ namespace Game.Core.Player
         {
             if ( _inspectDialogViewModel != null ) return;
             
-            _inputActionMenu.Disable();
-            
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< ResourcesScreenViewModel >();
             screen.OnShowingChanged += ScreenShowingChangedHandler;
             screen.ShowView();
+            
+            _inputActionMenu.Disable();
         }
 
         private void ScreenShowingChangedHandler( IViewModel viewModel )

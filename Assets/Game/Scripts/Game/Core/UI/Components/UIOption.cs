@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,19 +10,7 @@ namespace Game.Core.UI
         public event Action< UIOption > OnPointerExited;
         public event Action< UIOption > OnButtonClicked;
         
-        [ SerializeField ] private TextMeshProUGUI _name;
-        
         public bool IsSelected { get; private set; }
-        
-        public void SetName( string name )
-        {
-            _name.text = name;
-        }
-
-        public void SetNameColor( Color color )
-        {
-            _name.color = color;
-        }
         
         public virtual void Select()
         {
@@ -35,32 +22,32 @@ namespace Game.Core.UI
             IsSelected = false;
         }
 
-        public void OnPointerEnter( PointerEventData eventData )
+        public virtual void OnPointerEnter( PointerEventData eventData )
         {
             OnPointerEntered?.Invoke( this );
         }
 
-        public void OnPointerExit( PointerEventData eventData )
+        public virtual void OnPointerExit( PointerEventData eventData )
         {
             OnPointerExited?.Invoke( this );
         }
 
-        public void OnPointerClick( PointerEventData eventData )
+        public virtual void OnPointerClick( PointerEventData eventData )
         {
             OnButtonClicked?.Invoke( this );
         }
 
-        public void OnSelect( BaseEventData eventData )
+        public virtual void OnSelect( BaseEventData eventData )
         {
             OnPointerEntered?.Invoke( this );
         }
 
-        public void OnDeselect( BaseEventData eventData )
+        public virtual void OnDeselect( BaseEventData eventData )
         {
             OnPointerExited?.Invoke( this );
         }
 
-        public void OnSubmit( BaseEventData eventData )
+        public virtual void OnSubmit( BaseEventData eventData )
         {
             OnButtonClicked?.Invoke( this );
         }

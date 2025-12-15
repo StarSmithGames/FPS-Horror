@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class OptionBarController : OptionController
+    public sealed class OptionBarController : OptionTextController
     {
         public float Value { get; private set; }
         public float Min { get; }
@@ -12,9 +12,9 @@ namespace Game.Core.UI.OptionsDialog
         private float _step;
         private string _postfix;
         
-        private readonly UIOptionLeftRight _view;
+        private readonly UIOptionLeftRightText _view;
         
-        public OptionBarController( UIOptionLeftRight view, float value, float min = 0, float max = 100, float step = 1, string postfix = "%" ) : base( view )
+        public OptionBarController( UIOptionLeftRightText view, float value, float min = 0, float max = 100, float step = 1, string postfix = "%" ) : base( view )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             Value = value;

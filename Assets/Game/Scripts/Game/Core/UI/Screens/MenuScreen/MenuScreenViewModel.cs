@@ -12,7 +12,7 @@ namespace Game.Core.UI.MenuScreen
 {
     public sealed class MenuScreenViewModel : ViewModel< UIMenuScreen >
     {
-        private List< UIOptionMenuButton > _buttons = new( 3 );
+        private List< UIOptionMenuTextButton > _buttons = new( 3 );
 
         private UIOption _lastOption;
         
@@ -111,7 +111,7 @@ namespace Game.Core.UI.MenuScreen
         
         private void ButtonClickedHandler( UIOption option )
         {
-            var index = _buttons.IndexOf( (UIOptionMenuButton)option );
+            var index = _buttons.IndexOf( (UIOptionMenuTextButton)option );
             if ( index == 0 )
             {
                 _gameBoostrap.Start();
