@@ -7,6 +7,7 @@ namespace Game.Systems.InventorySystem
     public sealed class ItemConfig : ScriptableObject
     {
         [ field: SerializeField ] public string UID { get; private set; }
+        [ field: SerializeField ] public Sprite Icon { get; private set; }
         [ field: Space ]
         [ field: SerializeField ] public ItemObject Prefab { get; private set; }
     }

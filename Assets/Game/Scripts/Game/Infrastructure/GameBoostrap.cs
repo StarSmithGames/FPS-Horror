@@ -1,3 +1,4 @@
+using Game.Core.World.EntityManager;
 using Game.Core.Player;
 using Game.Core.UI;
 using Game.Core.UI.MenuScreen;
@@ -22,6 +23,7 @@ namespace Game
         private readonly UIRootGame _uiRootGame;
         private readonly GameConfig _gameConfig;
         private readonly GameManager _gameManager;
+        private readonly EntityManager _entityManager;
         private readonly StoryManager _storyManager;
         private readonly UITransitionService _uiTransitionService;
 
@@ -30,6 +32,7 @@ namespace Game
             UIRootGame uiRootGame,
             GameConfig gameConfig,
             GameManager gameManager,
+            EntityManager entityManager,
             StoryManager storyManager,
             UITransitionService uiTransitionService
             )
@@ -38,6 +41,7 @@ namespace Game
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _gameConfig = gameConfig ?? throw new ArgumentNullException( nameof(gameConfig) );
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
+            _entityManager = entityManager ?? throw new ArgumentNullException( nameof(entityManager) );
             _storyManager = storyManager ?? throw new ArgumentNullException( nameof(storyManager) );
             _uiTransitionService = uiTransitionService ?? throw new ArgumentNullException( nameof(uiTransitionService) );
         }
@@ -88,6 +92,8 @@ namespace Game
                             var player = playerInstaller.GetComponentInChildren< PlayerObject >();
                             player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
                             player.Controller.Initialize();
+                            
+                            _entityManager.SetPlayer( player );
                         }
                     }
                     
@@ -111,6 +117,8 @@ namespace Game
             var player = playerInstaller.GetComponentInChildren< PlayerObject >();
             player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
             player.Controller.Initialize();
+            
+            _entityManager.SetPlayer( player );
         }
 
         private bool IsTestScene()

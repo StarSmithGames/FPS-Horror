@@ -5,17 +5,17 @@ namespace Game.Systems.InventorySystem
 {
     public sealed class Inventory
     {
-        public List< Item > Items { get; private set; } = new();
+        public List< InventoryItemModel > Items { get; private set; } = new();
 
-        public void AddItem( ItemConfig config ) => AddItem( config.UID );
-        public void AddItem( string uid )
+        public void AddItem( ItemConfig config )
         {
-            var item = GetItem( uid );
+            var item = GetItem( config.UID );
             if ( item == null )
             {
                 Items.Add( new()
                 {
-                    UID = uid,
+                    UID = config.UID,
+                    Icon = config.Icon,
                     Count = 1
                 } );
             }
@@ -38,8 +38,8 @@ namespace Game.Systems.InventorySystem
         public bool ContainsItem( ItemConfig config ) => ContainsItem( config.UID );
         public bool ContainsItem( string uid ) => GetItem( uid ) != null;
 
-        public Item GetItem( ItemConfig config ) => GetItem( config.UID );
-        public Item GetItem( string uid )
+        public InventoryItemModel GetItem( ItemConfig config ) => GetItem( config.UID );
+        public InventoryItemModel GetItem( string uid )
         {
             return Items.Find( ( x ) => string.Equals( x.UID, uid, StringComparison.InvariantCultureIgnoreCase ) );
         }

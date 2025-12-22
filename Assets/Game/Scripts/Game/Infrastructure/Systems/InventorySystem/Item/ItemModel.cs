@@ -1,8 +1,7 @@
 namespace Game.Systems.InventorySystem
 {
-    public sealed class Item
+    public abstract class ItemModel
     {
         public string UID;
-        public int Count;
     }
 }

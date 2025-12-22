@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using Game.Core.World.EntityManager;
+using Game.Core.Player;
 using Game.Managers.CursorManager;
 using Game.Managers.GameManager;
 using Game.Managers.InputManager;
@@ -21,16 +23,19 @@ namespace Game.Core.UI.ResourcesScreen
         private readonly DiContainer _diContainer;
         private readonly PauseManager _pauseManager;
         private readonly GameManager _gameManager;
+        private readonly EntityManager _entityManager;
         
         public ResourcesScreenViewModel(
             DiContainer diContainer,
             PauseManager pauseManager,
-            GameManager gameManager
+            GameManager gameManager,
+            EntityManager entityManager
             )
         {
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
             _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
+            _entityManager = entityManager ?? throw new ArgumentNullException( nameof(entityManager) );
         }
         
         protected override void SubscribeView()
@@ -77,11 +82,24 @@ namespace Game.Core.UI.ResourcesScreen
         {
             ModelView.Inventory.Content.DestroyChildren();
             _cells.Clear();
+
+            var inventoryController = _entityManager.Player.Controller.ServiceLocator.GetAs< PlayerInventoryController >();
+            var inventory = inventoryController.Inventory;
             
             for ( int i = 0; i < 20; i++ )
             {
                 var cell = _diContainer.InstantiatePrefab( ModelView.Inventory.CellPrefab, ModelView.Inventory.Content ).GetComponent< UIInventoryCell >();
-                cell.SetLock( i > 4 );
+
+                if ( i < inventory.Items.Count )
+                {
+                    cell.Set( inventory.Items[ i ] );
+                    cell.SetLock( false );
+                }
+                else
+                {
+                    cell.SetLock( true );
+                }
+                
                 _cells.Add( cell );
             }
         }
