@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game.Systems.InventorySystem
 {
     [ CreateAssetMenu( fileName = "Item", menuName = "Game/Inventory/Item" ) ]
-    public abstract class ItemConfig : ScriptableObject
+    public class ItemConfig : ScriptableObject
     {
         [ field: SerializeField ] public string UID { get; private set; }
         [ field: SerializeField ] public Sprite Icon { get; private set; }

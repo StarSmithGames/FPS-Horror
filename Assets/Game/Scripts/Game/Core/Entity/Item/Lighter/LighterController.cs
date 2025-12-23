@@ -18,11 +18,11 @@ namespace Game.Core.Entity
         private float _cachedLightIntensity;
         private bool _isInProcess;
         
-        private readonly LighterItemObject _view;
+        private readonly Lighter _view;
         private readonly AudioManager _audioManager;
 
         public LighterController(
-            LighterItemObject view,
+            Lighter view,
             AudioManager audioManager
             ) : base( view )
         {

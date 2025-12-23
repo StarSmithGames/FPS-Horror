@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public sealed class LighterItemObject : ItemObject
+    public sealed class Lighter : ItemObject
     {
         [ field: Header( "Zippo" ) ]
         [ field: SerializeField ] public Animator Animator { get; private set; }

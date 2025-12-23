@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Systems.InventorySystem
 {
@@ -9,6 +10,7 @@ namespace Game.Systems.InventorySystem
 
         public void AddItem( ItemConfig config )
         {
+            Debug.LogError( ( config == null ));
             var item = GetItem( config.UID );
             if ( item == null )
             {
