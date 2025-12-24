@@ -82,6 +82,9 @@ namespace Game.Core.UI.OptionsDialog
             _graphicsTabController?.Dispose();
             _controlsTabController?.Dispose();
 
+            _inputActionCancel.Disable();
+            _inputActionLB.Disable();
+            _inputActionRB.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
             InputActionManager.RemoveInputActionWrap( _inputActionLB );
             InputActionManager.RemoveInputActionWrap( _inputActionRB );

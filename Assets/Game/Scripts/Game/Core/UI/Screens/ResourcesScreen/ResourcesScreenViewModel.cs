@@ -17,6 +17,7 @@ namespace Game.Core.UI.ResourcesScreen
     public sealed class ResourcesScreenViewModel : ViewModel< UIResourcesScreen >
     {
         private InputActionVoidWrap _inputActionCancel;
+        private InputActionVoidWrap _inputActionInventory;
         private CancellationTokenSource _cancellationTokenSource;
         private List< UIInventoryCell > _cells = new();
             
@@ -44,13 +45,19 @@ namespace Game.Core.UI.ResourcesScreen
             
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
             _inputActionCancel.Enable();
+            
+            _inputActionInventory = new( InputManager.Inputs.System.Inventory, InventoryClickedHandler );
+            _inputActionInventory.Enable();
         }
 
         protected override void UnSubscribeView()
         {
             base.UnSubscribeView();
             
+            _inputActionCancel.Disable();
+            _inputActionInventory.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
+            InputActionManager.RemoveInputActionWrap( _inputActionInventory );
         }
 
         protected override void OnViewShowingChanged()
@@ -102,6 +109,11 @@ namespace Game.Core.UI.ResourcesScreen
                 
                 _cells.Add( cell );
             }
+        }
+        
+        private void InventoryClickedHandler()
+        {
+            HideViewAndDispose();
         }
 
         private void CancelButtonClickedHandler()

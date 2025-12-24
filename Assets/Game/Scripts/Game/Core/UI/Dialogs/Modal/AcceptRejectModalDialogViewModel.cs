@@ -45,6 +45,8 @@ namespace Game.Core.UI.Dialogs
                 ModelView.Buttons[ i ].OnPointerEntered -= ButtonPointerEnteredHandler;
             }
             
+            _inputActionSubmit.Disable();
+            _inputActionCancel.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionSubmit );
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
 

@@ -45,7 +45,6 @@ namespace Game.Core.Player
         {
             if ( !IsEnable ) return;
 
-            Debug.LogError( "Interact" );
             _interactable.Interact( _playerController );
             
             base.Completed();

@@ -39,6 +39,10 @@ namespace Game.Core.Entity
             {
                 var angle = Mathf.Clamp( Mathf.Abs( GetAngle( _settings.DoorAxis, _door.localRotation.eulerAngles - Quaternion.identity.eulerAngles ) ), 0, _settings.DoorOpenAngle );
                 IsOpen = angle > _settings.DoorOpenAngle / 2f && angle <= _settings.DoorOpenAngle;
+                if ( _settings.IsFlipped )
+                {
+                    IsOpen = !IsOpen;
+                }
             }
 
             if ( _handle != null )
@@ -58,6 +62,34 @@ namespace Game.Core.Entity
             CloseDoorAsync().Forget();
         }
 
+        public void SetToOpen()
+        {
+            if ( IsOpen ) return;
+            IsOpen = true;
+            if ( _settings.IsFlipped )
+            {
+                _door.localRotation = Quaternion.identity;
+            }
+            else
+            {
+                _door.localRotation = GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle );
+            }
+        }
+
+        public void SetToClose()
+        {
+            if ( !IsOpen ) return;
+            IsOpen = false;
+            if ( _settings.IsFlipped )
+            {
+                _door.localRotation = GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle );
+            }
+            else
+            {
+                _door.localRotation = Quaternion.identity;
+            }
+        }
+        
         private async UniTask OpenDoorAsync()
         {
             if ( IsOpen ) return;
@@ -72,7 +104,7 @@ namespace Game.Core.Entity
             {
                 await AnimateHandleAsync();
             }
-            await AnimateDoorAsync( true );
+            await AnimateDoorAsync( _settings.IsFlipped ? false : true );
         }
 
         private async UniTask CloseDoorAsync()
@@ -80,7 +112,7 @@ namespace Game.Core.Entity
             if ( !IsOpen ) return;
             IsOpen = false;
             
-            await AnimateDoorAsync( false );
+            await AnimateDoorAsync( _settings.IsFlipped ? true :false );
         }
 
         private async UniTask AnimateHandleAsync()
@@ -92,7 +124,7 @@ namespace Game.Core.Entity
         private async UniTask AnimateDoorAsync( bool opening )
         {
             Quaternion from = opening ? _door.localRotation : GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle );
-            Quaternion to = opening ? GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle ) :  Quaternion.identity;
+            Quaternion to = opening ? GetAngle( _settings.DoorAxis, _settings.DoorOpenAngle ) : Quaternion.identity;
 
             float angleDelta = Quaternion.Angle( from, to );
             float fraction = Mathf.Clamp01( angleDelta / _settings.DoorOpenAngle );

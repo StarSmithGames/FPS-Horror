@@ -8,6 +8,7 @@ namespace Game.Core.Entity
     {
         [ field: SerializeField ] public bool IsLocked { get; private set; }
         [ field: Space ]
+        [ field: SerializeField ] public bool IsFlipped { get; private set; }
         [ field: SerializeField ] public float DoorOpenAngle { get; private set; } = 90f;
         [ field: SerializeField ] public float DoorDuration { get; private set; } = 1f;
         [ field: SerializeField ] public Axis DoorAxis { get; private set; } = Axis.Y;

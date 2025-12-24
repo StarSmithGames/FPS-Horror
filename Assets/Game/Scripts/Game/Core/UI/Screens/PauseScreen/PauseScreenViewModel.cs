@@ -74,6 +74,7 @@ namespace Game.Core.UI.PauseScreen
             
             GamepadDetector.OnChanged -= GamepadChangedHandler;
             
+            _inputActionCancel.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
         }
 
