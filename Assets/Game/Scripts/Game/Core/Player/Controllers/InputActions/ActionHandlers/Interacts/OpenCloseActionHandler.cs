@@ -9,7 +9,7 @@ namespace Game.Core.Player
 {
     public sealed class OpenCloseActionHandler : LongActionHandler
     {
-        private OpenCloseDynamicObject _dynamicObject;
+        private OpenCloseObject _dynamicObject;
         
         private readonly ILocalizationSystem _localizationSystem;
         
@@ -23,7 +23,7 @@ namespace Game.Core.Player
 
         public override void Initialize( IObservable target )
         {
-            _dynamicObject = (OpenCloseDynamicObject)target;
+            _dynamicObject = (OpenCloseObject)target;
             
             ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
             string nameId = _dynamicObject.IsOpen ? LocalizationIds.UI_CONTROL_CLOSE : LocalizationIds.UI_CONTROL_OPEN;

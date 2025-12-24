@@ -1,10 +1,13 @@
 using System;
+using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public abstract class OpenCloseDynamicObject : DynamicObject
+    public abstract class OpenCloseObject : ObservableObject
     {
         public event Action OnChanged;
+        
+        [ field: SerializeField ] public string NameId { get; private set; }
         
         public bool IsOpen
         {

@@ -127,14 +127,11 @@ namespace Game.Core.Player
 
         private ActionHandlerComposite TryGetHandler()
         {
-            if ( _currentObservable is DynamicObject dynamic )
+            if ( _currentObservable is OpenCloseObject dynamic )
             {
                 _pointerController.SetPointer( PointerType.Hand );
                 _targetInformer.Name.text = dynamic.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( dynamic.NameId );
-                if ( _currentObservable is OpenCloseDynamicObject )
-                {
-                    return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
-                }
+                return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
             }
             else if( _currentObservable is ItemObject item )
             {

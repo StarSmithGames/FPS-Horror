@@ -1,3 +1,4 @@
+using Game.Core.Entity;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,6 +17,17 @@ namespace Game.StoryFlow.Introduce.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+
+            if ( GUILayout.Button( "Find All Entities" ) )
+            {
+                _target.Items.Clear();
+                _target.Items.AddRange( FindObjectsOfType< ItemObject >( true ) );
+                
+                _target.Puzzles.Clear();
+                _target.Puzzles.AddRange( FindObjectsOfType< PuzzleObject >( true ) );
+                
+                EditorUtility.SetDirty( _target );
+            }
         }
     }
 }

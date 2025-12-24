@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace Game.Core.Entity
 {
-    public sealed class OpenableObject : OpenCloseDynamicObject
+    public sealed class OpenableObject : OpenCloseObject
     {
         [ SerializeField ] private Transform _door;
         [ SerializeField ] private Transform _handle;

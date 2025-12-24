@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public sealed class PullableObject : OpenCloseDynamicObject
+    public sealed class PullableObject : OpenCloseObject
     {
         [ SerializeField ] private Transform _pull;
         [ SerializeField ] private PullableSettings _settings;
