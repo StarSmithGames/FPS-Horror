@@ -21,27 +21,28 @@ namespace Game.Core.Player
             Container.BindInstance( _view );
             Container.BindInstance( _avatar );
             BindLocomotion();
-            Container.Bind< CameraFOVController >().AsSingle();
-            Container.Bind< CameraVisionController >().AsSingle();
-            Container.Bind< ContextMenuActionFactory >().AsSingle();
-            Container.Bind< PlayerHoveringController >().AsSingle();
+            Container.Bind< CameraFOVController >().AsSingle().Lazy();
+            Container.Bind< CameraVisionController >().AsSingle().Lazy();
+            Container.Bind< ContextMenuActionFactory >().AsSingle().Lazy();
+            Container.Bind< PlayerHoveringController >().AsSingle().Lazy();
+            Container.Bind< PlayerIndicatorController >().AsSingle().Lazy();
             
-            Container.Bind< PlayerInputActionsController >().AsSingle();
-            Container.Bind< PlayerInventoryController >().AsSingle();
+            Container.Bind< PlayerInputActionsController >().AsSingle().Lazy();
+            Container.Bind< PlayerInventoryController >().AsSingle().Lazy();
             
-            Container.Bind< PlayerSoundController >().AsSingle();
+            Container.Bind< PlayerSoundController >().AsSingle().Lazy();
             
-            Container.Bind< PlayerStates >().AsSingle();
-            Container.Bind< PlayerBrain >().AsSingle();
+            Container.Bind< PlayerStates >().AsSingle().Lazy();
+            Container.Bind< PlayerBrain >().AsSingle().Lazy();
             Container.Bind< PlayerController >().AsSingle().NonLazy();
         }
 
         private void BindLocomotion()
         {
-            Container.Bind< PlayerLookController >().AsSingle();
-            Container.Bind< PlayerMoveController >().AsSingle();
-            Container.Bind< PlayerJumpController >().AsSingle();
-            Container.Bind< PlayerCrouchController >().AsSingle();
+            Container.Bind< PlayerLookController >().AsSingle().Lazy();
+            Container.Bind< PlayerMoveController >().AsSingle().Lazy();
+            Container.Bind< PlayerJumpController >().AsSingle().Lazy();
+            Container.Bind< PlayerCrouchController >().AsSingle().Lazy();
         }
 
 #if UNITY_EDITOR

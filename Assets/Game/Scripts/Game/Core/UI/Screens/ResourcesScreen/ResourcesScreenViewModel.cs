@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Game.Core.World.EntityManager;
+using Game.Core.World.WorldManager;
 using Game.Core.Player;
 using Game.Managers.CursorManager;
 using Game.Managers.GameManager;
@@ -26,21 +26,21 @@ namespace Game.Core.UI.ResourcesScreen
         private readonly ItemDescriptor _itemDescriptor;
         private readonly PauseManager _pauseManager;
         private readonly GameManager _gameManager;
-        private readonly EntityManager _entityManager;
+        private readonly WorldManager _worldManager;
         
         public ResourcesScreenViewModel(
             DiContainer diContainer,
             ItemDescriptor itemDescriptor,
             PauseManager pauseManager,
             GameManager gameManager,
-            EntityManager entityManager
+            WorldManager worldManager
             )
         {
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
             _itemDescriptor = itemDescriptor ?? throw new ArgumentNullException( nameof(itemDescriptor) );
             _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
-            _entityManager = entityManager ?? throw new ArgumentNullException( nameof(entityManager) );
+            _worldManager = worldManager ?? throw new ArgumentNullException( nameof(worldManager) );
         }
         
         protected override void SubscribeView()
@@ -100,7 +100,7 @@ namespace Game.Core.UI.ResourcesScreen
             ModelView.Inventory.Content.DestroyChildren();
             _cells.Clear();
 
-            var inventoryController = _entityManager.Player.Controller.ServiceLocator.GetAs< PlayerInventoryController >();
+            var inventoryController = _worldManager.Player.Controller.ServiceLocator.GetAs< PlayerInventoryController >();
             var inventory = inventoryController.Inventory;
             
             for ( int i = 0; i < 20; i++ )

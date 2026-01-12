@@ -9,8 +9,6 @@ namespace Game
     {
         [ field: SerializeField ] public PlayerInstaller PlayerPrefab { get; private set; }
         [ field: Space ]
-        #if UNITY_EDITOR
-        [ field: SerializeField ] public LevelObject EditorLevelPrefab { get; private set; }
-        #endif
+        [ field: SerializeField ] public LevelObject LevelPrefab { get; private set; }
     }
 }
