@@ -11,7 +11,8 @@ namespace Game.Systems.InventorySystem
         public override void InstallBindings()
         {
             Container.BindInstance( _database );
-            Container.Bind< ItemFactory >().AsSingle();
+            Container.Bind< ItemFactory >().AsSingle().Lazy();
+            Container.Bind< ItemDescriptor >().AsSingle().Lazy();
         }
     }
 }
