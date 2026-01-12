@@ -3,6 +3,7 @@ using Game.Core.World.InteractionSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Game.Core.Player
 {
@@ -10,7 +11,6 @@ namespace Game.Core.Player
     {
         public event Action OnCompleted;
 
-        public List< ContextMenuActionHandler > Handlers => _handlers;
         private readonly List< ContextMenuActionHandler > _handlers;
         
         public ActionHandlerComposite( List< ContextMenuActionHandler > handlers )
@@ -23,35 +23,32 @@ namespace Game.Core.Player
             for ( int i = 0; i < _handlers.Count; i++ )
             {
                 _handlers[ i ].Initialize( target );
-            }
-        }
-
-        public void Enable( List< UIInfoButton > options )
-        {
-            for ( int i = 0; i < _handlers.Count; i++ )
-            {
                 _handlers[ i ].OnCompleted += ActionCompletedHandler;
-                _handlers[ i ].Enable( options[ i ] );
             }
         }
 
-        public void Disable()
+        public void Dispose()
         {
             for ( int i = 0; i < _handlers.Count; i++ )
             {
                 _handlers[ i ].OnCompleted -= ActionCompletedHandler;
-                _handlers[ i ].Disable();
+                _handlers[ i ].Dispose();
             }
         }
 
+        public void SetOptions( List< UIInfoButton > options  )
+        {
+            for ( int i = 0; i < _handlers.Count; i++ )
+            {
+                _handlers[ i ].Enable( options[ i ] );
+            }
+        }
+        
         private void ActionCompletedHandler( ContextMenuActionHandler actionHandler )
         {
             OnCompleted?.Invoke();
         }
         
-        public List< ContextMenuOperation > GetContextMenuOptions()
-        {
-            return _handlers.Select( ( x ) => x.ContextMenuOperation ).ToList();
-        }
+        public List< ContextMenuOperation > GetContextMenuOptions() => _handlers.Select( ( x ) => x.ContextMenuOperation ).ToList();
     }
 }

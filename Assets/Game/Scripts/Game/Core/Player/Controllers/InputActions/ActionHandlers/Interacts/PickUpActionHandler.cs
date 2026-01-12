@@ -1,5 +1,4 @@
 using Game.Core.Entity;
-using Game.Core.UI;
 using Game.Core.World.InteractionSystem;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
@@ -13,6 +12,7 @@ namespace Game.Core.Player
         private ItemObject _item;
 
         private readonly PlayerInventoryController _playerInventoryController;
+        private readonly ILocalizationSystem _localizationSystem;
         
         public PickUpActionHandler(
             PlayerInventoryController playerInventoryController,
@@ -21,24 +21,23 @@ namespace Game.Core.Player
             ) : base( inputKeyActionsSettings.InteractAction )
         {
             _playerInventoryController = playerInventoryController ?? throw new ArgumentNullException( nameof(playerInventoryController) );
-            
-            if ( ContextMenuOperation == null )
-            {
-                ContextMenuOperation = new();
-            }
-            ContextMenuOperation.Key = inputKeyActionsSettings.InteractAction.GetDisplayKey();
-            ContextMenuOperation.Name = localizationSystem.Translate( LocalizationIds.UI_CONTROL_TAKE );
+            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
         
         public override void Initialize( IObservable target )
         {
+            base.Initialize( target );
+            
             _item = (ItemObject)target;
+            
+            ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
+            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_TAKE );
         }
 
-        public override void Disable()
+        public override void Dispose()
         {
             _item = null;
-            base.Disable();
+            base.Dispose();
         }
         
         protected override void Completed()

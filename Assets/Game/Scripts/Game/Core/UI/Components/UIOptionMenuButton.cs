@@ -3,8 +3,9 @@ using UnityEngine.UI;
 
 namespace Game.Core.UI
 {
-    public sealed class UIOptionMenuButton : UIOption
+    public class UIOptionMenuButton : UIOption
     {
+        [ SerializeField ] private Image _icon;
         [ SerializeField ] private Image _point;
         [ SerializeField ] private Color _normal;
         [ SerializeField ] private Color _selected;
@@ -13,16 +14,16 @@ namespace Game.Core.UI
         {
             base.Select();
 
-            SetNameColor( _selected );
-            _point.gameObject.SetActive( true );
+            _icon.color = _selected;
+            _point.color = _selected;
         }
 
         public override void Deselect()
         {
             base.Deselect();
 
-            SetNameColor( _normal );
-            _point.gameObject.SetActive( false );
+            _icon.color = _normal;
+            _point.color = _normal;
         }
     }
 }

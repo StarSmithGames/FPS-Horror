@@ -32,11 +32,6 @@ namespace Game.Core.UI.OptionsDialog
             View.OnButtonClicked -= ButtonClickedHandler;
         }
 
-        public void SetName( string name )
-        {
-            View.SetName( name );
-        }
-
         public virtual void Select()
         {
             View.Select();

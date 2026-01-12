@@ -2,11 +2,9 @@ using Game.Core.Player;
 using Game.Core.World.InteractionSystem;
 using Game.Systems.InventorySystem;
 using PuzzlescapeGames.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Core.Entity
 {
@@ -67,6 +65,7 @@ namespace Game.Core.Entity
                     if ( slot.Nest.childCount == 0 )
                     {
                         var fuse = GameObject.Instantiate( _fusePrefab, slot.Nest );
+                        fuse.EnableCollider( false );
                         fuse.transform.localPosition = Vector3.zero;
                         fuse.transform.localScale = Vector3.one;
                         fuse.transform.localRotation = Quaternion.identity;
@@ -82,8 +81,6 @@ namespace Game.Core.Entity
 
         private void DoorChangedHandler()
         {
-            Debug.LogError( _door.IsOpen + " " + IsFusesConnected );
-            
             EnableCollider( _door.IsOpen && !IsFusesConnected );
         }
     }

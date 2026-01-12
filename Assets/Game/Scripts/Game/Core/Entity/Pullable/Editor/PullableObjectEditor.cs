@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -48,7 +46,7 @@ namespace Game.Core.Entity.Editor
                 Vector3 pos = _pull.localPosition;
                 pos.z = _settings.OpenScalar;
 
-                Undo.RecordObject( _pull, "CLOSE" );
+                Undo.RecordObject( _pull, "OPEN" );
                 _pull.localPosition = pos;
                 EditorUtility.SetDirty( _pull );
             }

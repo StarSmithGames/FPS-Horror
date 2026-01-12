@@ -68,12 +68,16 @@ namespace Game.Core.Player
         {
             _currentObservable = observable;
 
-            ResetOptions();
-
             if ( _actionHandlerComposite != null )
             {
-                _actionHandlerComposite.Disable();
+                _actionHandlerComposite.Dispose();
                 _actionHandlerComposite.OnCompleted -= ActionCompleted;
+            }
+            
+            for ( int i = 0; i < _targetInformer.Options.Count; i++ )
+            {
+                _targetInformer.Options[ i ].gameObject.SetActive( false );
+                _targetInformer.Options[ i ].SetFillAmount( 0f );
             }
             
             if ( _currentObservable == null )
@@ -93,12 +97,8 @@ namespace Game.Core.Player
             if ( _actionHandlerComposite != null )
             {
                 _actionHandlerComposite.Initialize( _currentObservable );
-                List< ContextMenuOperation > options = _actionHandlerComposite.GetContextMenuOptions();
-                if ( options != null )
-                {
-                    _actionHandlerComposite.Enable( GetOptions( options ) );
-                    _actionHandlerComposite.OnCompleted += ActionCompleted;
-                }
+                _actionHandlerComposite.SetOptions( GetOptions( _actionHandlerComposite.GetContextMenuOptions() ) );
+                _actionHandlerComposite.OnCompleted += ActionCompleted;
             }
             
             if ( !_isShowingInformer )
@@ -123,27 +123,15 @@ namespace Game.Core.Player
 
                 return result;
             }
-            
-            void ResetOptions()
-            {
-                for ( int i = 0; i < _targetInformer.Options.Count; i++ )
-                {
-                    _targetInformer.Options[ i ].gameObject.SetActive( false );
-                    _targetInformer.Options[ i ].SetFillAmount( 0f );
-                }
-            }
         }
 
         private ActionHandlerComposite TryGetHandler()
         {
-            if ( _currentObservable is DynamicObject dynamic )
+            if ( _currentObservable is OpenCloseObject dynamic )
             {
                 _pointerController.SetPointer( PointerType.Hand );
                 _targetInformer.Name.text = dynamic.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( dynamic.NameId );
-                if ( _currentObservable is OpenCloseDynamicObject )
-                {
-                    return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
-                }
+                return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
             }
             else if( _currentObservable is ItemObject item )
             {

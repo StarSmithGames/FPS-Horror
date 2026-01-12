@@ -2,7 +2,7 @@ using System;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class OptionKeyController : OptionController
+    public sealed class OptionKeyController : OptionTextController
     {
         public event Action< OptionKeyController > OnKeyButtonClicked;
         

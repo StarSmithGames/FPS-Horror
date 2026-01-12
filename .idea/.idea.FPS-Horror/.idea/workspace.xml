@@ -5,14 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fe0e433-bcb8-4294-9709-c4ec95d03e79" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Level 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/Environment/Level 1.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerLookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerLookController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMoveController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMovementController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/Locomotion/PlayerMoveController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerBrain.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/PlayerInstaller.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameBoostrap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Infrastructure/GameBoostrap.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionMenuTextButton.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionMenuTextButton.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionText.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionText.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionTextController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionTextController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/Inventory.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/Inventory/UIInventory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/Inventory/UIInventory.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/Inventory/UIInventoryCell.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/Inventory/UIInventoryCell.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-Horror/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Fonts/RubikDirt-Regular SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Fonts/RubikDirt-Regular SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/UI/ResourcesScreen/ResourcesScreen.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/UI/ResourcesScreen/ResourcesScreen.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Prefabs/UI/UIRootGame.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Prefabs/UI/UIRootGame.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/PlayerInputActionsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/Player/Controllers/InputActions/PlayerInputActionsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionKey.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/OptionKey.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionKey/UIKeyBox.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/OptionKey/UIKeyBox.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionKey/UIKeyBox.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/OptionKey/UIKeyBox.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionKey/UIOptionKey.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/OptionKey/UIOptionKey.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionKey/UIOptionKey.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/OptionKey/UIOptionKey.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOption.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOption.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionLeftRight.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionLeftRightText.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionLeftRight.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionLeftRightText.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionMenuButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionMenuButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionMenuButton.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionMenuButton.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionModalButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionModalTextButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionModalButton.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionModalTextButton.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionToggle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionTextToggle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/UIOptionToggle.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Components/OptionText/UIOptionTextToggle.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionBarController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionBarController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionKeyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionKeyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionSelectorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionSelectorController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionToggleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Controllers/OptionToggleController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Tabs/TabsSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Dialogs/OptionsDialog/Tabs/TabsSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/MenuScreen/MenuScreenViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/MenuScreen/MenuScreenViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/MenuScreen/UIMenuScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/MenuScreen/UIMenuScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/PauseScreen/PauseScreenViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/PauseScreen/PauseScreenViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/PauseScreen/UIPauseScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/PauseScreen/UIPauseScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/ResourcesScreenViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/ResourcesScreenViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/UIResourcesScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game/Scripts/Game/Core/UI/Screens/ResourcesScreen/UIResourcesScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,8 +70,12 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/Contexts/GameObjectContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/Contexts/ProjectContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Install/MonoInstaller.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Plugins/Zenject/Source/Main/DiContainer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Runtime/CustomInstaller.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.ioc_zenject@1.0.2/Runtime/DiManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.services@1.4.0/Runtime/Services/UITransitionService/UIInfinityBlank.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.vvm@1.1.7/Runtime/Services/ViewModelAggregator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.puzzlescapegames.vvm@1.1.7/Runtime/ViewModel/ViewModel.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Behaviours/CinemachineCamera.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/CinemachineVirtualCameraBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@3.1.0/Runtime/Core/InputAxisControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
@@ -163,6 +203,10 @@
       <workItem from="1756527614294" duration="16398000" />
       <workItem from="1756615076577" duration="390000" />
       <workItem from="1756615830295" duration="3047000" />
+      <workItem from="1765289278759" duration="7191000" />
+      <workItem from="1765372584579" duration="4062000" />
+      <workItem from="1765790427652" duration="4364000" />
+      <workItem from="1765811998393" duration="735000" />
     </task>
     <servers />
   </component>

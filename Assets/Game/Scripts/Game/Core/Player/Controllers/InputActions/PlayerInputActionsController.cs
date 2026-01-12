@@ -2,6 +2,7 @@ using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.UI.InspectDialog;
 using Game.Core.UI.PauseScreen;
+using Game.Core.UI.ResourcesScreen;
 using Game.Managers.InputManager;
 using Game.Systems.StorageSystem;
 using PuzzlescapeGames.VVM;
@@ -17,7 +18,8 @@ namespace Game.Core.Player
         private InputActionVoidWrap _inputActionCrouch;
         private InputActionVoidWrap _inputActionJump;
         private InputActionVoidWrap _inputActionLighter;
-        
+        private InputActionVoidWrap _inputActionInventory;
+
         private InspectDialogViewModel _inspectDialogViewModel;
 
         private readonly PlayerObject _view;
@@ -53,7 +55,9 @@ namespace Game.Core.Player
             _inputActionSprint = new( InputManager.Inputs.Player.Sprint, SpringStartHandler, SpringStopHandler );
             _inputActionCrouch = new( InputManager.Inputs.Player.Crouch, CrouchStartHandler, CrouchStopHandler );
             _inputActionJump = new( InputManager.Inputs.Player.Jump, JumpClickedHandler );
-            _inputActionLighter = new( InputManager.Inputs.System.Lighter, InputLighterCompletedHandler );
+            _inputActionLighter = new( InputManager.Inputs.System.Lighter, LighterClickedHandler );
+            _inputActionInventory = new( InputManager.Inputs.System.Inventory, InventoryClickedHandler );
+
         }
         
         public void Enable()
@@ -74,6 +78,7 @@ namespace Game.Core.Player
             _inputActionCrouch.Enable();
             _inputActionJump.Enable();
             _inputActionLighter.Enable();
+            _inputActionInventory.Enable();
         }
 
         public void DisablePlayer()
@@ -82,6 +87,7 @@ namespace Game.Core.Player
             _inputActionCrouch.Disable();
             _inputActionJump.Disable();
             _inputActionLighter.Disable();
+            _inputActionInventory.Disable();
         }
 
         #region Inspection
@@ -111,16 +117,8 @@ namespace Game.Core.Player
             _inputActionMenu.Disable();
             
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< PauseScreenViewModel >();
-            screen.OnShowingChanged += PauseScreenShowingChangedHandler;
+            screen.OnShowingChanged += ScreenShowingChangedHandler;
             screen.ShowView();
-        }
-
-        private void PauseScreenShowingChangedHandler( IViewModel viewModel )
-        {
-            if ( viewModel.IsShowing ) return;
-            viewModel.OnShowingChanged -= PauseScreenShowingChangedHandler;
-            
-            _inputActionMenu.Enable();
         }
 
         #region Player
@@ -189,11 +187,30 @@ namespace Game.Core.Player
         }
         #endregion
         
-        private void InputLighterCompletedHandler()
+        private void LighterClickedHandler()
         {
             if ( _states.IsBlocked ) return;
             
             _inventoryController.SelectLighter();
+        }
+        
+        private void InventoryClickedHandler()
+        {
+            if ( _inspectDialogViewModel != null ) return;
+            
+            var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< ResourcesScreenViewModel >();
+            screen.OnShowingChanged += ScreenShowingChangedHandler;
+            screen.ShowView();
+            
+            _inputActionMenu.Disable();
+        }
+
+        private void ScreenShowingChangedHandler( IViewModel viewModel )
+        {
+            if ( viewModel.IsShowing ) return;
+            viewModel.OnShowingChanged -= ScreenShowingChangedHandler;
+            
+            _inputActionMenu.Enable();
         }
     }
 }
