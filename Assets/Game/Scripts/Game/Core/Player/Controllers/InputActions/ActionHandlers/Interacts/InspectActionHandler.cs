@@ -1,12 +1,9 @@
 using Game.Core.Entity;
-using Game.Core.UI;
-using Game.Core.UI.InspectDialog;
 using Game.Core.World.InteractionSystem;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
 using StarSmithGames.Localization;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Core.Player
 {
@@ -15,6 +12,7 @@ namespace Game.Core.Player
         private ItemObject _item;
 
         private readonly PlayerController _playerController;
+        private readonly ILocalizationSystem _localizationSystem;
         
         public InspectActionHandler(
             PlayerController playerController,
@@ -23,25 +21,24 @@ namespace Game.Core.Player
             ) : base( inputKeyActionsSettings.InspectAction )
         {
             _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
-            
-            if ( ContextMenuOperation == null )
-            {
-                ContextMenuOperation = new();
-            }
-            ContextMenuOperation.Key = inputKeyActionsSettings.InspectAction.GetDisplayKey();
-            ContextMenuOperation.Name = localizationSystem.Translate( LocalizationIds.UI_CONTROL_INSPECT );
+            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
 
         public override void Initialize( IObservable target )
         {
+            base.Initialize( target );
+            
             _item = (ItemObject)target;
+            
+            ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
+            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INSPECT );
         }
         
-        public override void Disable()
+        public override void Dispose()
         {
             _item = null;
 
-            base.Disable();
+            base.Dispose();
         }
 
         protected override void Completed()

@@ -38,6 +38,7 @@ namespace Game.Core.UI.OptionsDialog
 
         public void Dispose()
         {
+            _inputActionNavigate.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionNavigate );
             
             Options.Clear();

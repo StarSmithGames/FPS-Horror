@@ -15,7 +15,7 @@ namespace Game.Core.UI.PauseScreen
 {
     public sealed class PauseScreenViewModel : ViewModel< UIPauseScreen >
     {
-        private List< UIOptionMenuButton > _buttons = new( 3 );
+        private List< UIOptionMenuTextButton > _buttons = new( 3 );
         
         private InputActionValueWrap< Vector2 > _inputActionNavigate;
         private InputActionVoidWrap _inputActionSubmit;
@@ -74,6 +74,7 @@ namespace Game.Core.UI.PauseScreen
             
             GamepadDetector.OnChanged -= GamepadChangedHandler;
             
+            _inputActionCancel.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
         }
 
@@ -140,7 +141,7 @@ namespace Game.Core.UI.PauseScreen
         {
             _inputActionCancel.Disable();
             
-            var index = _buttons.IndexOf( (UIOptionMenuButton)option );
+            var index = _buttons.IndexOf( (UIOptionMenuTextButton)option );
             if ( index == 0 )
             {
                 HideViewAndDispose();

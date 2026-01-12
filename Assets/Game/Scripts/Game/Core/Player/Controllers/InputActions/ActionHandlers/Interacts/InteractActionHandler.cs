@@ -12,6 +12,7 @@ namespace Game.Core.Player
         private IInteractable _interactable;
 
         private readonly PlayerController _playerController;
+        private readonly ILocalizationSystem _localizationSystem;
         
         public InteractActionHandler(
             PlayerController playerController,
@@ -20,32 +21,30 @@ namespace Game.Core.Player
             ) : base( inputKeyActionsSettings.InteractAction )
         {
             _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
-            
-            if ( ContextMenuOperation == null )
-            {
-                ContextMenuOperation = new();
-            }
-            ContextMenuOperation.Key = inputKeyActionsSettings.InteractAction.GetDisplayKey();
-            ContextMenuOperation.Name = localizationSystem.Translate( LocalizationIds.UI_CONTROL_INTERACT );
+            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
         
         public override void Initialize( IObservable target )
         {
+            base.Initialize( target );
+            
             _interactable = (IInteractable)target;
+            
+            ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
+            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INTERACT );
         }
 
-        public override void Disable()
+        public override void Dispose()
         {
             _interactable = null;
             
-            base.Disable();
+            base.Dispose();
         }
         
         protected override void Completed()
         {
             if ( !IsEnable ) return;
 
-            Debug.LogError( "Interact" );
             _interactable.Interact( _playerController );
             
             base.Completed();

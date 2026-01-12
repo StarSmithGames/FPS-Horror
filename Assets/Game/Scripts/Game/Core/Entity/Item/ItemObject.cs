@@ -1,6 +1,5 @@
 using Game.Core.World.InspectionSystem;
 using Game.Systems.InventorySystem;
-using Moduls.Physics;
 using System;
 using UnityEngine;
 

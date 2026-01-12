@@ -6,7 +6,7 @@ namespace Game.Core.Entity
 {
     public abstract class ObservableObject : EntityObject, IObservable
     {
-        [ field: Header( "SETTINGS" ) ]
+        [ Header( "SETTINGS" ) ]
         [ SerializeField ] protected List< Collider > _colliders = new();
         
         public IReadOnlyList< Collider > Colliders => _colliders;

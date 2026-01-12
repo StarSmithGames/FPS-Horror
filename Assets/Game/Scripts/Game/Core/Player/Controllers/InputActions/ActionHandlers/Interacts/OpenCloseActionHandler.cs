@@ -9,7 +9,7 @@ namespace Game.Core.Player
 {
     public sealed class OpenCloseActionHandler : LongActionHandler
     {
-        private OpenCloseDynamicObject _dynamicObject;
+        private OpenCloseObject _dynamicObject;
         
         private readonly ILocalizationSystem _localizationSystem;
         
@@ -23,22 +23,18 @@ namespace Game.Core.Player
 
         public override void Initialize( IObservable target )
         {
-            _dynamicObject = (OpenCloseDynamicObject)target;
+            _dynamicObject = (OpenCloseObject)target;
             
-            if ( ContextMenuOperation == null )
-            {
-                ContextMenuOperation = new();
-            }
             ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
             string nameId = _dynamicObject.IsOpen ? LocalizationIds.UI_CONTROL_CLOSE : LocalizationIds.UI_CONTROL_OPEN;
             ContextMenuOperation.Name = _localizationSystem.Translate( nameId );
         }
 
-        public override void Disable()
+        public override void Dispose()
         {
             _dynamicObject = null;
 
-            base.Disable();
+            base.Dispose();
         }
 
         protected override void Completed()

@@ -2,13 +2,13 @@ using System;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class OptionToggleController : OptionController
+    public sealed class OptionToggleController : OptionTextController
     {
         public bool IsOn => _view.Toggle.isOn;
         
-        private readonly UIOptionToggle _view;
+        private readonly UIOptionTextToggle _view;
         
-        public OptionToggleController( UIOptionToggle view, bool isOn ) : base( view )
+        public OptionToggleController( UIOptionTextToggle view, bool isOn ) : base( view )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
 

@@ -1,27 +1,27 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Systems.InventorySystem
 {
     public sealed class Inventory
     {
-        public List< Item > Items { get; private set; } = new();
+        public List< ItemModel > Items { get; private set; } = new();
 
-        public void AddItem( ItemConfig config ) => AddItem( config.UID );
-        public void AddItem( string uid )
+        public void AddItem( ItemConfig config )
         {
-            var item = GetItem( uid );
+            var item = GetItem( config.UID );
             if ( item == null )
             {
-                Items.Add( new()
+                Items.Add( new( 1 )
                 {
-                    UID = uid,
-                    Count = 1
+                    UID = config.UID,
+                    Config = config,
                 } );
             }
             else
             {
-                item.Count++;
+                item.Quantity++;
             }
         }
 
@@ -38,8 +38,8 @@ namespace Game.Systems.InventorySystem
         public bool ContainsItem( ItemConfig config ) => ContainsItem( config.UID );
         public bool ContainsItem( string uid ) => GetItem( uid ) != null;
 
-        public Item GetItem( ItemConfig config ) => GetItem( config.UID );
-        public Item GetItem( string uid )
+        public ItemModel GetItem( ItemConfig config ) => GetItem( config.UID );
+        public ItemModel GetItem( string uid )
         {
             return Items.Find( ( x ) => string.Equals( x.UID, uid, StringComparison.InvariantCultureIgnoreCase ) );
         }

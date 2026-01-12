@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Game.Core.UI.OptionsDialog
 {
-    public sealed class OptionSelectorController : OptionController
+    public sealed class OptionSelectorController : OptionTextController
     {
         public int Index { get; private set; }
         
         private string[] _options;
         
-        private readonly UIOptionLeftRight _view;
+        private readonly UIOptionLeftRightText _view;
         
-        public OptionSelectorController( UIOptionLeftRight view, int index ) : base( view )
+        public OptionSelectorController( UIOptionLeftRightText view, int index ) : base( view )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             Index = index;

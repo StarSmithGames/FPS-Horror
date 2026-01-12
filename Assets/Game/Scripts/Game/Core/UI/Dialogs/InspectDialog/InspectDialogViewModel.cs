@@ -63,6 +63,8 @@ namespace Game.Core.UI.InspectDialog
             ModelView.CancelButton1.OnButtonClicked -= CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked -= CancelButtonClickedHandler;
             
+            _inputActionRead.Disable();
+            _inputActionCancel.Disable();
             InputActionManager.RemoveInputActionWrap( _inputActionRead );
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
             

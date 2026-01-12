@@ -12,7 +12,7 @@ namespace Game.Managers.InputManager
         
         private CancellationTokenSource _cancellationTokenSource;
         
-        private readonly InputAction _input;
+        private readonly InputActionVoidWrap _holder;
         private readonly Action _action;
         private readonly float _duration;
         private readonly Action _onStartHold;
@@ -32,7 +32,6 @@ namespace Game.Managers.InputManager
             Action< bool > callback = null
             )
         {
-            _input = input ?? throw new ArgumentNullException( nameof(input) );
             _action = action ?? throw new ArgumentNullException( nameof(action) );
             _duration = duration;
             _onStartHold = onStartHold;
@@ -40,20 +39,18 @@ namespace Game.Managers.InputManager
             _breaker = breaker;
             _progress = progress;
             _callback = callback;
+            
+            _holder = new InputActionVoidWrap( input, Performed, Canceled );
         }
 
         public void Enable()
         {
-            _input.performed += InputPerformedHandler;
-            _input.canceled += InputCanceledHandler;
-            _input.Enable();
+            InputActionManager.AddInputActionWrap( _holder );
         }
 
         public void Disable()
         {
-            _input.performed -= InputPerformedHandler;
-            _input.canceled -= InputCanceledHandler;
-            _input.Disable();
+            InputActionManager.RemoveInputActionWrap( _holder );
 
             Stop();
         }
@@ -99,15 +96,15 @@ namespace Game.Managers.InputManager
             }
             IsInProcess = false;
         }
-        
-        private void InputPerformedHandler( InputAction.CallbackContext context )
+
+        private void Performed()
         {
             _onStartHold?.Invoke();
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
         }
-        
-        private void InputCanceledHandler( InputAction.CallbackContext context )
+
+        private void Canceled()
         {
             Stop();
             _onEndHold?.Invoke();
