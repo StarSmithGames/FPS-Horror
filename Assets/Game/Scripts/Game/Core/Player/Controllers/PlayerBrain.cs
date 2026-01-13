@@ -23,7 +23,7 @@ namespace Game.Core.Player
         private readonly PlayerMoveController _moveController;
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerCrouchController _crouchController;
-        private readonly PlayerIndicatorController _indicatorController;
+        private readonly PlayerInteractionPointsController _interactionPointsController;
         private readonly CameraFOVController _cameraFOVController;
         private readonly CameraVisionController _cameraVisionController;
         private readonly PlayerHoveringController _hoveringController;
@@ -40,7 +40,7 @@ namespace Game.Core.Player
             PlayerMoveController moveController,
             PlayerJumpController jumpController,
             PlayerCrouchController crouchController,
-            PlayerIndicatorController indicatorController,
+            PlayerInteractionPointsController interactionPointsController,
                 
             CameraFOVController cameraFOVController,
             CameraVisionController cameraVisionController,
@@ -59,7 +59,7 @@ namespace Game.Core.Player
             _moveController = moveController ?? throw new ArgumentNullException( nameof(moveController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
-            _indicatorController = indicatorController ?? throw new ArgumentNullException( nameof(indicatorController) );
+            _interactionPointsController = interactionPointsController ?? throw new ArgumentNullException( nameof(interactionPointsController) );
             _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
             _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
@@ -73,7 +73,7 @@ namespace Game.Core.Player
             ServiceLocator.Register( _moveController );
             ServiceLocator.Register( _jumpController );
             ServiceLocator.Register( _crouchController );
-            ServiceLocator.Register( _indicatorController );
+            ServiceLocator.Register( _interactionPointsController );
             ServiceLocator.Register( _cameraFOVController );
             ServiceLocator.Register( _cameraVisionController );
             ServiceLocator.Register( _hoveringController );
@@ -87,7 +87,7 @@ namespace Game.Core.Player
             _moveController.Initialize();
             _jumpController.Initialize();
             _crouchController.Initialize();
-            _indicatorController.Initialize();
+            _interactionPointsController.Initialize();
             _cameraFOVController.Initialize();
             _cameraVisionController.Initialize();
             _hoveringController.Initialize();

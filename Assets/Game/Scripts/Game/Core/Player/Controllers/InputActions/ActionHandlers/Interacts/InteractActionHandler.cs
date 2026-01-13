@@ -1,3 +1,4 @@
+using Game.Core.Entity;
 using Game.Core.World.InteractionSystem;
 using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
@@ -9,7 +10,7 @@ namespace Game.Core.Player
 {
     public sealed class InteractActionHandler : QuickActionHandler
     {
-        private IInteractable _interactable;
+        private InteractableObject _interactable;
 
         private readonly PlayerController _playerController;
         private readonly ILocalizationSystem _localizationSystem;
@@ -28,7 +29,7 @@ namespace Game.Core.Player
         {
             base.Initialize( target );
             
-            _interactable = (IInteractable)target;
+            _interactable = (InteractableObject)target;
             
             ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
             ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INTERACT );
