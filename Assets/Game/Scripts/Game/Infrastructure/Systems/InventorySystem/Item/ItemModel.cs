@@ -5,10 +5,12 @@ namespace Game.Systems.InventorySystem
     public sealed class ItemModel
     {
         public event Action< ItemModel > OnChanged;
-        
-        public string UID;
-        public ItemConfig Config;
 
+        public string UID => Config.UID;
+
+        public ItemConfig Config { get; }
+        public ItemState State { get; }
+        
         public int Quantity
         {
             get => _quantity;
@@ -22,13 +24,14 @@ namespace Game.Systems.InventorySystem
             }
         }
         private int _quantity; //сколько таких предметов лежит в этом слоте
-        
-        public ItemState State { get; }
 
-        public ItemModel( int quantity = 1 )
+        public ItemModel( ItemConfig config, int quantity = 1 )
         {
-            _quantity = quantity;
+            Config = config;
             State = new ItemState();
+
+            _quantity = quantity;
+            
             State.OnChanged += NotifyChanged;
         }
 

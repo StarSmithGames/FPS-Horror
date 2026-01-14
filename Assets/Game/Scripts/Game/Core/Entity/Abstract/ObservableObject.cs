@@ -1,4 +1,5 @@
 using Game.Core.World.InteractionSystem;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +10,10 @@ namespace Game.Core.Entity
         [ Header( "SETTINGS" ) ]
         [ SerializeField ] protected List< Collider > _colliders = new();
         
-        public IReadOnlyList< Collider > Colliders => _colliders;
+        public bool IsCollidersEnabled { get; protected set; }
         
+        public IReadOnlyList< Collider > Colliders => _colliders;
+
         public virtual void StartObserve() {}
 
         public virtual void Observe() {}
@@ -24,6 +27,8 @@ namespace Game.Core.Entity
             {
                 _colliders[ i ].enabled = trigger;
             }
+
+            IsCollidersEnabled = trigger;
         }
     }
 }
