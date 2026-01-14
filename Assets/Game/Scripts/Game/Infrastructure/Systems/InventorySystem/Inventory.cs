@@ -6,18 +6,14 @@ namespace Game.Systems.InventorySystem
 {
     public sealed class Inventory
     {
-        public List< ItemModel > Items { get; private set; } = new();
+        public List< ItemModel > Items { get; } = new();
 
         public void AddItem( ItemConfig config )
         {
             var item = GetItem( config.UID );
             if ( item == null )
             {
-                Items.Add( new( 1 )
-                {
-                    UID = config.UID,
-                    Config = config,
-                } );
+                Items.Add( new( config, 1 ) );
             }
             else
             {

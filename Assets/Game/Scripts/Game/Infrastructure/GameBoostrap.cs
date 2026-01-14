@@ -1,4 +1,4 @@
-using Game.Core.World.EntityManager;
+using Game.Core.World.WorldManager;
 using Game.Core.Player;
 using Game.Core.UI;
 using Game.Core.UI.MenuScreen;
@@ -23,7 +23,7 @@ namespace Game
         private readonly UIRootGame _uiRootGame;
         private readonly GameConfig _gameConfig;
         private readonly GameManager _gameManager;
-        private readonly EntityManager _entityManager;
+        private readonly WorldManager _worldManager;
         private readonly StoryManager _storyManager;
         private readonly UITransitionService _uiTransitionService;
 
@@ -32,7 +32,7 @@ namespace Game
             UIRootGame uiRootGame,
             GameConfig gameConfig,
             GameManager gameManager,
-            EntityManager entityManager,
+            WorldManager worldManager,
             StoryManager storyManager,
             UITransitionService uiTransitionService
             )
@@ -41,7 +41,7 @@ namespace Game
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _gameConfig = gameConfig ?? throw new ArgumentNullException( nameof(gameConfig) );
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
-            _entityManager = entityManager ?? throw new ArgumentNullException( nameof(entityManager) );
+            _worldManager = worldManager ?? throw new ArgumentNullException( nameof(worldManager) );
             _storyManager = storyManager ?? throw new ArgumentNullException( nameof(storyManager) );
             _uiTransitionService = uiTransitionService ?? throw new ArgumentNullException( nameof(uiTransitionService) );
         }
@@ -83,17 +83,18 @@ namespace Game
 
                     if ( !IsTestScene() )
                     {
-                        if ( _gameConfig.EditorLevelPrefab != null )
+                        if ( _gameConfig.LevelPrefab != null )
                         {
-                            var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.EditorLevelPrefab );
-                            _storyManager.CreateAndStartStory( level );
+                            var level = _diContainer.InstantiatePrefabForComponent< LevelObject >( _gameConfig.LevelPrefab );
+                            _worldManager.SetLevel( level );
 
                             var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
                             var player = playerInstaller.GetComponentInChildren< PlayerObject >();
                             player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
                             player.Controller.Initialize();
+                            _worldManager.SetPlayer( player );
                             
-                            _entityManager.SetPlayer( player );
+                            _storyManager.CreateAndStartStory( level );
                         }
                     }
                     
@@ -111,14 +112,15 @@ namespace Game
             CursorManager.Disable();
 
             LevelObject level = GameObject.FindAnyObjectByType< LevelObject >();
-            _storyManager.CreateAndStartStory( level );
+            _worldManager.SetLevel( level );
 
             var playerInstaller = _diContainer.InstantiatePrefabForComponent< PlayerInstaller >( _gameConfig.PlayerPrefab );
             var player = playerInstaller.GetComponentInChildren< PlayerObject >();
             player.Controller.Teleport( level.PlayerPoint.transform.position, level.PlayerPoint.transform.rotation.eulerAngles );
             player.Controller.Initialize();
+            _worldManager.SetPlayer( player );
             
-            _entityManager.SetPlayer( player );
+            _storyManager.CreateAndStartStory( level );
         }
 
         private bool IsTestScene()

@@ -1,12 +1,7 @@
-using Game.Core.World.InteractionSystem;
-
 namespace Game.Core.Entity
 {
-    public abstract class PuzzleObject : ObservableObject, IInteractable
+    public abstract class PuzzleObject : InteractableObject
     {
-        public virtual void Interact( IInteractor interactor )
-        {
-            
-        }
+        
     }
 }
