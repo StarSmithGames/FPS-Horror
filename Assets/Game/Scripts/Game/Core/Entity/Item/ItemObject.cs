@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public abstract class ItemObject : ObservableObject
+    public abstract class ItemObject : InteractableObject
     {
         [ field: Header( "INFO" ) ]
         [ field: SerializeField ] public string NameId { get; private set; }

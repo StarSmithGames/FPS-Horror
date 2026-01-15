@@ -9,8 +9,8 @@ namespace Game.Core.Entity
     {
         [ Header( "SETTINGS" ) ]
         [ SerializeField ] protected List< Collider > _colliders = new();
-        
-        public bool IsCollidersEnabled { get; protected set; }
+
+        public bool IsCollidersEnabled { get; protected set; } = true;
         
         public IReadOnlyList< Collider > Colliders => _colliders;
 

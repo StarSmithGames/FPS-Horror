@@ -10,18 +10,23 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInteractionPointsController
     {
+        private const float MAX_DISTANCE = 3f;
+        
         private InteractionPointerDictionary _puzzlesDictionary = new();
         
         private readonly PointerSystem _pointerSystem;
         private readonly WorldManager _worldManager;
+        private readonly PlayerObject _view;
         
         public PlayerInteractionPointsController(
             PointerSystem pointerSystem,
-            WorldManager worldManager
+            WorldManager worldManager,
+            PlayerObject view
             )
         {
             _pointerSystem = pointerSystem ?? throw new ArgumentNullException( nameof(pointerSystem) );
             _worldManager = worldManager ?? throw new ArgumentNullException( nameof(worldManager) );
+            _view = view ?? throw new ArgumentNullException( nameof(view) );
         }
 
         public void Initialize()
@@ -33,29 +38,53 @@ namespace Game.Core.Player
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
+                for ( int i = 0; i < _worldManager.Level.Items.Count; i++ )
+                {
+                    var item = _worldManager.Level.Items[ i ];
+                    Pointing( item );
+                    Debug.LogError( "Item" );
+                }
+                
                 for ( int i = 0; i < _worldManager.Level.Puzzles.Count; i++ )
                 {
                     var puzzle = _worldManager.Level.Puzzles[ i ];
-                    if ( !puzzle.IsCollidersEnabled )
-                    {
-                        _puzzlesDictionary.TryRemove( puzzle );
-                        continue;
-                    }
-                    if ( _puzzlesDictionary.IsPointerShowing( puzzle ) )
-                    {
-                        continue;
-                    }
-                    if ( !_puzzlesDictionary.Contains( puzzle ) )
-                    {
-                        var pointer = _pointerSystem.CreateIndicator();
-                        _puzzlesDictionary.TryAdd( puzzle, pointer );
-                    }
-                    _puzzlesDictionary.ShowPointer( puzzle );
+                    Pointing( puzzle );
                 }
                 
-                Debug.LogError( "Tick" );
-                
                 await UniTask.WaitForSeconds( 0.2f, cancellationToken: cancellationToken );
+            }
+        }
+
+        private void Pointing( InteractableObject target )
+        {
+            if ( !target.IsCollidersEnabled )
+            {
+                _puzzlesDictionary.TryRemove( target );
+                return;
+            }
+
+            float sqrMagnitude = ( target.transform.position - _view.transform.position ).sqrMagnitude;
+            if ( sqrMagnitude < MAX_DISTANCE * MAX_DISTANCE )//if player is close enough
+            {
+                if ( _puzzlesDictionary.IsPointerShowing( target ) )
+                {
+                    return;
+                }
+                        
+                //show pointer
+                if ( !_puzzlesDictionary.Contains( target ) )
+                {
+                    var pointer = _pointerSystem.CreateIndicator();
+                    _puzzlesDictionary.TryAdd( target, pointer );
+                }
+                _puzzlesDictionary.ShowPointer( target, _view.CameraFPS.transform );
+            }
+            else
+            {
+                if ( _puzzlesDictionary.IsPointerShowing( target ) )
+                {
+                    _puzzlesDictionary.TryRemove( target );
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 using Game.Core.Entity;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Core.World.PointerSystem
 {
@@ -35,14 +36,14 @@ namespace Game.Core.World.PointerSystem
             return false;
         }
 
-        public void ShowPointer( InteractableObject target )
+        public void ShowPointer( InteractableObject target, Transform lookAt )
         {
             var pointer = Get( target );
 
             if ( pointer.IsShowing ) return;
             
-            pointer.transform.position = target.PointerPosition;
-            pointer.Show();
+            pointer.StartLookAt( lookAt );
+            pointer.Show( target );
         }
         
         public void HidePointer( InteractableObject target )
@@ -51,7 +52,7 @@ namespace Game.Core.World.PointerSystem
 
             if ( !pointer.IsShowing ) return;
             
-            pointer.Hide();
+            pointer.Hide( pointer.StopLookAt );
         }
     }
 }
