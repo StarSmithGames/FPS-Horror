@@ -5,9 +5,9 @@ using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.IoC;
 using System;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace Game.Core.World.PointerSystem
 {
@@ -15,9 +15,12 @@ namespace Game.Core.World.PointerSystem
     {
         [ SerializeField ] private Canvas _canvas;
         [ SerializeField ] private CanvasGroup _canvasGroup;
+        [ SerializeField ] private Image _frame;
         [ SerializeField ] private Image _center;
+        [ SerializeField ] private TextMeshProUGUI _key;
 
         public bool IsShowing { get; private set; }
+        public bool IsKeyShowing { get; private set; }
         
         private Tween _tween;
         private Tween _centerLoopTween;
@@ -32,17 +35,15 @@ namespace Game.Core.World.PointerSystem
             
             transform.position = target.PointerStartPosition;
 
+            _key.SetAlpha( 0 );
+            
             _tween?.Kill( true );
             _tween = DOTween.Sequence()
                 .Append( _canvasGroup.DOFade( 1f, 0.33f ) )
                 .Join( transform.DOMove( target.PointerEndPosition, 0.33f) )
                 .OnComplete( () => callback?.Invoke() );
             
-            _centerLoopTween?.Kill();
-            _centerLoopTween = _center.transform.DOScale( 0.65f, 0.99f )
-                .From( 0.25f )
-                .SetEase( Ease.InOutSine )
-                .SetLoops( -1, LoopType.Yoyo );
+            CenterIdle();
         }
         
         public void Hide( Action callback = null )
@@ -62,6 +63,37 @@ namespace Game.Core.World.PointerSystem
                 } );
         }
 
+        public void ShowKey()
+        {
+            if ( IsKeyShowing ) return;
+            IsKeyShowing = true;
+            
+            _key.SetAlpha( 0 );
+            _key.gameObject.SetActive( true );
+            
+            _tween?.Kill( true );
+            _centerLoopTween?.Kill();
+            
+            _tween = DOTween.Sequence()
+                .Append( _center.transform.DOScale( 0f, 0.33f ) )
+                .Join( _key.DOFade( 1f, 0.33f ) )
+                .Join( DOTween.To( () => _frame.pixelsPerUnitMultiplier, ( x ) => _frame.pixelsPerUnitMultiplier = x, 5f, 0.33f) );
+        }
+
+        public void HideKey()
+        {
+            if ( !IsKeyShowing ) return;
+            IsKeyShowing = false;
+            
+            _tween?.Kill( true );
+            _tween = DOTween.Sequence()
+                .Append( _key.DOFade( 0f, 0.33f ) )
+                .Join( DOTween.To( () => _frame.pixelsPerUnitMultiplier, ( x ) => _frame.pixelsPerUnitMultiplier = x, 1f, 0.33f) );
+            
+            CenterIdle();
+        }
+
+        #region LookAt
         public void StartLookAt( Transform target )
         {
             _lookAtTarget = target;
@@ -81,10 +113,24 @@ namespace Game.Core.World.PointerSystem
         {
             while ( !cancellationToken.IsCancellationRequested )
             {
-                transform.LookAt( _lookAtTarget );
+                // transform.LookAt( _lookAtTarget );
+
+                var dir = _lookAtTarget.position - transform.position;
+                var rot = Quaternion.LookRotation( dir );
+                transform.rotation = rot * Quaternion.Euler( 0f, 180f, 0f );
                 
                 await UniTask.Yield( PlayerLoopTiming.LastUpdate );
             }
+        }
+        #endregion
+
+        private void CenterIdle()
+        {
+            _centerLoopTween?.Kill();
+            _centerLoopTween = _center.transform.DOScale( 0.65f, 0.99f )
+                .From( 0.25f )
+                .SetEase( Ease.InOutSine )
+                .SetLoops( -1, LoopType.Yoyo );
         }
     }
 }

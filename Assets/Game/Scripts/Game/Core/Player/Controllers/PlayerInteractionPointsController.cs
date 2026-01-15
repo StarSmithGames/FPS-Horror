@@ -10,7 +10,9 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInteractionPointsController
     {
-        private const float MAX_DISTANCE = 3f;
+        private const float MAX_DISTANCE = 3f * 3f;
+        private const float KEY_DISTANCE = 1.5f * 1.5f;
+        
         
         private InteractionPointerDictionary _puzzlesDictionary = new();
         
@@ -42,7 +44,6 @@ namespace Game.Core.Player
                 {
                     var item = _worldManager.Level.Items[ i ];
                     Pointing( item );
-                    Debug.LogError( "Item" );
                 }
                 
                 for ( int i = 0; i < _worldManager.Level.Puzzles.Count; i++ )
@@ -63,11 +64,23 @@ namespace Game.Core.Player
                 return;
             }
 
-            float sqrMagnitude = ( target.transform.position - _view.transform.position ).sqrMagnitude;
-            if ( sqrMagnitude < MAX_DISTANCE * MAX_DISTANCE )//if player is close enough
+            Vector3 delta = target.PointerStartPosition - _view.transform.position;
+            delta.y = 0f;
+            float sqrMagnitude = delta.sqrMagnitude;
+            if ( sqrMagnitude < MAX_DISTANCE )//if player is close enough
             {
                 if ( _puzzlesDictionary.IsPointerShowing( target ) )
                 {
+                    var pointer = _puzzlesDictionary.Get( target );
+                    if ( sqrMagnitude < KEY_DISTANCE )
+                    {
+                        pointer.ShowKey();
+                    }
+                    else
+                    {
+                        pointer.HideKey();
+                    }
+                    
                     return;
                 }
                         
@@ -76,6 +89,15 @@ namespace Game.Core.Player
                 {
                     var pointer = _pointerSystem.CreateIndicator();
                     _puzzlesDictionary.TryAdd( target, pointer );
+                    
+                    if ( sqrMagnitude < KEY_DISTANCE )
+                    {
+                        pointer.ShowKey();
+                    }
+                    else
+                    {
+                        pointer.HideKey();
+                    }
                 }
                 _puzzlesDictionary.ShowPointer( target, _view.CameraFPS.transform );
             }
