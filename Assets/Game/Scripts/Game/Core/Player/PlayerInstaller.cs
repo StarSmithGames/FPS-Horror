@@ -25,6 +25,7 @@ namespace Game.Core.Player
             Container.Bind< CameraVisionController >().AsSingle().Lazy();
 
             Container.Bind< InteractionActionController >().AsSingle().Lazy();
+            Container.Bind< InteractionActionFactory >().AsSingle().Lazy();
             // Container.Bind< ContextMenuActionController >().AsSingle().Lazy();
             // Container.Bind< ContextMenuActionFactory >().AsSingle().Lazy();
             

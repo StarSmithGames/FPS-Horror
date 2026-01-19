@@ -4,23 +4,20 @@ using System;
 
 namespace Game.Core.Player
 {
-    public abstract class ContextMenuLongActionHandler : ContextMenuActionHandler
+    public abstract class LongActionHandler : ActionHandler
     {
-        private UIInfoButton _ui;
-        
         protected readonly InputActionProvider _provider;
         protected readonly InputKeyAction _inputKeyAction;
 
-        public ContextMenuLongActionHandler( InputKeyAction inputKeyAction, float duration = 0.33f )
+        public LongActionHandler( InputKeyAction inputKeyAction, float duration = 0.33f )
         {
             _inputKeyAction = inputKeyAction ?? throw new ArgumentNullException( nameof(inputKeyAction) );
             _provider = new( inputKeyAction.InputAction, Completed, duration, progress: InteractProgress, callback: InteractFinished );
         }
 
-        public override void Enable( UIInfoButton ui )
+        public override void Enable()
         {
             _provider.Enable();
-            _ui = ui;
             
             IsEnable = true;
         }
@@ -28,21 +25,21 @@ namespace Game.Core.Player
         public override void Disable()
         {
             _provider.Disable();
-            _ui = null;
+            // _ui = null;
             
             IsEnable = false;
         }
         
         private void InteractProgress( float value )
         {
-            _ui.SetFillAmount( value );
+            // _ui.SetFillAmount( value );
         }
 
         private void InteractFinished( bool result )
         {
             if ( !IsEnable ) return;
             
-            _ui.SetFillAmount( 0 );
+            // _ui.SetFillAmount( 0 );
         }
     }
 }

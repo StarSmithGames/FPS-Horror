@@ -1,6 +1,5 @@
 using Game.Core.Entity;
 using Game.Core.UI;
-using Game.Core.World.InteractionSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +8,6 @@ namespace Game.Core.Player
 {
     public sealed class ContextMenuActionHandlerComposite
     {
-        public event Action OnCompleted;
-
         private readonly List< ContextMenuActionHandler > _handlers;
         
         public ContextMenuActionHandlerComposite( List< ContextMenuActionHandler > handlers )
@@ -23,7 +20,6 @@ namespace Game.Core.Player
             for ( int i = 0; i < _handlers.Count; i++ )
             {
                 _handlers[ i ].Initialize( target );
-                _handlers[ i ].OnCompleted += ActionCompletedHandler;
             }
         }
 
@@ -31,7 +27,6 @@ namespace Game.Core.Player
         {
             for ( int i = 0; i < _handlers.Count; i++ )
             {
-                _handlers[ i ].OnCompleted -= ActionCompletedHandler;
                 _handlers[ i ].Dispose();
             }
         }
@@ -40,13 +35,8 @@ namespace Game.Core.Player
         {
             for ( int i = 0; i < _handlers.Count; i++ )
             {
-                _handlers[ i ].Enable( options[ i ] );
+                _handlers[ i ].Set( options[ i ] );
             }
-        }
-        
-        private void ActionCompletedHandler( ContextMenuActionHandler actionHandler )
-        {
-            OnCompleted?.Invoke();
         }
         
         public List< ContextMenuOperation > GetContextMenuOptions() => _handlers.Select( ( x ) => x.ContextMenuOperation ).ToList();

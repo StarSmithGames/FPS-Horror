@@ -57,10 +57,7 @@ namespace Game.Core.Player
 
         public void CurrentObservableChangedHandler( ObservableObject observable )
         {
-            if ( _contextMenuActionHandlerComposite != null )
-            {
-                _contextMenuActionHandlerComposite.Dispose();
-            }
+            _contextMenuActionHandlerComposite?.Dispose();
             
             for ( int i = 0; i < _targetInformer.Options.Count; i++ )
             {
