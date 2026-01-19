@@ -29,6 +29,7 @@ namespace Game.Core.Player
         private readonly PlayerHoveringController _hoveringController;
         private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerInventoryController _inventoryController;
+        private readonly PlayerInspectionController _inspectionController;
         private readonly PlayerSoundController _soundController;
         private readonly PauseManager _pauseManager;
         
@@ -47,6 +48,7 @@ namespace Game.Core.Player
             PlayerHoveringController hoveringController,
             PlayerInputActionsController inputActionsController,
             PlayerInventoryController inventoryController,
+            PlayerInspectionController inspectionController,
             PlayerSoundController soundController,
             
             PauseManager pauseManager
@@ -65,6 +67,7 @@ namespace Game.Core.Player
             _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
+            _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
             _soundController = soundController ?? throw new ArgumentNullException( nameof(soundController) );
             _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
 
@@ -79,6 +82,7 @@ namespace Game.Core.Player
             ServiceLocator.Register( _hoveringController );
             ServiceLocator.Register( _inputActionsController );
             ServiceLocator.Register( _inventoryController );
+            ServiceLocator.Register( _inspectionController );
             ServiceLocator.Register( _soundController );
         }
 

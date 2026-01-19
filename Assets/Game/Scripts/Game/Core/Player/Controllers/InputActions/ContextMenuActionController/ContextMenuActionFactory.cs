@@ -5,12 +5,12 @@ namespace Game.Core.Player
 {
     public sealed class ContextMenuActionFactory
     {
-        private ActionHandlerComposite _open = null;
-        private ActionHandlerComposite _pull = null;
-        private ActionHandlerComposite _inspect = null;
-        private ActionHandlerComposite _item = null;
-        private ActionHandlerComposite _itemNote = null;
-        private ActionHandlerComposite _puzzleUse = null;
+        private ContextHandlerComposite _open = null;
+        private ContextHandlerComposite _pull = null;
+        private ContextHandlerComposite _inspect = null;
+        private ContextHandlerComposite _item = null;
+        private ContextHandlerComposite _itemNote = null;
+        private ContextHandlerComposite _puzzleUse = null;
 
         private readonly DiContainer _diContainer;
         
@@ -19,21 +19,20 @@ namespace Game.Core.Player
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
         }
         
-        public ActionHandlerComposite GetOrCreateItemHandler()
+        public ContextHandlerComposite GetOrCreateItemHandler()
         {
             if ( _item == null )
             {
                 _item = new( new()
                 {
                     _diContainer.Instantiate< PickUpActionHandler >(),
-                    _diContainer.Instantiate< InspectActionHandler >()
                 } );
             }
 
             return _item;
         }
 
-        public ActionHandlerComposite GetOrCreateItemNoteHandler()
+        public ContextHandlerComposite GetOrCreateItemNoteHandler()
         {
             if ( _itemNote == null )
             {
@@ -46,7 +45,7 @@ namespace Game.Core.Player
             return _itemNote;
         }
         
-        public ActionHandlerComposite GetOrCreateOpenCloseHandler()
+        public ContextHandlerComposite GetOrCreateOpenCloseHandler()
         {
             if ( _open == null )
             {
@@ -56,7 +55,7 @@ namespace Game.Core.Player
             return _open;
         }
 
-        public ActionHandlerComposite GetOrCreatePuzzleHandler()
+        public ContextHandlerComposite GetOrCreatePuzzleHandler()
         {
             if ( _puzzleUse == null )
             {

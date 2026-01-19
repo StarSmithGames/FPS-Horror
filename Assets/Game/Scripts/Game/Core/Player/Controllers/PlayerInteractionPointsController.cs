@@ -3,6 +3,7 @@ using Game.Core.Entity;
 using Game.Core.World.PointerSystem;
 using Game.Core.World.WorldManager;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -38,6 +39,8 @@ namespace Game.Core.Player
 
         private async UniTask Loop( CancellationToken cancellationToken = default )
         {
+            // List< InteractableObject >
+            
             while ( !cancellationToken.IsCancellationRequested )
             {
                 for ( int i = 0; i < _worldManager.Level.Items.Count; i++ )

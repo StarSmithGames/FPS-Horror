@@ -14,13 +14,14 @@ namespace Game.Core.UI.InspectDialog
 {
     public sealed class InspectDialogViewModel : ViewModel< InspectDialog >
     {
+        public event Action OnActionButtonClicked;
         public event Action OnCancelButtonClicked;
 
         private InspectionSystem _inspectionSystem;
         private ItemObject _item;
         private bool _isExamine;
 
-        private readonly InputActionVoidWrap _inputActionRead;
+        private readonly InputActionVoidWrap _inputAction;
         private readonly InputActionVoidWrap _inputActionCancel;
         private readonly InputKeyActionsSettings _inputKeyActionsSettings;
         private readonly ILocalizationSystem _localizationSystem;
@@ -32,7 +33,8 @@ namespace Game.Core.UI.InspectDialog
         {
             _inputKeyActionsSettings = inputKeyActionsSettings ?? throw new ArgumentNullException( nameof(inputKeyActionsSettings) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
-            _inputActionRead = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Read, ReadButtonClickedHandler );
+            
+            _inputAction = InputActionManager.CreateInputActionWrap( _inputKeyActionsSettings.InteractAction.InputAction, ActionButtonClickedHandler );
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
@@ -48,7 +50,7 @@ namespace Game.Core.UI.InspectDialog
             
             CursorManager.Enable();
             
-            ModelView.ReadButton.OnButtonClicked += ReadButtonClickedHandler;
+            ModelView.ActionButton.OnButtonClicked += ActionButtonClickedHandler;
             ModelView.CancelButton1.OnButtonClicked += CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked += CancelButtonClickedHandler;
             
@@ -59,13 +61,13 @@ namespace Game.Core.UI.InspectDialog
         {
             base.UnSubscribeView();
             
-            ModelView.ReadButton.OnButtonClicked -= ReadButtonClickedHandler;
+            ModelView.ActionButton.OnButtonClicked -= ActionButtonClickedHandler;
             ModelView.CancelButton1.OnButtonClicked -= CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked -= CancelButtonClickedHandler;
             
-            _inputActionRead.Disable();
+            _inputAction.Disable();
             _inputActionCancel.Disable();
-            InputActionManager.RemoveInputActionWrap( _inputActionRead );
+            InputActionManager.RemoveInputActionWrap( _inputAction );
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
             
             CursorManager.Disable();
@@ -80,8 +82,17 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ControlButtons.SetActive( true );
             ModelView.ExamineCanvasGroup.Enable( false );
 
-            ModelView.ReadButton.gameObject.SetActive( false );
-            ModelView.ReadButton.Set( _inputKeyActionsSettings.ReadAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_READ ) );
+            _inputAction.Enable();
+            
+            if ( _item is Note )
+            {
+                ModelView.ActionButton.Set( _inputKeyActionsSettings.InteractAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_READ ) );
+            }
+            else
+            {
+                ModelView.ActionButton.gameObject.SetActive( true );
+                ModelView.ActionButton.Set( _inputKeyActionsSettings.InteractAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_TAKE ) );
+            }
             ModelView.CancelButton1.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_BACK ) );
             ModelView.CancelButton2.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_BACK ) );
 
@@ -95,24 +106,33 @@ namespace Game.Core.UI.InspectDialog
             if ( !_item.TextId.IsEmpty() )
             {
                 ModelView.ExamineText.text = _localizationSystem.Translate( _item.TextId );
-                
-                _inputActionRead.Enable();
-                ModelView.ReadButton.gameObject.SetActive( true );
             }
             
             _item.SetLayer( LayersParams.ABOVE );
             _inspectionSystem.StartInspection( _item );
         }
 
-        private void ReadButtonClickedHandler()
+        private void ActionButtonClickedHandler()
         {
-            _isExamine = true;
+            if ( _item is Note )
+            {
+                _isExamine = true;
 
-            ModelView.ControlButtons.SetActive( false );
-            ModelView.ExamineCanvasGroup.Enable( true, false );
-            ModelView.ExamineCanvasGroup.DOFade( 1f, 0.33f );
+                ModelView.ControlButtons.SetActive( false );
+                ModelView.ExamineCanvasGroup.Enable( true, false );
+                ModelView.ExamineCanvasGroup.DOFade( 1f, 0.33f );
             
-            _inspectionSystem.Block( true );
+                _inspectionSystem.Block( true ); 
+            }
+            else
+            {
+                _inspectionSystem.StopInspection();
+                _item.ResetLayer();
+            
+                OnActionButtonClicked?.Invoke();
+                
+                HideViewAndDispose();
+            }
         }
         
         private void CancelButtonClickedHandler()

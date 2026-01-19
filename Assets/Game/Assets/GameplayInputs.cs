@@ -211,7 +211,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Read"",
+                    ""name"": ""Action"",
                     ""type"": ""Button"",
                     ""id"": ""789a669c-c751-4591-9d47-6125a3b22f2f"",
                     ""expectedControlType"": """",
@@ -515,7 +515,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Read"",
+                    ""action"": ""Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -526,7 +526,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Read"",
+                    ""action"": ""Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1026,7 +1026,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
         m_UI_Inspection = m_UI.FindAction("Inspection", throwIfNotFound: true);
-        m_UI_Read = m_UI.FindAction("Read", throwIfNotFound: true);
+        m_UI_Action = m_UI.FindAction("Action", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
@@ -1244,7 +1244,7 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Navigate;
     private readonly InputAction m_UI_Inspection;
-    private readonly InputAction m_UI_Read;
+    private readonly InputAction m_UI_Action;
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
     private readonly InputAction m_UI_Click;
@@ -1270,9 +1270,9 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Inspection => m_Wrapper.m_UI_Inspection;
         /// <summary>
-        /// Provides access to the underlying input action "UI/Read".
+        /// Provides access to the underlying input action "UI/Action".
         /// </summary>
-        public InputAction @Read => m_Wrapper.m_UI_Read;
+        public InputAction @Action => m_Wrapper.m_UI_Action;
         /// <summary>
         /// Provides access to the underlying input action "UI/Submit".
         /// </summary>
@@ -1325,9 +1325,9 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
             @Inspection.started += instance.OnInspection;
             @Inspection.performed += instance.OnInspection;
             @Inspection.canceled += instance.OnInspection;
-            @Read.started += instance.OnRead;
-            @Read.performed += instance.OnRead;
-            @Read.canceled += instance.OnRead;
+            @Action.started += instance.OnAction;
+            @Action.performed += instance.OnAction;
+            @Action.canceled += instance.OnAction;
             @Submit.started += instance.OnSubmit;
             @Submit.performed += instance.OnSubmit;
             @Submit.canceled += instance.OnSubmit;
@@ -1360,9 +1360,9 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
             @Inspection.started -= instance.OnInspection;
             @Inspection.performed -= instance.OnInspection;
             @Inspection.canceled -= instance.OnInspection;
-            @Read.started -= instance.OnRead;
-            @Read.performed -= instance.OnRead;
-            @Read.canceled -= instance.OnRead;
+            @Action.started -= instance.OnAction;
+            @Action.performed -= instance.OnAction;
+            @Action.canceled -= instance.OnAction;
             @Submit.started -= instance.OnSubmit;
             @Submit.performed -= instance.OnSubmit;
             @Submit.canceled -= instance.OnSubmit;
@@ -1700,12 +1700,12 @@ public partial class @GameplayInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInspection(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Read" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRead(InputAction.CallbackContext context);
+        void OnAction(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

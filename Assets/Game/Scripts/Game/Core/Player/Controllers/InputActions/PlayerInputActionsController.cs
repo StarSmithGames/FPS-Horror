@@ -19,32 +19,30 @@ namespace Game.Core.Player
         private InputActionVoidWrap _inputActionJump;
         private InputActionVoidWrap _inputActionLighter;
         private InputActionVoidWrap _inputActionInventory;
-
-        private InspectDialogViewModel _inspectDialogViewModel;
-
-        private readonly PlayerObject _view;
+        
         private readonly PlayerStates _states;
         private readonly PlayerCrouchController _crouchController;
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerInventoryController _inventoryController;
+        private readonly PlayerInspectionController _inspectionController;
         private readonly UIRootGame _uiRootGame;
         private readonly DataHolder _dataHolder;
         
         public PlayerInputActionsController(
-            PlayerObject view,
             PlayerStates states,
             PlayerCrouchController crouchController,
             PlayerJumpController jumpController,
             PlayerInventoryController inventoryController,
+            PlayerInspectionController inspectionController,
             UIRootGame uiRootGame,
             DataHolder dataHolder
             )
         {
-            _view = view ?? throw new ArgumentNullException( nameof(view) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
+            _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
         }
@@ -90,29 +88,10 @@ namespace Game.Core.Player
             _inputActionInventory.Disable();
         }
 
-        #region Inspection
-        public void InspectItem( ItemObject item )
-        {
-            _states.IsBlocked = true;
-
-            _inspectDialogViewModel = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< InspectDialogViewModel >();
-            _inspectDialogViewModel.Set( item, _view.CameraFPS );
-            _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
-            _inspectDialogViewModel.ShowView();
-        }
-
-        private void InspectCompletedHandler()
-        {
-            _inspectDialogViewModel.OnCancelButtonClicked -= InspectCompletedHandler;
-            _inspectDialogViewModel = null;
-            
-            _states.IsBlocked = false;
-        }
-        #endregion
 
         private void MenuClickedHandler()
         {
-            if ( _inspectDialogViewModel != null ) return;
+            if ( _inspectionController.IsInspecting ) return;
             
             _inputActionMenu.Disable();
             
@@ -196,7 +175,7 @@ namespace Game.Core.Player
         
         private void InventoryClickedHandler()
         {
-            if ( _inspectDialogViewModel != null ) return;
+            if ( _inspectionController.IsInspecting ) return;
             
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< ResourcesScreenViewModel >();
             screen.OnShowingChanged += ScreenShowingChangedHandler;

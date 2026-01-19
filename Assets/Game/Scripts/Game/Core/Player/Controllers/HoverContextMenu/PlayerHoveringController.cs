@@ -1,13 +1,8 @@
 using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.UI.GameScreen;
-using PuzzlescapeGames.Localization;
-using PuzzlescapeGames.Extensions;
+using Game.Core.World.InteractionSystem;
 using System;
-using System.Collections.Generic;
-using UnityEngine;
-using IObservable = Game.Core.World.InteractionSystem.IObservable;
-using PointerType = Game.Core.UI.GameScreen.PointerType;
 
 namespace Game.Core.Player
 {
@@ -16,28 +11,21 @@ namespace Game.Core.Player
         private GameScreenViewModel _gameScreenViewModel;
         private PointerController _pointerController;
         private PointerType _pointerType;
-        private UITargetInformer _targetInformer;
-        private bool _isShowingInformer;
-        
         private IObservable _currentObservable;
-        private ActionHandlerComposite _actionHandlerComposite;
 
-        private readonly ContextMenuActionFactory _contextMenuActionFactory;
         private readonly UIRootGame _uiRootGame;
         private readonly CameraVisionController _cameraVisionController;
-        private readonly ILocalizationSystem _localizationSystem;
-        
+        private readonly ContextMenuActionController _contextMenuActionController;
+
         public PlayerHoveringController(
-            ContextMenuActionFactory contextMenuActionFactory,
             UIRootGame uiRootGame,
             CameraVisionController cameraVisionController,
-            ILocalizationSystem localizationSystem
+            ContextMenuActionController contextMenuActionController
             )
         {
-            _contextMenuActionFactory = contextMenuActionFactory ?? throw new ArgumentNullException( nameof(contextMenuActionFactory) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
-            _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
+            _contextMenuActionController = contextMenuActionController ?? throw new ArgumentNullException( nameof(contextMenuActionController) );
         }
 
         public void Initialize()
@@ -45,9 +33,10 @@ namespace Game.Core.Player
             _gameScreenViewModel = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< GameScreenViewModel >();
             _gameScreenViewModel.EnableView( true );
             _pointerController = new( _gameScreenViewModel );
-            _targetInformer = _gameScreenViewModel.ModelView.TargetInformer;
-            _targetInformer.Enable( false );
-
+            _gameScreenViewModel.ModelView.TargetInformer.Enable( false );
+            
+            _contextMenuActionController.Initialize( _gameScreenViewModel.ModelView.TargetInformer );
+            
             _cameraVisionController.OnObservablesChanged += ObservablesChangedHandler;
             _cameraVisionController.OnCurrentObservableChanged += CurrentObservableChangedHandler;
             CurrentObservableChangedHandler( _cameraVisionController.CurrentObservable );
@@ -68,97 +57,35 @@ namespace Game.Core.Player
         {
             _currentObservable = observable;
 
-            if ( _actionHandlerComposite != null )
-            {
-                _actionHandlerComposite.Dispose();
-                _actionHandlerComposite.OnCompleted -= ActionCompleted;
-            }
-            
-            for ( int i = 0; i < _targetInformer.Options.Count; i++ )
-            {
-                _targetInformer.Options[ i ].gameObject.SetActive( false );
-                _targetInformer.Options[ i ].SetFillAmount( 0f );
-            }
-            
-            if ( _currentObservable == null )
-            {
-                if ( _isShowingInformer )
-                {
-                    _isShowingInformer = false;
-                    _targetInformer.Hide();
-                }
-
-                _pointerController.SetPointer( PointerType.None );
-
-                return;
-            }
-
-            _actionHandlerComposite = TryGetHandler();
-            if ( _actionHandlerComposite != null )
-            {
-                _actionHandlerComposite.Initialize( _currentObservable );
-                _actionHandlerComposite.SetOptions( GetOptions( _actionHandlerComposite.GetContextMenuOptions() ) );
-                _actionHandlerComposite.OnCompleted += ActionCompleted;
-            }
-            
-            if ( !_isShowingInformer )
-            {
-                _isShowingInformer = true;
-                _targetInformer.Show();
-            }
-
-            List< UIInfoButton > GetOptions( List< ContextMenuOperation > options )
-            {
-                List< UIInfoButton > result = new( options.Count );
-                for ( int i = 0; i < options.Count; i++ )
-                {
-                    var option = options[ i ];
-                    var view = _targetInformer.Options[ i ];
-                       
-                    view.gameObject.SetActive( true );
-                    view.Set( option.Key, option.Name );
-                        
-                    result.Add( view );
-                }
-
-                return result;
-            }
+            // ContextMenu();
         }
 
-        private ActionHandlerComposite TryGetHandler()
+        private void ContextMenu()
         {
+            if ( _currentObservable == null )
+            {
+                _pointerController.SetPointer( PointerType.None );
+                _contextMenuActionController.CurrentObservableChangedHandler( null );
+                return;
+            }
+                
             if ( _currentObservable is OpenCloseObject dynamic )
             {
                 _pointerController.SetPointer( PointerType.Hand );
-                _targetInformer.Name.text = dynamic.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( dynamic.NameId );
-                return _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
+                _contextMenuActionController.SetToDynamic( dynamic );
             }
             else if( _currentObservable is ItemObject item )
             {
                 _pointerController.SetPointer( PointerType.Point );
-                _targetInformer.Name.text = item.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( item.NameId );
-
-                if ( item is Note )
-                {
-                    return _contextMenuActionFactory.GetOrCreateItemNoteHandler();
-                }
-                
-                return _contextMenuActionFactory.GetOrCreateItemHandler();
+                _contextMenuActionController.SetToItem( item );
             }
             else if ( _currentObservable is PuzzleObject puzzle )
             {
                 _pointerController.SetPointer( PointerType.Point );
-                _targetInformer.Name.text = "Puzzle";
-                
-                return _contextMenuActionFactory.GetOrCreatePuzzleHandler();
+                _contextMenuActionController.SetToPuzzle( puzzle );
             }
-
-            return null;
-        }
-
-        private void ActionCompleted()
-        {
-            CurrentObservableChangedHandler( _currentObservable );
+                
+            _contextMenuActionController.CurrentObservableChangedHandler( _currentObservable );
         }
     }
 }

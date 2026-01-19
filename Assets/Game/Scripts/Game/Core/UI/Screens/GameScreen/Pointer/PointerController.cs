@@ -15,6 +15,7 @@ namespace Game.Core.UI.GameScreen
             
             _gameScreenViewModel.ModelView.TargetPoint.Disable();
             _gameScreenViewModel.ModelView.TargetHand.Disable();
+            _gameScreenViewModel.ModelView.TargetHolder.Disable();
         }
 
         public void SetObservablesAround( bool isObservablesAround )

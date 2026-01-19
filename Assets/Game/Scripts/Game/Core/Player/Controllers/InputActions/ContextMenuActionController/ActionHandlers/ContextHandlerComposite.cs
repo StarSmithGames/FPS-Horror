@@ -3,17 +3,16 @@ using Game.Core.World.InteractionSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class ActionHandlerComposite
+    public sealed class ContextHandlerComposite
     {
         public event Action OnCompleted;
 
         private readonly List< ContextMenuActionHandler > _handlers;
         
-        public ActionHandlerComposite( List< ContextMenuActionHandler > handlers )
+        public ContextHandlerComposite( List< ContextMenuActionHandler > handlers )
         {
             _handlers = handlers ?? throw new ArgumentNullException( nameof(handlers) );
         }

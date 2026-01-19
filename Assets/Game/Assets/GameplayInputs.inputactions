@@ -125,7 +125,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Read",
+                    "name": "Action",
                     "type": "Button",
                     "id": "789a669c-c751-4591-9d47-6125a3b22f2f",
                     "expectedControlType": "",
@@ -429,7 +429,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Read",
+                    "action": "Action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -440,7 +440,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Read",
+                    "action": "Action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

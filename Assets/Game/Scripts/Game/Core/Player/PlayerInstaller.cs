@@ -23,12 +23,16 @@ namespace Game.Core.Player
             BindLocomotion();
             Container.Bind< CameraFOVController >().AsSingle().Lazy();
             Container.Bind< CameraVisionController >().AsSingle().Lazy();
+            
+            Container.Bind< ContextMenuActionController >().AsSingle().Lazy();
             Container.Bind< ContextMenuActionFactory >().AsSingle().Lazy();
+            
             Container.Bind< PlayerHoveringController >().AsSingle().Lazy();
             Container.Bind< PlayerInteractionPointsController >().AsSingle().Lazy();
             
             Container.Bind< PlayerInputActionsController >().AsSingle().Lazy();
             Container.Bind< PlayerInventoryController >().AsSingle().Lazy();
+            Container.Bind< PlayerInspectionController >().AsSingle().Lazy();
             
             Container.Bind< PlayerSoundController >().AsSingle().Lazy();
             
