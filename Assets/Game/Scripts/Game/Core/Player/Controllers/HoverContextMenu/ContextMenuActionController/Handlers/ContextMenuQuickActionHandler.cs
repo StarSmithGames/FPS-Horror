@@ -4,12 +4,12 @@ using System;
 
 namespace Game.Core.Player
 {
-    public abstract class QuickActionHandler : ContextMenuActionHandler
+    public abstract class ContextMenuQuickActionHandler : ContextMenuActionHandler
     {
         protected readonly InputActionVoidWrap _holder;
         protected readonly InputKeyAction _inputKeyAction;
         
-        public QuickActionHandler( InputKeyAction inputAction )
+        public ContextMenuQuickActionHandler( InputKeyAction inputAction )
         {
             _inputKeyAction = inputAction ?? throw new ArgumentNullException( nameof(inputAction) );
             

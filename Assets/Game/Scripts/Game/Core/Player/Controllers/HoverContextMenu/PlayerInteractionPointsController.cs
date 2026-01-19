@@ -3,7 +3,6 @@ using Game.Core.Entity;
 using Game.Core.World.PointerSystem;
 using Game.Core.World.WorldManager;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -14,20 +13,19 @@ namespace Game.Core.Player
         private const float MAX_DISTANCE = 3f * 3f;
         private const float KEY_DISTANCE = 1.5f * 1.5f;
         
-        
         private InteractionPointerDictionary _puzzlesDictionary = new();
         
-        private readonly PointerSystem _pointerSystem;
+        private readonly InteractionPointerFactory _interactionPointerFactory;
         private readonly WorldManager _worldManager;
         private readonly PlayerObject _view;
         
         public PlayerInteractionPointsController(
-            PointerSystem pointerSystem,
+            InteractionPointerFactory interactionPointerFactory,
             WorldManager worldManager,
             PlayerObject view
             )
         {
-            _pointerSystem = pointerSystem ?? throw new ArgumentNullException( nameof(pointerSystem) );
+            _interactionPointerFactory = interactionPointerFactory ?? throw new ArgumentNullException( nameof(interactionPointerFactory) );
             _worldManager = worldManager ?? throw new ArgumentNullException( nameof(worldManager) );
             _view = view ?? throw new ArgumentNullException( nameof(view) );
         }
@@ -90,7 +88,7 @@ namespace Game.Core.Player
                 //show pointer
                 if ( !_puzzlesDictionary.Contains( target ) )
                 {
-                    var pointer = _pointerSystem.CreateIndicator();
+                    var pointer = _interactionPointerFactory.Create();
                     _puzzlesDictionary.TryAdd( target, pointer );
                     
                     if ( sqrMagnitude < KEY_DISTANCE )

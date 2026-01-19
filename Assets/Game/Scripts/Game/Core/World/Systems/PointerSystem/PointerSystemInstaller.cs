@@ -13,7 +13,6 @@ namespace Game.Core.World.PointerSystem
             Container.BindFactory< InteractionPointer, InteractionPointerFactory >()
                 .FromMonoPoolableMemoryPool( ( x ) => x.WithInitialSize( 1 )
                     .FromComponentInNewPrefab( _interactionPointerPrefab ) ).Lazy();
-            Container.Bind< PointerSystem >().AsSingle().Lazy();
         }
     }
 }

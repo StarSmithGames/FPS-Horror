@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Game.Core.Entity;
 using Game.Core.World.InteractionSystem;
 using System;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace Game.Core.Player
 {
     public sealed class CameraVisionController
     {
-        public event Action< IObservable > OnCurrentObservableChanged;
+        public event Action< ObservableObject > OnCurrentObservableChanged;
         public event Action< bool > OnObservablesChanged;
    
-        public IObservable CurrentObservable
+        public ObservableObject CurrentObservable
         {
             get => _currentObservable;
             set
@@ -31,7 +32,7 @@ namespace Game.Core.Player
                 }
             }
         }
-        private IObservable _currentObservable;
+        private ObservableObject _currentObservable;
 
         private Transform _head;
         private CancellationTokenSource _cancellationTokenSource;
@@ -108,7 +109,7 @@ namespace Game.Core.Player
             {
                 for ( int i = 0; i < colliders.Length; i++ )
                 {
-                    var observable = colliders[ i ].transform.GetComponentInParent< IObservable >();
+                    var observable = colliders[ i ].transform.GetComponentInParent< ObservableObject >();
                     if ( observable != null )
                     {
                         CurrentObservable = observable;

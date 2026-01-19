@@ -4,14 +4,14 @@ using System;
 
 namespace Game.Core.Player
 {
-    public abstract class LongActionHandler : ContextMenuActionHandler
+    public abstract class ContextMenuLongActionHandler : ContextMenuActionHandler
     {
         private UIInfoButton _ui;
         
         protected readonly InputActionProvider _provider;
         protected readonly InputKeyAction _inputKeyAction;
 
-        public LongActionHandler( InputKeyAction inputKeyAction, float duration = 0.33f )
+        public ContextMenuLongActionHandler( InputKeyAction inputKeyAction, float duration = 0.33f )
         {
             _inputKeyAction = inputKeyAction ?? throw new ArgumentNullException( nameof(inputKeyAction) );
             _provider = new( inputKeyAction.InputAction, Completed, duration, progress: InteractProgress, callback: InteractFinished );

@@ -7,14 +7,14 @@ using System;
 
 namespace Game.Core.Player
 {
-    public sealed class PickUpActionHandler : QuickActionHandler
+    public sealed class ContextMenuPickUpActionHandler : ContextMenuQuickActionHandler
     {
         private ItemObject _item;
 
         private readonly PlayerController _playerController;
         private readonly ILocalizationSystem _localizationSystem;
         
-        public PickUpActionHandler(
+        public ContextMenuPickUpActionHandler(
             PlayerController playerController,
             InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
@@ -24,7 +24,7 @@ namespace Game.Core.Player
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
         
-        public override void Initialize( IObservable target )
+        public override void Initialize( ObservableObject target )
         {
             base.Initialize( target );
             

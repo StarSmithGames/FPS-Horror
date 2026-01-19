@@ -1,3 +1,4 @@
+using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.World.InteractionSystem;
 using System;
@@ -6,18 +7,18 @@ using System.Linq;
 
 namespace Game.Core.Player
 {
-    public sealed class ContextHandlerComposite
+    public sealed class ContextMenuActionHandlerComposite
     {
         public event Action OnCompleted;
 
         private readonly List< ContextMenuActionHandler > _handlers;
         
-        public ContextHandlerComposite( List< ContextMenuActionHandler > handlers )
+        public ContextMenuActionHandlerComposite( List< ContextMenuActionHandler > handlers )
         {
             _handlers = handlers ?? throw new ArgumentNullException( nameof(handlers) );
         }
 
-        public void Initialize( IObservable target )
+        public void Initialize( ObservableObject target )
         {
             for ( int i = 0; i < _handlers.Count; i++ )
             {

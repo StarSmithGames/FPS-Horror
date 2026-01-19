@@ -4,18 +4,17 @@ using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
 using StarSmithGames.Localization;
 using System;
-using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class InteractActionHandler : QuickActionHandler
+    public sealed class ContextMenuInspectActionHandler : ContextMenuQuickActionHandler
     {
-        private InteractableObject _interactable;
+        private ItemObject _item;
 
         private readonly PlayerController _playerController;
         private readonly ILocalizationSystem _localizationSystem;
         
-        public InteractActionHandler(
+        public ContextMenuInspectActionHandler(
             PlayerController playerController,
             InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
@@ -24,29 +23,29 @@ namespace Game.Core.Player
             _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
-        
-        public override void Initialize( IObservable target )
+
+        public override void Initialize( ObservableObject target )
         {
             base.Initialize( target );
             
-            _interactable = (InteractableObject)target;
+            _item = (ItemObject)target;
             
             ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
-            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INTERACT );
-        }
-
-        public override void Dispose()
-        {
-            _interactable = null;
-            
-            base.Dispose();
+            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INSPECT );
         }
         
+        public override void Dispose()
+        {
+            _item = null;
+
+            base.Dispose();
+        }
+
         protected override void Completed()
         {
             if ( !IsEnable ) return;
-
-            _interactable.Interact( _playerController );
+            
+            _playerController.ServiceLocator.GetAs< PlayerInspectionController >().InspectItem( _item );
             
             base.Completed();
         }

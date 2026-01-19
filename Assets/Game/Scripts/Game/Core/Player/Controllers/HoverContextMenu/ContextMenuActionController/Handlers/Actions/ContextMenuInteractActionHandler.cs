@@ -4,51 +4,49 @@ using Game.Managers.InputManager;
 using PuzzlescapeGames.Localization;
 using StarSmithGames.Localization;
 using System;
+using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class OpenCloseActionHandler : LongActionHandler
+    public sealed class ContextMenuInteractActionHandler : ContextMenuQuickActionHandler
     {
-        private OpenCloseObject _dynamicObject;
-        
+        private InteractableObject _interactable;
+
+        private readonly PlayerController _playerController;
         private readonly ILocalizationSystem _localizationSystem;
         
-        public OpenCloseActionHandler(
+        public ContextMenuInteractActionHandler(
+            PlayerController playerController,
             InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
             ) : base( inputKeyActionsSettings.InteractAction )
         {
+            _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
-
-        public override void Initialize( IObservable target )
+        
+        public override void Initialize( ObservableObject target )
         {
-            _dynamicObject = (OpenCloseObject)target;
+            base.Initialize( target );
+            
+            _interactable = (InteractableObject)target;
             
             ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
-            string nameId = _dynamicObject.IsOpen ? LocalizationIds.UI_CONTROL_CLOSE : LocalizationIds.UI_CONTROL_OPEN;
-            ContextMenuOperation.Name = _localizationSystem.Translate( nameId );
+            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INTERACT );
         }
 
         public override void Dispose()
         {
-            _dynamicObject = null;
-
+            _interactable = null;
+            
             base.Dispose();
         }
-
+        
         protected override void Completed()
         {
             if ( !IsEnable ) return;
-            
-            if ( _dynamicObject.IsOpen )
-            {
-                _dynamicObject.Close();
-            }
-            else
-            {
-                _dynamicObject.Open();
-            }
+
+            _interactable.Interact( _playerController );
             
             base.Completed();
         }

@@ -5,19 +5,15 @@ using PuzzlescapeGames.Localization;
 using PuzzlescapeGames.Extensions;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Game.Core.Player
 {
     public sealed class ContextMenuActionController
     {
-        public event Action OnCompleted;
-        
         private bool _isShowingInformer;
         
         private UITargetInformer _targetInformer;
-        private World.InteractionSystem.IObservable _currentObservable;
-        private ContextHandlerComposite _contextHandlerComposite;
+        private ContextMenuActionHandlerComposite _contextMenuActionHandlerComposite;
         
         private readonly ContextMenuActionFactory _contextMenuActionFactory;
         private readonly ILocalizationSystem _localizationSystem;
@@ -39,7 +35,7 @@ namespace Game.Core.Player
         public void SetToDynamic( OpenCloseObject dynamic )
         {
             _targetInformer.Name.text = dynamic.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( dynamic.NameId );
-            _contextHandlerComposite = _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
+            _contextMenuActionHandlerComposite = _contextMenuActionFactory.GetOrCreateOpenCloseHandler();
         }
 
         public void SetToItem( ItemObject item )
@@ -47,26 +43,23 @@ namespace Game.Core.Player
             _targetInformer.Name.text = item.NameId.IsEmpty() ? string.Empty : _localizationSystem.Translate( item.NameId );
             if ( item is Note )
             {
-                _contextHandlerComposite = _contextMenuActionFactory.GetOrCreateItemNoteHandler();
+                _contextMenuActionHandlerComposite = _contextMenuActionFactory.GetOrCreateItemNoteHandler();
             }
                 
-            _contextHandlerComposite = _contextMenuActionFactory.GetOrCreateItemHandler();
+            _contextMenuActionHandlerComposite = _contextMenuActionFactory.GetOrCreateItemHandler();
         }
 
         public void SetToPuzzle( PuzzleObject puzzle )
         {
             _targetInformer.Name.text = "Puzzle";
-            _contextHandlerComposite = _contextMenuActionFactory.GetOrCreatePuzzleHandler();
+            _contextMenuActionHandlerComposite = _contextMenuActionFactory.GetOrCreatePuzzleHandler();
         }
 
-        public void CurrentObservableChangedHandler( World.InteractionSystem.IObservable observable )
+        public void CurrentObservableChangedHandler( ObservableObject observable )
         {
-            _currentObservable = observable;
-            
-            if ( _contextHandlerComposite != null )
+            if ( _contextMenuActionHandlerComposite != null )
             {
-                _contextHandlerComposite.Dispose();
-                _contextHandlerComposite.OnCompleted -= ContextCompleted;
+                _contextMenuActionHandlerComposite.Dispose();
             }
             
             for ( int i = 0; i < _targetInformer.Options.Count; i++ )
@@ -75,9 +68,9 @@ namespace Game.Core.Player
                 _targetInformer.Options[ i ].SetFillAmount( 0f );
             }
 
-            if ( _currentObservable == null )
+            if ( observable == null )
             {
-                _contextHandlerComposite = null;
+                _contextMenuActionHandlerComposite = null;
                 
                 if ( _isShowingInformer )
                 {
@@ -88,11 +81,10 @@ namespace Game.Core.Player
                 return;
             }
             
-            if ( _contextHandlerComposite != null )
+            if ( _contextMenuActionHandlerComposite != null )
             {
-                _contextHandlerComposite.Initialize( _currentObservable );
-                _contextHandlerComposite.SetOptions( GetOptions( _contextHandlerComposite.GetContextMenuOptions() ) );
-                _contextHandlerComposite.OnCompleted += ContextCompleted;
+                _contextMenuActionHandlerComposite.Initialize( observable );
+                _contextMenuActionHandlerComposite.SetOptions( GetOptions( _contextMenuActionHandlerComposite.GetContextMenuOptions() ) );
             }
             
             if ( !_isShowingInformer )
@@ -117,13 +109,6 @@ namespace Game.Core.Player
 
                 return result;
             }
-        }
-        
-        
-        private void ContextCompleted()
-        {
-            // OnCompleted?.Invoke();
-            // CurrentObservableChangedHandler( _currentObservable );
         }
     }
 }

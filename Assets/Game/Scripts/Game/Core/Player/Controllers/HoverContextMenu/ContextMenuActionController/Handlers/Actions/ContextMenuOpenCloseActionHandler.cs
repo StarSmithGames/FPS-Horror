@@ -7,36 +7,32 @@ using System;
 
 namespace Game.Core.Player
 {
-    public sealed class InspectActionHandler : QuickActionHandler
+    public sealed class ContextMenuOpenCloseActionHandler : ContextMenuLongActionHandler
     {
-        private ItemObject _item;
-
-        private readonly PlayerController _playerController;
+        private OpenCloseObject _dynamicObject;
+        
         private readonly ILocalizationSystem _localizationSystem;
         
-        public InspectActionHandler(
-            PlayerController playerController,
+        public ContextMenuOpenCloseActionHandler(
             InputKeyActionsSettings inputKeyActionsSettings,
             ILocalizationSystem localizationSystem
             ) : base( inputKeyActionsSettings.InteractAction )
         {
-            _playerController = playerController ?? throw new ArgumentNullException( nameof(playerController) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
 
-        public override void Initialize( IObservable target )
+        public override void Initialize( ObservableObject target )
         {
-            base.Initialize( target );
-            
-            _item = (ItemObject)target;
+            _dynamicObject = (OpenCloseObject)target;
             
             ContextMenuOperation.Key = _inputKeyAction.GetDisplayKey();
-            ContextMenuOperation.Name = _localizationSystem.Translate( LocalizationIds.UI_CONTROL_INSPECT );
+            string nameId = _dynamicObject.IsOpen ? LocalizationIds.UI_CONTROL_CLOSE : LocalizationIds.UI_CONTROL_OPEN;
+            ContextMenuOperation.Name = _localizationSystem.Translate( nameId );
         }
-        
+
         public override void Dispose()
         {
-            _item = null;
+            _dynamicObject = null;
 
             base.Dispose();
         }
@@ -45,7 +41,14 @@ namespace Game.Core.Player
         {
             if ( !IsEnable ) return;
             
-            _playerController.ServiceLocator.GetAs< PlayerInspectionController >().InspectItem( _item );
+            if ( _dynamicObject.IsOpen )
+            {
+                _dynamicObject.Close();
+            }
+            else
+            {
+                _dynamicObject.Open();
+            }
             
             base.Completed();
         }

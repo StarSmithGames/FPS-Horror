@@ -1,5 +1,5 @@
+using Game.Core.Entity;
 using Game.Core.UI;
-using Game.Core.World.InteractionSystem;
 using System;
 
 namespace Game.Core.Player
@@ -12,7 +12,7 @@ namespace Game.Core.Player
 
         public ContextMenuOperation ContextMenuOperation { get; protected set; } = new();
 
-        public virtual void Initialize( IObservable target ) {}
+        public virtual void Initialize( ObservableObject target ) {}
         public virtual void Dispose()
         {
             Disable();

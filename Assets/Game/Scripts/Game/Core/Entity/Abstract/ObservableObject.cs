@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public abstract class ObservableObject : EntityObject, IObservable
+    public abstract class ObservableObject : EntityObject
     {
         [ Header( "SETTINGS" ) ]
         [ SerializeField ] protected List< Collider > _colliders = new();
