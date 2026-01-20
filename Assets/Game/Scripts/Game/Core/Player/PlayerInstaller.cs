@@ -21,8 +21,8 @@ namespace Game.Core.Player
             Container.BindInstance( _view );
             Container.BindInstance( _avatar );
             BindLocomotion();
-            Container.Bind< CameraFOVController >().AsSingle().Lazy();
-            Container.Bind< CameraVisionController >().AsSingle().Lazy();
+            Container.Bind< PlayerFOVController >().AsSingle().Lazy();
+            Container.Bind< PlayerVisionController >().AsSingle().Lazy();
 
             Container.Bind< InteractionActionController >().AsSingle().Lazy();
             Container.Bind< InteractionActionFactory >().AsSingle().Lazy();
@@ -30,7 +30,8 @@ namespace Game.Core.Player
             // Container.Bind< ContextMenuActionFactory >().AsSingle().Lazy();
             
             Container.Bind< PlayerHoveringController >().AsSingle().Lazy();
-            Container.Bind< PlayerInteractionPointsController >().AsSingle().Lazy();
+            Container.Bind< PlayerAroundController >().AsSingle().Lazy();
+            Container.Bind< PlayerPointsController >().AsSingle().Lazy();
             
             Container.Bind< PlayerInputActionsController >().AsSingle().Lazy();
             Container.Bind< PlayerInventoryController >().AsSingle().Lazy();

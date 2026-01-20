@@ -19,19 +19,19 @@ namespace Game.Core.Player
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
         private readonly PlayerStates _states;
-        private readonly CameraFOVController _cameraFOVController;
+        private readonly PlayerFOVController _playerFOVController;
         
         public PlayerMoveController(
             PlayerObject view,
             PlayerConfig config,
             PlayerStates states,
-            CameraFOVController cameraFOVController
+            PlayerFOVController playerFOVController
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
-            _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
+            _playerFOVController = playerFOVController ?? throw new ArgumentNullException( nameof(playerFOVController) );
         }
 
         public void Initialize()
@@ -170,7 +170,7 @@ namespace Game.Core.Player
 
                         if ( _currentSpeed != _config.MovementSettings.RunSpeed && _view.Rigidbody.velocity.magnitude > .1f )// && !wallRunning
                         {
-                            _cameraFOVController.SetFOV( _config.CameraFOVSettings.RunningFOV );
+                            _playerFOVController.SetFOV( _config.CameraFOVSettings.RunningFOV );
                         }
                         _currentSpeed = _config.MovementSettings.RunSpeed;
                         return;
@@ -187,7 +187,7 @@ namespace Game.Core.Player
             {
                 if ( _currentSpeed != _config.MovementSettings.WalkSpeed ) //&& !wallRunning
                 {
-                    _cameraFOVController.SetFOV( _config.CameraFOVSettings.NormalFOV );
+                    _playerFOVController.SetFOV( _config.CameraFOVSettings.NormalFOV );
                 }
                 _currentSpeed = _config.MovementSettings.WalkSpeed;
             }
@@ -196,7 +196,7 @@ namespace Game.Core.Player
             {
                 if ( _currentSpeed != _config.MovementSettings.WalkSpeed )
                 {
-                    _cameraFOVController.SetFOV( _config.CameraFOVSettings.NormalFOV );
+                    _playerFOVController.SetFOV( _config.CameraFOVSettings.NormalFOV );
                 }
                 _currentSpeed = _config.MovementSettings.WalkSpeed;
             }

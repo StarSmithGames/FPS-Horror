@@ -10,20 +10,22 @@ namespace Game.Core.Player
         private GameScreenViewModel _gameScreenViewModel;
         private bool _isObservablesAround;
         private PointerType _pointerType;
-        private ObservableObject _currentObservable;
 
         private readonly UIRootGame _uiRootGame;
-        private readonly CameraVisionController _cameraVisionController;
+        private readonly PlayerVisionController _playerVisionController;
+        private readonly PlayerAroundController _playerAroundController;
         private readonly InteractionActionController _interactionActionController;
 
         public PlayerHoveringController(
             UIRootGame uiRootGame,
-            CameraVisionController cameraVisionController,
+            PlayerVisionController playerVisionController,
+            PlayerAroundController playerAroundController,
             InteractionActionController interactionActionController
             )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
-            _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
+            _playerVisionController = playerVisionController ?? throw new ArgumentNullException( nameof(playerVisionController) );
+            _playerAroundController = playerAroundController ?? throw new ArgumentNullException( nameof(playerAroundController) );
             _interactionActionController = interactionActionController ?? throw new ArgumentNullException( nameof(interactionActionController) );
         }
 
@@ -40,30 +42,35 @@ namespace Game.Core.Player
             _interactionActionController.Initialize();
             // _contextMenuActionController.Initialize( _gameScreenViewModel.ModelView.TargetInformer );
             
-            _cameraVisionController.OnObservablesChanged += ObservablesChangedHandler;
-            _cameraVisionController.OnCurrentObservableChanged += CurrentObservableChangedHandler;
-            CurrentObservableChangedHandler( _cameraVisionController.CurrentObservable );
+            _playerVisionController.OnObservablesChanged += ObservablesChangedHandler;
+            _playerVisionController.OnCurrentObservableChanged += CurrentObservableChangedVisionHandler;
+            _playerAroundController.OnCurrentObservableChanged += CurrentObservableChangedAroundHandler;
+            CurrentObservableChangedVisionHandler( _playerVisionController.CurrentObservable );
         }
 
         public void Dispose()
         {
-            _cameraVisionController.OnObservablesChanged -= ObservablesChangedHandler;
-            _cameraVisionController.OnCurrentObservableChanged -= CurrentObservableChangedHandler;
+            _playerVisionController.OnObservablesChanged -= ObservablesChangedHandler;
+            _playerVisionController.OnCurrentObservableChanged -= CurrentObservableChangedVisionHandler;
+            _playerAroundController.OnCurrentObservableChanged -= CurrentObservableChangedAroundHandler;
         }
 
         private void ObservablesChangedHandler( bool trigger )
         {
-            _isObservablesAround = trigger;
-            SetPointer( _pointerType );
+            // _isObservablesAround = trigger;
+            // SetPointer( _pointerType );
         }
         
-        private void CurrentObservableChangedHandler( ObservableObject observable )
+        private void CurrentObservableChangedVisionHandler( ObservableObject observable )
         {
-            _currentObservable = observable;
+            // InteractionVision( observable );
 
-            Interaction();
-
-            // ContextMenu();
+            // ContextMenu( observable );
+        }
+        
+        private void CurrentObservableChangedAroundHandler( ObservableObject observable )
+        {
+            InteractionAround( observable );
         }
 
         private void SetPointer( PointerType type )
@@ -86,9 +93,9 @@ namespace Game.Core.Player
             }
         }
         
-        private void Interaction()
+        private void InteractionVision( ObservableObject observable )
         {
-            if ( _currentObservable == null )
+            if ( observable == null )
             {
                 SetPointer( PointerType.None );
 
@@ -97,54 +104,81 @@ namespace Game.Core.Player
                 return;
             }
 
-            if ( _currentObservable is OpenCloseObject dynamic )
+            if ( observable is OpenCloseObject dynamic )
             {
                 SetPointer( PointerType.Hand );
                 
                 _interactionActionController.SetToDynamic( dynamic );
             }
-            else if ( _currentObservable is ItemObject item )
+            else if ( observable is ItemObject item )
             {
                 SetPointer( PointerType.Point );
                 
                 _interactionActionController.SetToItem( item );
             }
-            else if ( _currentObservable is PuzzleObject puzzle )
+            else if ( observable is PuzzleObject puzzle )
             {
                 SetPointer( PointerType.Point );
                 
                 _interactionActionController.SetToPuzzle( puzzle );
             }
             
-            _interactionActionController.CurrentObservableChangedHandler( _currentObservable );
+            _interactionActionController.CurrentObservableChangedHandler( observable );
+        }
+        
+        private void InteractionAround( ObservableObject observable )
+        {
+            if ( observable == null )
+            {
+                SetPointer( PointerType.None );
+
+                _interactionActionController.CurrentObservableChangedHandler( null );
+                
+                return;
+            }
+
+            if ( observable is ItemObject item )
+            {
+                SetPointer( PointerType.Point );
+                
+                _interactionActionController.SetToItem( item );
+            }
+            else if ( observable is PuzzleObject puzzle )
+            {
+                SetPointer( PointerType.Point );
+                
+                _interactionActionController.SetToPuzzle( puzzle );
+            }
+            
+            _interactionActionController.CurrentObservableChangedHandler( observable );
         }
 
-        // private void ContextMenu()
+        // private void ContextMenu( ObservableObject observable )
         // {
-        //     if ( _currentObservable == null )
+        //     if ( observable == null )
         //     {
         //         _pointerController.SetPointer( PointerType.None );
         //         _contextMenuActionController.CurrentObservableChangedHandler( null );
         //         return;
         //     }
         //         
-        //     if ( _currentObservable is OpenCloseObject dynamic )
+        //     if ( observable is OpenCloseObject dynamic )
         //     {
         //         _pointerController.SetPointer( PointerType.Hand );
         //         _contextMenuActionController.SetToDynamic( dynamic );
         //     }
-        //     else if( _currentObservable is ItemObject item )
+        //     else if( observable is ItemObject item )
         //     {
         //         _pointerController.SetPointer( PointerType.Point );
         //         _contextMenuActionController.SetToItem( item );
         //     }
-        //     else if ( _currentObservable is PuzzleObject puzzle )
+        //     else if ( observable is PuzzleObject puzzle )
         //     {
         //         _pointerController.SetPointer( PointerType.Point );
         //         _contextMenuActionController.SetToPuzzle( puzzle );
         //     }
         //         
-        //     _contextMenuActionController.CurrentObservableChangedHandler( _currentObservable );
+        //     _contextMenuActionController.CurrentObservableChangedHandler( observable );
         // }
     }
 }

@@ -23,9 +23,9 @@ namespace Game.Core.Player
         private readonly PlayerMoveController _moveController;
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerCrouchController _crouchController;
-        private readonly PlayerInteractionPointsController _interactionPointsController;
-        private readonly CameraFOVController _cameraFOVController;
-        private readonly CameraVisionController _cameraVisionController;
+        private readonly PlayerAroundController _aroundController;
+        private readonly PlayerFOVController _playerFOVController;
+        private readonly PlayerVisionController _playerVisionController;
         private readonly PlayerHoveringController _hoveringController;
         private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerInventoryController _inventoryController;
@@ -41,10 +41,10 @@ namespace Game.Core.Player
             PlayerMoveController moveController,
             PlayerJumpController jumpController,
             PlayerCrouchController crouchController,
-            PlayerInteractionPointsController interactionPointsController,
+            PlayerAroundController aroundController,
                 
-            CameraFOVController cameraFOVController,
-            CameraVisionController cameraVisionController,
+            PlayerFOVController playerFOVController,
+            PlayerVisionController playerVisionController,
             PlayerHoveringController hoveringController,
             PlayerInputActionsController inputActionsController,
             PlayerInventoryController inventoryController,
@@ -61,9 +61,9 @@ namespace Game.Core.Player
             _moveController = moveController ?? throw new ArgumentNullException( nameof(moveController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
-            _interactionPointsController = interactionPointsController ?? throw new ArgumentNullException( nameof(interactionPointsController) );
-            _cameraFOVController = cameraFOVController ?? throw new ArgumentNullException( nameof(cameraFOVController) );
-            _cameraVisionController = cameraVisionController ?? throw new ArgumentNullException( nameof(cameraVisionController) );
+            _aroundController = aroundController ?? throw new ArgumentNullException( nameof(aroundController) );
+            _playerFOVController = playerFOVController ?? throw new ArgumentNullException( nameof(playerFOVController) );
+            _playerVisionController = playerVisionController ?? throw new ArgumentNullException( nameof(playerVisionController) );
             _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
@@ -76,9 +76,9 @@ namespace Game.Core.Player
             ServiceLocator.Register( _moveController );
             ServiceLocator.Register( _jumpController );
             ServiceLocator.Register( _crouchController );
-            ServiceLocator.Register( _interactionPointsController );
-            ServiceLocator.Register( _cameraFOVController );
-            ServiceLocator.Register( _cameraVisionController );
+            ServiceLocator.Register( _aroundController );
+            ServiceLocator.Register( _playerFOVController );
+            ServiceLocator.Register( _playerVisionController );
             ServiceLocator.Register( _hoveringController );
             ServiceLocator.Register( _inputActionsController );
             ServiceLocator.Register( _inventoryController );
@@ -91,9 +91,9 @@ namespace Game.Core.Player
             _moveController.Initialize();
             _jumpController.Initialize();
             _crouchController.Initialize();
-            _interactionPointsController.Initialize();
-            _cameraFOVController.Initialize();
-            _cameraVisionController.Initialize();
+            _aroundController.Initialize();
+            _playerFOVController.Initialize();
+            _playerVisionController.Initialize();
             _hoveringController.Initialize();
             _inputActionsController.Initialize();
 
@@ -116,8 +116,8 @@ namespace Game.Core.Player
             
             _inputActionsController.Disable();
             
-            _cameraFOVController.Dispose();
-            _cameraVisionController.Dispose();
+            _playerFOVController.Dispose();
+            _playerVisionController.Dispose();
             _hoveringController.Dispose();
         }
 

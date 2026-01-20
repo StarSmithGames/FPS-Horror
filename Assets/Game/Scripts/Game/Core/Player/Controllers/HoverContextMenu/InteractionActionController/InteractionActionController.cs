@@ -20,16 +20,19 @@ namespace Game.Core.Player
         
         public void SetToDynamic( OpenCloseObject dynamic )
         {
+            _actionHandler?.Dispose();
             _actionHandler = _interactionActionFactory.GetOrCreateOpenCloseHandler( dynamic );
         }
 
         public void SetToItem( ItemObject item )
         {
+            _actionHandler?.Dispose();
             _actionHandler = _interactionActionFactory.GetOrCreateItemHandler( item );
         }
 
         public void SetToPuzzle( PuzzleObject puzzle )
         {
+            _actionHandler?.Dispose();
             _actionHandler = _interactionActionFactory.GetOrCreatePuzzleHandler( puzzle );
         }
         

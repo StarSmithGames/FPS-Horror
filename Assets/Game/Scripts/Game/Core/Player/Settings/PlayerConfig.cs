@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace Game.Core.Player
@@ -13,6 +14,7 @@ namespace Game.Core.Player
         [ field: Space ]
         [ field: SerializeField ] public GroundSettings GroundSettings { get; private set; }
         [ field: Space ]
+        [ field: SerializeField ] public InteractionsSettings InteractionsSettings { get; private set; }
         [ field: SerializeField ] public CameraFOVSettings CameraFOVSettings { get; private set; }
         [ field: SerializeField ] public CameraVisionSettings CameraVisionSettings { get; private set; } 
         [ field: Space ]

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class CameraFOVController
+    public sealed class PlayerFOVController
     {
         private CancellationTokenSource _cancellationTokenSource;
         private float _targetFOV;
@@ -14,7 +14,7 @@ namespace Game.Core.Player
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
         
-        public CameraFOVController(
+        public PlayerFOVController(
             PlayerObject view,
             PlayerConfig config
             )
@@ -53,6 +53,16 @@ namespace Game.Core.Player
         public void SetFOV( float fov )
         {
             _targetFOV = fov;
+        }
+
+        public bool IsInFOV( Vector3 worldPoint )
+        {
+            Vector3 dirToTarget = ( worldPoint - _view.CameraFPS.transform.position ).normalized;
+
+            float dot = Vector3.Dot( _view.CameraFPS.transform.forward, dirToTarget );
+            float minDot = Mathf.Cos( _view.CameraFPS.fieldOfView * 0.5f * Mathf.Deg2Rad );
+
+            return dot >= minDot;
         }
     }
 }

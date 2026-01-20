@@ -1,14 +1,12 @@
 using Cysharp.Threading.Tasks;
 using Game.Core.Entity;
-using Game.Core.World.InteractionSystem;
 using System;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 
 namespace Game.Core.Player
 {
-    public sealed class CameraVisionController
+    public sealed class PlayerVisionController
     {
         public event Action< ObservableObject > OnCurrentObservableChanged;
         public event Action< bool > OnObservablesChanged;
@@ -42,7 +40,7 @@ namespace Game.Core.Player
         private readonly PlayerConfig _config;
         private readonly PlayerStates _states;
         
-        public CameraVisionController(
+        public PlayerVisionController(
             PlayerObject view,
             PlayerConfig config,
             PlayerStates states
@@ -82,7 +80,7 @@ namespace Game.Core.Player
                     Vision();
                 }
 
-                await UniTask.Yield();
+                await UniTask.WaitForSeconds( 0.14f, cancellationToken: cancellationToken );
             }
         }
 

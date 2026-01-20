@@ -24,6 +24,23 @@ namespace Game.Core.World.PointerSystem
 
         public InteractionPointer Get( InteractableObject target ) => _pointers[ target ];
 
+        public void TryRemoveSubtractions( List< InteractableObject > targets )
+        {
+            List< InteractableObject > removes = new();
+            foreach ( var pointer in _pointers )
+            {
+                if ( !targets.Contains( pointer.Key ) )
+                {
+                    removes.Add( pointer.Key );
+                }
+            }
+
+            for ( int i = 0; i < removes.Count; i++ )
+            {
+                TryRemove( removes[ i ] );
+            }
+        }
+
         public bool Contains( InteractableObject target ) => _pointers.ContainsKey( target );
         
         public bool IsPointerShowing( InteractableObject target )

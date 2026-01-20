@@ -40,6 +40,9 @@ namespace Game.Core.Player
         protected override void InteractStarted()
         {
             base.InteractStarted();
+            
+            if ( !IsEnable ) return;
+            
             _gameScreenViewModel.ModelView.TargetHand.SetHand( false );
         }
 
