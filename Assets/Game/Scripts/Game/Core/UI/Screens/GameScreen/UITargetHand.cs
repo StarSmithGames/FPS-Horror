@@ -28,15 +28,15 @@ namespace Game.Core.UI.GameScreen
         {
             if ( trigger )
             {
-                ShowTargetPoint();
+                Show();
             }
             else
             {
-                HideTargetPoint();
+                Hide();
             }
         }
 
-        private void ShowTargetPoint()
+        private void Show()
         {
             if ( _isTargetHandShowing ) return;
             _isTargetHandShowing = true;
@@ -45,7 +45,7 @@ namespace Game.Core.UI.GameScreen
             _targetHandTween = _targetHand.DOFade( 1f, 0.48f ).SetEase( Ease.OutQuad );
         }
 
-        private void HideTargetPoint()
+        private void Hide()
         {
             if ( !_isTargetHandShowing ) return;
             _isTargetHandShowing = false;

@@ -1,5 +1,7 @@
 using Game.Core.Entity;
+using Game.Core.UI;
 using Game.Managers.InputManager;
+using UnityEngine;
 
 namespace Game.Core.Player
 {
@@ -8,8 +10,9 @@ namespace Game.Core.Player
         private OpenCloseObject _dynamic;
 
         public OpenCloseActionHandler(
+            UIRootGame uiRootGame,
             InputKeyActionsSettings inputKeyActionsSettings
-            ) : base( inputKeyActionsSettings.InteractAction )
+            ) : base( uiRootGame, inputKeyActionsSettings.InteractAction )
         {
         }
 
@@ -25,6 +28,30 @@ namespace Game.Core.Player
             base.Dispose();
         }
 
+        public override void Enable()
+        {
+            base.Enable();
+            
+            _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( false );
+            _gameScreenViewModel.ModelView.TargetHand.SetHand( true );
+            _gameScreenViewModel.ModelView.TargetHand.EnableTargetHand( true );
+        }
+
+        protected override void InteractStarted()
+        {
+            base.InteractStarted();
+            _gameScreenViewModel.ModelView.TargetHand.SetHand( false );
+        }
+
+        protected override void InteractFinished( bool result )
+        {
+            base.InteractFinished( result );
+            
+            if ( !IsEnable ) return;
+            
+            _gameScreenViewModel.ModelView.TargetHand.SetHand( true );
+        }
+
         protected override void Completed()
         {
             if ( !IsEnable ) return;
@@ -37,6 +64,8 @@ namespace Game.Core.Player
             {
                 _dynamic.Open();
             }
+         
+            _gameScreenViewModel.ModelView.TargetHand.SetHand( true );
             
             base.Completed();
         }

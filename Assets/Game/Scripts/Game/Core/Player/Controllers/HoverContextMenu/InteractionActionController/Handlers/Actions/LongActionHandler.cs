@@ -1,4 +1,5 @@
 using Game.Core.UI;
+using Game.Core.UI.GameScreen;
 using Game.Managers.InputManager;
 using System;
 
@@ -6,17 +7,25 @@ namespace Game.Core.Player
 {
     public abstract class LongActionHandler : ActionHandler
     {
+        protected GameScreenViewModel _gameScreenViewModel;
+        
         protected readonly InputActionProvider _provider;
-        protected readonly InputKeyAction _inputKeyAction;
+        protected readonly UIRootGame _uiRootGame;
 
-        public LongActionHandler( InputKeyAction inputKeyAction, float duration = 0.33f )
+        public LongActionHandler(
+            UIRootGame uiRootGame,
+            InputKeyAction inputKeyAction,
+            float duration = 0.33f
+            )
         {
-            _inputKeyAction = inputKeyAction ?? throw new ArgumentNullException( nameof(inputKeyAction) );
-            _provider = new( inputKeyAction.InputAction, Completed, duration, progress: InteractProgress, callback: InteractFinished );
+            _provider = new( inputKeyAction.InputAction, Completed, duration, onStartHold: InteractStarted, progress: InteractProgress, callback: InteractFinished );
+            _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
         }
 
         public override void Enable()
         {
+            _gameScreenViewModel = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< GameScreenViewModel >();
+            
             _provider.Enable();
             
             IsEnable = true;
@@ -25,21 +34,24 @@ namespace Game.Core.Player
         public override void Disable()
         {
             _provider.Disable();
-            // _ui = null;
+
+            _gameScreenViewModel = null;
             
             IsEnable = false;
         }
+
+        protected virtual void InteractStarted() {}
         
-        private void InteractProgress( float value )
+        protected virtual void InteractProgress( float value )
         {
-            // _ui.SetFillAmount( value );
+            _gameScreenViewModel.ModelView.TargetHolder.SetProgress( value );
         }
 
-        private void InteractFinished( bool result )
+        protected virtual void InteractFinished( bool result )
         {
             if ( !IsEnable ) return;
             
-            // _ui.SetFillAmount( 0 );
+            _gameScreenViewModel.ModelView.TargetHolder.SetProgress( 0 );
         }
     }
 }

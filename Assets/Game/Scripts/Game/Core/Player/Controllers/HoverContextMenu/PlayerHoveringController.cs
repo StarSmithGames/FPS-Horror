@@ -77,8 +77,7 @@ namespace Game.Core.Player
             }
             else if ( _pointerType == PointerType.Hand )
             {
-                _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( false );
-                _gameScreenViewModel.ModelView.TargetHand.EnableTargetHand( true );
+
             }
             else if ( _pointerType == PointerType.Point || _isObservablesAround )
             {

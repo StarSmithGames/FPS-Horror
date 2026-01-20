@@ -6,17 +6,16 @@ namespace Game.Core.Player
     public sealed class InteractionActionController
     {
         private ActionHandler _actionHandler;
-
-        private readonly InteractionActionFactory _interactionActionFactory;
         
+        private readonly InteractionActionFactory _interactionActionFactory;
+
         public InteractionActionController( InteractionActionFactory interactionActionFactory )
         {
             _interactionActionFactory = interactionActionFactory ?? throw new ArgumentNullException( nameof(interactionActionFactory) );
         }
-        
+
         public void Initialize()
         {
-            
         }
         
         public void SetToDynamic( OpenCloseObject dynamic )
