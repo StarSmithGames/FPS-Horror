@@ -20,83 +20,80 @@ namespace Game.Core.World.PointerSystem
         [ SerializeField ] private TextMeshProUGUI _key;
 
         public bool IsShowing { get; private set; }
+        public bool IsPointShowing { get; private set; }
         public bool IsKeyShowing { get; private set; }
         
         private Tween _tween;
+        private Tween _tweenMorph;
         private Tween _centerLoopTween;
-        
+
+        private InteractableObject _target;
         private Transform _lookAtTarget;
         private CancellationTokenSource _cancellationLookAtSource;
-        
-        public void Show( InteractableObject target, Action callback = null )
+
+        public void Show()
         {
             if ( IsShowing ) return;
             IsShowing = true;
             
-            transform.position = target.PointerStartPosition;
-
-            _key.SetAlpha( 0 );
+            transform.position = _target.PointerStartPosition;
             
             _tween?.Kill( true );
             _tween = DOTween.Sequence()
                 .Append( _canvasGroup.DOFade( 1f, 0.33f ) )
-                .Join( transform.DOMove( target.PointerEndPosition, 0.33f) )
-                .OnComplete( () => callback?.Invoke() );
-            
-            CenterIdle();
+                .Join( transform.DOMove( _target.PointerEndPosition, 0.33f) );
         }
-        
+
         public void Hide( Action callback = null )
         {
             if ( !IsShowing ) return;
             IsShowing = false;
             
             _tween?.Kill( true );
-            _centerLoopTween?.Kill();
-            
             _tween = DOTween.Sequence()
                 .Append( _canvasGroup.DOFade( 0f, 0.33f ) )
+                .Join( transform.DOMove( _target.PointerEndPosition, 0.33f) )
                 .OnComplete( () =>
                 {
                     DespawnIt();
                     callback?.Invoke();
                 } );
         }
-
-        public void ShowKey()
+        
+        public void ShowPointHideKey()
         {
-            if ( IsKeyShowing ) return;
-            IsKeyShowing = true;
-            
-            _key.SetAlpha( 0 );
-            _key.gameObject.SetActive( true );
-            
-            _tween?.Kill( true );
-            _centerLoopTween?.Kill();
-            
-            _tween = DOTween.Sequence()
-                .Append( _center.transform.DOScale( 0f, 0.33f ) )
-                .Join( _key.DOFade( 1f, 0.33f ) )
-                .Join( DOTween.To( () => _frame.pixelsPerUnitMultiplier, ( x ) => _frame.pixelsPerUnitMultiplier = x, 5f, 0.33f) );
-        }
-
-        public void HideKey()
-        {
-            if ( !IsKeyShowing ) return;
+            if ( IsPointShowing && !IsKeyShowing ) return;
+            IsPointShowing = true;
             IsKeyShowing = false;
             
-            _tween?.Kill( true );
-            _tween = DOTween.Sequence()
+            _tweenMorph?.Kill( true );
+            _tweenMorph = DOTween.Sequence()
                 .Append( _key.DOFade( 0f, 0.33f ) )
-                .Join( DOTween.To( () => _frame.pixelsPerUnitMultiplier, ( x ) => _frame.pixelsPerUnitMultiplier = x, 1f, 0.33f) );
+                .Join( DoPixelsPerUnitMultiplier( 1f ) );
             
             CenterIdle();
         }
+        
+        public void HidePointShowKey()
+        {
+            if ( !IsPointShowing && IsKeyShowing ) return;
+            IsPointShowing = false;
+            IsKeyShowing = true;
+            
+            _tweenMorph?.Kill( true );
+            _centerLoopTween?.Kill();
+            
+            _tweenMorph = DOTween.Sequence()
+                .Append( _center.transform.DOScale( 0, 0.33f ) )
+                .Join( _key.DOFade( 1f, 0.33f ) )
+                .Join( DoPixelsPerUnitMultiplier( 5f ) );
+        }
 
         #region LookAt
-        public void StartLookAt( Transform target )
+        public void StartLookAt( Transform lookAt, InteractableObject target )
         {
-            _lookAtTarget = target;
+            _lookAtTarget = lookAt;
+            _target = target;
             
             _cancellationLookAtSource = new();
             LookAt( _cancellationLookAtSource.Token ).Forget();
@@ -115,7 +112,7 @@ namespace Game.Core.World.PointerSystem
             {
                 // transform.LookAt( _lookAtTarget );
 
-                var dir = _lookAtTarget.position - transform.position;
+                var dir = _lookAtTarget.transform.position - transform.position;
                 var rot = Quaternion.LookRotation( dir );
                 transform.rotation = rot * Quaternion.Euler( 0f, 180f, 0f );
                 
@@ -123,6 +120,11 @@ namespace Game.Core.World.PointerSystem
             }
         }
         #endregion
+
+        private Tween DoPixelsPerUnitMultiplier( float target, float duration = 0.33f )
+        {
+            return DOTween.To( () => _frame.pixelsPerUnitMultiplier, ( x ) => _frame.pixelsPerUnitMultiplier = x, target, duration );
+        }
 
         private void CenterIdle()
         {

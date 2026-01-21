@@ -22,13 +22,13 @@ namespace Game.Core.Player
             _config = config ?? throw new ArgumentNullException( nameof(config) );
         }
 
-        public void PointsAround( List< InteractableObject > targets, Transform root, Transform camera )
+        public void PointsAround( List< InteractableObject > allTargets, Transform root, Transform camera )
         {
-            _dictionary.TryRemoveSubtractions( targets );
+            _dictionary.TryRemoveSubtractions( allTargets );
             
-            for ( int i = 0; i < targets.Count; i++ )
+            for ( int i = 0; i < allTargets.Count; i++ )
             {
-                var target = targets[ i ];
+                var target = allTargets[ i ];
                 if ( !target.IsCollidersEnabled )
                 {
                     _dictionary.TryRemove( target );
@@ -46,16 +46,16 @@ namespace Game.Core.Player
             float sqrMagnitude = delta.sqrMagnitude;
             if ( sqrMagnitude < _config.InteractionsSettings.MaxDistanceSquared )//if root is close enough
             {
-                if ( _dictionary.IsPointerShowing( target ) )
+                if ( _dictionary.IsShowing( target ) )
                 {
                     var pointer = _dictionary.Get( target );
                     if ( sqrMagnitude < _config.InteractionsSettings.KeyDistanceSquared )
                     {
-                        pointer.ShowKey();
+                        pointer.HidePointShowKey();
                     }
                     else
                     {
-                        pointer.HideKey();
+                        pointer.ShowPointHideKey();
                     }
                     
                     return;
@@ -67,20 +67,21 @@ namespace Game.Core.Player
                     var pointer = _interactionPointerFactory.Create();
                     _dictionary.TryAdd( target, pointer );
                     
+                    pointer.StartLookAt( camera, target );
+                    pointer.Show();
                     if ( sqrMagnitude < _config.InteractionsSettings.KeyDistanceSquared )
                     {
-                        pointer.ShowKey();
+                        pointer.HidePointShowKey();
                     }
                     else
                     {
-                        pointer.HideKey();
+                        pointer.ShowPointHideKey();
                     }
                 }
-                _dictionary.ShowPointer( target, camera );
             }
             else
             {
-                if ( _dictionary.IsPointerShowing( target ) )
+                if ( _dictionary.IsShowing( target ) )
                 {
                     _dictionary.TryRemove( target );
                 }

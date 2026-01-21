@@ -43,7 +43,7 @@ namespace Game.Core.World.PointerSystem
 
         public bool Contains( InteractableObject target ) => _pointers.ContainsKey( target );
         
-        public bool IsPointerShowing( InteractableObject target )
+        public bool IsShowing( InteractableObject target )
         {
             if ( Contains( target ) )
             {
@@ -53,16 +53,6 @@ namespace Game.Core.World.PointerSystem
             return false;
         }
 
-        public void ShowPointer( InteractableObject target, Transform lookAt )
-        {
-            var pointer = Get( target );
-
-            if ( pointer.IsShowing ) return;
-            
-            pointer.StartLookAt( lookAt );
-            pointer.Show( target );
-        }
-        
         public void HidePointer( InteractableObject target )
         {
             var pointer = Get( target );

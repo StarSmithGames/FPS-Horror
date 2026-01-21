@@ -70,10 +70,10 @@ namespace Game.Core.Player
                 {
                     Vector3 position = _view.CameraFPS.transform.position;
                     Collider[] colliders = Physics.OverlapSphere( position, _config.InteractionsSettings.MaxDistance, _config.CameraVisionSettings.InteractLayers );
-                    var interactables = GetInteractables( colliders );
-                    CurrentObservable = FindNearestObservable( position, interactables );
+                    var allTargets = GetInteractables( colliders );
+                    CurrentObservable = FindNearestObservable( position, allTargets );
                     
-                    _playerPointsController.PointsAround( interactables, _view.transform, _view.CameraFPS.transform );
+                    _playerPointsController.PointsAround( allTargets, _view.transform, _view.CameraFPS.transform );
                 }
                 
                 await UniTask.WaitForSeconds( 0.14f, cancellationToken: cancellationToken );
@@ -101,7 +101,7 @@ namespace Game.Core.Player
             if ( targets.Count > 0 )
             {
                 ObservableObject nearest = null;
-                float minSqrDistance = float.MaxValue;
+                float minSqrDistance = _config.InteractionsSettings.KeyDistanceSquared;
 
                 foreach ( var target in targets )
                 {
