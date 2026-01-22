@@ -65,6 +65,7 @@ namespace Game.Core.Player
                 if ( _states.IsBlocked )
                 {
                     CurrentObservable = null;
+                    _playerPointsController.Clear();
                 }
                 else
                 {

@@ -2,6 +2,8 @@ using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.UI.GameScreen;
 using System;
+using UnityEngine;
+using PointerType = Game.Core.UI.GameScreen.PointerType;
 
 namespace Game.Core.Player
 {
@@ -112,9 +114,9 @@ namespace Game.Core.Player
             }
             else if ( observable is ItemObject item )
             {
-                SetPointer( PointerType.Point );
-                
-                _interactionActionController.SetToItem( item );
+                // SetPointer( PointerType.Point );
+                //
+                // _interactionActionController.SetToItem( item );
             }
             else if ( observable is PuzzleObject puzzle )
             {
@@ -142,6 +144,13 @@ namespace Game.Core.Player
                 SetPointer( PointerType.Point );
                 
                 _interactionActionController.SetToItem( item );
+            }
+            else if ( observable is OpenCloseObject dynamic )
+            {
+                Debug.LogError( "HERER" );
+                SetPointer( PointerType.Hand );
+                
+                _interactionActionController.SetToDynamic( dynamic );
             }
             else if ( observable is PuzzleObject puzzle )
             {

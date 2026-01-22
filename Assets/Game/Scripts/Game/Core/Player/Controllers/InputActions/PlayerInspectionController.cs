@@ -7,6 +7,9 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInspectionController
     {
+        public event Action OnInspectStarted;
+        public event Action OnInspectEnded;
+        
         public bool IsInspecting => _inspectDialogViewModel != null;
         
         private ItemObject _item;
@@ -41,6 +44,8 @@ namespace Game.Core.Player
             _inspectDialogViewModel.OnActionButtonClicked += ItemTakenHandler;
             _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
             _inspectDialogViewModel.ShowView();
+            
+            OnInspectStarted?.Invoke();
         }
 
         private void ItemTakenHandler()
@@ -51,6 +56,8 @@ namespace Game.Core.Player
             _playerInventoryController.PickUpItem( _item );
             
             _states.IsBlocked = false;
+            
+            OnInspectEnded?.Invoke();
         }
 
         private void InspectCompletedHandler()
@@ -59,6 +66,8 @@ namespace Game.Core.Player
             _inspectDialogViewModel = null;
             
             _states.IsBlocked = false;
+            
+            OnInspectEnded?.Invoke();
         }
     }
 }

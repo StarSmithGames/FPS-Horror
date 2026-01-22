@@ -8,6 +8,22 @@ namespace Game.Core.World.PointerSystem
     {
         private readonly Dictionary< InteractableObject, InteractionPointer > _pointers = new();
 
+        public void Clear()
+        {
+            if ( _pointers.Count == 0 ) return;
+            
+            foreach ( var pointer in _pointers )
+            {
+                var p = Get( pointer.Key );
+
+                if ( !p.IsShowing ) return;
+
+                p.Enable( false );
+                p.StopLookAt();
+            }
+            _pointers.Clear();
+        }
+        
         public void TryAdd( InteractableObject target, InteractionPointer pointer )
         {
             _pointers.TryAdd( target, pointer );

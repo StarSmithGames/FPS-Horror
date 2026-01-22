@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace Game.Core.Entity
 {
-    public abstract class OpenCloseObject : ObservableObject
+    public abstract class OpenCloseObject : InteractableObject
     {
         public event Action OnChanged;
         
+        [ field: Space ]
         [ field: SerializeField ] public string NameId { get; private set; }
         
         public bool IsOpen

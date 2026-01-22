@@ -23,7 +23,7 @@ namespace Game.Core.World.PointerSystem
         public bool IsPointShowing { get; private set; }
         public bool IsKeyShowing { get; private set; }
         
-        private Tween _tween;
+        private Sequence _tween;
         private Tween _tweenMorph;
         private Tween _centerLoopTween;
 
@@ -31,17 +31,34 @@ namespace Game.Core.World.PointerSystem
         private Transform _lookAtTarget;
         private CancellationTokenSource _cancellationLookAtSource;
 
+        public void Enable( bool trigger )
+        {
+            IsShowing = trigger;
+            
+            _tween?.Kill( true );
+            _tweenMorph?.Kill( true );
+            _centerLoopTween?.Kill();
+            
+            _canvasGroup.alpha = trigger ? 1f : 0f;
+
+            if ( !trigger )
+            {
+                DespawnIt();
+            }
+        }
+        
         public void Show()
         {
             if ( IsShowing ) return;
             IsShowing = true;
             
-            transform.position = _target.PointerStartPosition;
-            
             _tween?.Kill( true );
-            _tween = DOTween.Sequence()
-                .Append( _canvasGroup.DOFade( 1f, 0.33f ) )
-                .Join( transform.DOMove( _target.PointerEndPosition, 0.33f) );
+            _tween = DOTween.Sequence().Append( _canvasGroup.DOFade( 1f, 0.33f ) );
+            if ( _target.InteractableSettings.UseAnimation )
+            {
+                transform.position = _target.GetInteractPointerPosition();//start point
+                _tween.Join( transform.DOMove( _target.GetLastPointerPosition(), 0.33f) );//to end point
+            }
         }
 
         public void Hide( Action callback = null )
@@ -51,9 +68,14 @@ namespace Game.Core.World.PointerSystem
             
             _tween?.Kill( true );
             _tween = DOTween.Sequence()
-                .Append( _canvasGroup.DOFade( 0f, 0.33f ) )
-                .Join( transform.DOMove( _target.PointerEndPosition, 0.33f) )
-                .OnComplete( () =>
+                .Append( _canvasGroup.DOFade( 0f, 0.33f ) );
+
+            if ( _target.InteractableSettings.UseAnimation )
+            {
+                _tween.Join( transform.DOMove( _target.GetLastPointerPosition(), 0.33f) );//to end point
+            }
+            
+            _tween.OnComplete( () =>
                 {
                     DespawnIt();
                     callback?.Invoke();

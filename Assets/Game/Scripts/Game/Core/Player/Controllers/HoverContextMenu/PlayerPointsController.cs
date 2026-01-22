@@ -22,6 +22,11 @@ namespace Game.Core.Player
             _config = config ?? throw new ArgumentNullException( nameof(config) );
         }
 
+        public void Clear()
+        {
+            _dictionary.Clear();
+        }
+
         public void PointsAround( List< InteractableObject > allTargets, Transform root, Transform camera )
         {
             _dictionary.TryRemoveSubtractions( allTargets );
@@ -41,7 +46,7 @@ namespace Game.Core.Player
 
         private void Pointing( InteractableObject target, Transform root, Transform camera )
         {
-            Vector3 delta = target.PointerStartPosition - root.position;
+            Vector3 delta = target.transform.position - root.position;
             delta.y = 0f;
             float sqrMagnitude = delta.sqrMagnitude;
             if ( sqrMagnitude < _config.InteractionsSettings.MaxDistanceSquared )//if root is close enough
