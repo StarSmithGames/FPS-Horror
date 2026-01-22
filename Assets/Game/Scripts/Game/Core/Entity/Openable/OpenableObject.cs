@@ -162,5 +162,22 @@ namespace Game.Core.Entity
             Axis.Z => Quaternion.Euler( 0, 0, angle ),
             _ => Quaternion.Euler( 0, angle, 0 )
         };
+        
+#if UNITY_EDITOR
+        protected override void OnDrawGizmos()
+        {
+            base.OnDrawGizmos();
+
+            Color color = IsCollidersEnabledInEditor ? Color.green : Color.red;
+            color.a = 0.15f;
+            Gizmos.color = color;
+
+            foreach ( var col in _colliders )
+            {
+                Gizmos.DrawCube( col.bounds.center, col.bounds.size );
+                // Gizmos.DrawWireCube( col.bounds.center, col.bounds.size );
+            }
+        }
+#endif
     }
 }

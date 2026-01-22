@@ -23,9 +23,10 @@ namespace Game.Core.Entity
             return InteractableSettings.Points.LastOrDefault()?.GetPointerPosition( transform ) ?? transform.position;
         }
         
-        private void OnDrawGizmos()
+#if UNITY_EDITOR
+        protected virtual void OnDrawGizmos()
         {
-            if ( !IsCollidersEnabled ) return;
+            if ( !IsCollidersEnabledInEditor ) return;
             
             Gizmos.color = Color.blue;
             foreach ( var point in InteractableSettings.Points )
@@ -33,5 +34,6 @@ namespace Game.Core.Entity
                 Gizmos.DrawSphere( point.GetPointerPosition( transform ), 0.01f );
             }
         }
+#endif
     }
 }

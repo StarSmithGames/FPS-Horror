@@ -65,9 +65,7 @@ namespace Game.Core.Player
         
         private void CurrentObservableChangedVisionHandler( ObservableObject observable )
         {
-            // InteractionVision( observable );
-
-            // ContextMenu( observable );
+            InteractionVision( observable );
         }
         
         private void CurrentObservableChangedAroundHandler( ObservableObject observable )
@@ -112,18 +110,6 @@ namespace Game.Core.Player
                 
                 _interactionActionController.SetToDynamic( dynamic );
             }
-            else if ( observable is ItemObject item )
-            {
-                // SetPointer( PointerType.Point );
-                //
-                // _interactionActionController.SetToItem( item );
-            }
-            else if ( observable is PuzzleObject puzzle )
-            {
-                SetPointer( PointerType.Point );
-                
-                _interactionActionController.SetToPuzzle( puzzle );
-            }
             
             _interactionActionController.CurrentObservableChangedHandler( observable );
         }
@@ -132,10 +118,6 @@ namespace Game.Core.Player
         {
             if ( observable == null )
             {
-                SetPointer( PointerType.None );
-
-                _interactionActionController.CurrentObservableChangedHandler( null );
-                
                 return;
             }
 
@@ -144,13 +126,6 @@ namespace Game.Core.Player
                 SetPointer( PointerType.Point );
                 
                 _interactionActionController.SetToItem( item );
-            }
-            else if ( observable is OpenCloseObject dynamic )
-            {
-                Debug.LogError( "HERER" );
-                SetPointer( PointerType.Hand );
-                
-                _interactionActionController.SetToDynamic( dynamic );
             }
             else if ( observable is PuzzleObject puzzle )
             {

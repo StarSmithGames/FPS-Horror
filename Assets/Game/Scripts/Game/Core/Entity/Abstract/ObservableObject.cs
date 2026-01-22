@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.Core.Entity
@@ -28,5 +29,9 @@ namespace Game.Core.Entity
 
             IsCollidersEnabled = trigger;
         }
+        
+#if UNITY_EDITOR
+        protected bool IsCollidersEnabledInEditor => _colliders.All( ( x ) => x.enabled );
+#endif
     }
 }

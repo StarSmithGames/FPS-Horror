@@ -84,17 +84,18 @@ namespace Game.Core.Entity
         }
         
 #if UNITY_EDITOR
-        private void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
-            bool isEnabled = _colliders.All( ( x ) => x.enabled );
+            base.OnDrawGizmos();
 
-            Color color = isEnabled ? Color.green : Color.red;
-            color.a = 0.33f;
+            Color color = IsCollidersEnabledInEditor ? Color.green : Color.red;
+            color.a = 0.15f;
             Gizmos.color = color;
 
             foreach ( var col in _colliders )
             {
-                Gizmos.DrawWireCube( col.bounds.center, col.bounds.size );
+                Gizmos.DrawCube( col.bounds.center, col.bounds.size );
+                // Gizmos.DrawWireCube( col.bounds.center, col.bounds.size );
             }
         }
 #endif
