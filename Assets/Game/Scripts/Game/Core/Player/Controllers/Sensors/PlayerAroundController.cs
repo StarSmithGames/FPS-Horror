@@ -89,7 +89,7 @@ namespace Game.Core.Player
             {
                 var interactable = collider.GetComponentInParent< InteractableObject >();
                 if ( interactable == null) continue;
-                if ( !_playerFOVController.IsInFOV( interactable.transform.position ) ) continue;
+                if ( !_playerFOVController.IsInFOV( interactable.GetInteractPointerPosition() ) ) continue;
                 
                 result.Add( interactable );
             }
@@ -106,7 +106,7 @@ namespace Game.Core.Player
 
                 foreach ( var target in targets )
                 {
-                    Vector3 closestPoint = target.transform.position;
+                    Vector3 closestPoint = target.GetInteractPointerPosition();
                     float sqrDist = ( closestPoint - from ).sqrMagnitude;
 
                     if ( sqrDist < minSqrDistance )

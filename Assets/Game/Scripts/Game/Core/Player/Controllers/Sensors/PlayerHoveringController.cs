@@ -12,6 +12,7 @@ namespace Game.Core.Player
         private GameScreenViewModel _gameScreenViewModel;
         private bool _isObservablesAround;
         private PointerType _pointerType;
+        private ObservableObject _visionObservable;
 
         private readonly UIRootGame _uiRootGame;
         private readonly PlayerVisionController _playerVisionController;
@@ -95,32 +96,25 @@ namespace Game.Core.Player
         
         private void InteractionVision( ObservableObject observable )
         {
-            if ( observable == null )
+            _visionObservable = observable;
+            
+            if ( _visionObservable == null )
             {
                 SetPointer( PointerType.None );
-
-                _interactionActionController.CurrentObservableChangedHandler( null );
                 
                 return;
             }
 
-            if ( observable is OpenCloseObject dynamic )
+            if ( _visionObservable is OpenCloseObject dynamic )
             {
                 SetPointer( PointerType.Hand );
                 
                 _interactionActionController.SetToDynamic( dynamic );
             }
-            
-            _interactionActionController.CurrentObservableChangedHandler( observable );
         }
         
         private void InteractionAround( ObservableObject observable )
         {
-            if ( observable == null )
-            {
-                return;
-            }
-
             if ( observable is ItemObject item )
             {
                 SetPointer( PointerType.Point );
@@ -133,8 +127,15 @@ namespace Game.Core.Player
                 
                 _interactionActionController.SetToPuzzle( puzzle );
             }
-            
-            _interactionActionController.CurrentObservableChangedHandler( observable );
+
+            if ( _visionObservable != null )
+            {
+                _interactionActionController.CurrentObservableChangedHandler( _visionObservable );
+            }
+            else
+            {
+                _interactionActionController.CurrentObservableChangedHandler( observable );
+            }
         }
 
         // private void ContextMenu( ObservableObject observable )
