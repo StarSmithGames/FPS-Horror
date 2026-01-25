@@ -1,3 +1,4 @@
+using Game.Core.UI.ContextMenu;
 using PuzzlescapeGames.VVM.UI;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,5 +9,6 @@ namespace Game.Core.UI.ResourcesScreen
     {
         [ field: SerializeField ] public List< UIOptionMenuButton > MenuOptions = new();
         [ field: SerializeField ] public UIInventory Inventory { get; private set; }
+        [ field: SerializeField ] public UIContextMenu ContextMenu { get; private set; }
     }
 }
