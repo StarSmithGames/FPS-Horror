@@ -106,50 +106,33 @@ namespace Game.Core.Player
 
         public InteractableObject FindBestKeyInteractable( List< InteractableObject > targets )
         {
-            if ( targets == null || targets.Count == 0 )
-                return null;
+            if ( targets == null || targets.Count == 0 ) return null;
 
-            // Насколько "примерно смотрим" на объект.
-            // 12° = довольно строго (почти по центру). Если надо мягче — поставь 18-25.
-            const float keyConeAngleDeg = 15f;
-            float minDotKey = Mathf.Cos( keyConeAngleDeg * Mathf.Deg2Rad );
+            float minDot = Mathf.Cos( 15f * Mathf.Deg2Rad );
 
-            InteractableObject best = null;
-            float bestDot = -1f;
-            float bestSqrDist = float.MaxValue;
+            InteractableObject result = null;
+            float bestDot = minDot;
+            float bestSqr = float.MaxValue;
 
             for ( int i = 0; i < targets.Count; i++ )
             {
                 var t = targets[ i ];
-                if ( t == null ) continue;
-                if ( !t.IsCollidersEnabled ) continue;
+                Vector3 to = t.GetInteractPointerPosition() - _head.position;
+                float sqr = to.sqrMagnitude;
+                if ( sqr > _config.InteractionsSettings.KeyDistanceSquared ) continue;
 
-                Vector3 p = t.GetInteractPointerPosition();
-                Vector3 to = p - _head.position;
+                float dot = Vector3.Dot( _head.forward, to.normalized );
+                if ( dot < bestDot ) continue;
 
-                float sqrDist = to.sqrMagnitude;
-
-                // Key только в радиусе "KeyDistance"
-                if ( sqrDist > _config.InteractionsSettings.KeyDistanceSquared )
-                    continue;
-
-                Vector3 dir = to.normalized;
-                float dot = Vector3.Dot( _head.forward, dir );
-
-                // Должен быть примерно по центру взгляда
-                if ( dot < minDotKey )
-                    continue;
-
-                // Выбираем максимально "в центре" (dot), при равенстве — ближе
-                if ( dot > bestDot || ( Mathf.Approximately( dot, bestDot ) && sqrDist < bestSqrDist ) )
+                if ( dot > bestDot || sqr < bestSqr )
                 {
                     bestDot = dot;
-                    bestSqrDist = sqrDist;
-                    best = t;
+                    bestSqr = sqr;
+                    result = t;
                 }
             }
 
-            return best;
+            return result;
         }
 
         private bool IsInFOV( Vector3 worldPoint )

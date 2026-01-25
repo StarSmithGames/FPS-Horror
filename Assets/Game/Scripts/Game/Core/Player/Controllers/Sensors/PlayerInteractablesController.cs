@@ -3,7 +3,6 @@ using Game.Core.Entity;
 using Game.Core.World.PointerSystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -11,6 +10,30 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInteractablesController
     {
+        public event Action< InteractableObject > OnCurrentInteractableChanged;
+        public event Action< bool > OnObservablesChanged;
+        
+        public InteractableObject CurrentObservable
+        {
+            get => _currentObservable;
+            set
+            {
+                if ( _currentObservable != value )
+                {
+                    _currentObservable?.EndObserve();
+                    _currentObservable = value;
+                    _currentObservable?.StartObserve();
+                    
+                    OnCurrentInteractableChanged?.Invoke( _currentObservable );
+                }
+                else
+                {
+                    _currentObservable?.Observe();
+                }
+            }
+        }
+        private InteractableObject _currentObservable;
+        
         private CancellationTokenSource _cancellationTokenSource;
         private InteractionPointerDictionary _dictionary = new();
         
@@ -56,37 +79,39 @@ namespace Game.Core.Player
                 {
                     _dictionary.Clear();
                     
-                    // CurrentObservable = null;
-                    // OnObservablesChanged?.Invoke( false );
+                    CurrentObservable = null;
+                    OnObservablesChanged?.Invoke( false );
                 }
                 else
                 {
-                    // bool isHasCollidersAround = _headFunctions.CastInFrontRay( out RaycastHit hit );
                     var targetsAround = _headFunctions.GetTargetsAround();
-                    var targetNearestAround = _headFunctions.FindBestKeyInteractable( targetsAround );
+                    CurrentObservable = _headFunctions.FindBestKeyInteractable( targetsAround );
                     
-                    PointsAround( targetsAround, targetNearestAround );
+                    PointsAround( targetsAround, CurrentObservable );
+
+                    OnObservablesChanged?.Invoke( _headFunctions.CastInFrontRay( out RaycastHit _ ) );
                 }
 
                 await UniTask.WaitForSeconds( 0.14f, cancellationToken: cancellationToken );
             }
         }
 
-        private void PointsAround( List< InteractableObject > allTargets, InteractableObject targetNearestAround )
+        private void PointsAround( List< InteractableObject > allTargets, InteractableObject keyTarget )
         {
             _dictionary.TryRemoveSubtractions( allTargets );
-            
+
+            var cam = _view.CameraFPS.transform;
+
             for ( int i = 0; i < allTargets.Count; i++ )
             {
-                var target = allTargets[ i ];
-                if( target == null ) continue;
-                if ( !target.IsCollidersEnabled )
+                var t = allTargets[ i ];
+                if ( t == null || !t.IsCollidersEnabled )
                 {
-                    _dictionary.TryRemove( target );
+                    _dictionary.TryRemove( t );
                     continue;
                 }
-                
-                Pointing( target, target == targetNearestAround, _view.CameraFPS.transform );
+
+                Pointing( t, t == keyTarget, cam );
             }
         }
 
@@ -94,51 +119,30 @@ namespace Game.Core.Player
         {
             Vector3 delta = target.transform.position - camera.position;
             delta.y = 0f;
-            float sqrMagnitude = delta.sqrMagnitude;
-            if ( sqrMagnitude < _config.InteractionsSettings.MaxDistanceSquared )//if root is close enough
-            {
-                if ( _dictionary.IsShowing( target ) )
-                {
-                    var pointer = _dictionary.Get( target );
-                    if ( sqrMagnitude < _config.InteractionsSettings.KeyDistanceSquared && isKey )
-                    {
-                        pointer.HidePointShowKey();
-                    }
-                    else
-                    {
-                        pointer.ShowPointHideKey();
-                    }
-                    
-                    return;
-                }
 
-                CreateAndShowPointer();
-            }
-            else
+            float sqrDist = delta.sqrMagnitude;
+            if ( sqrDist >= _config.InteractionsSettings.MaxDistanceSquared )
             {
-                if ( _dictionary.IsShowing( target ) )
-                {
-                    _dictionary.TryRemove( target );
-                }
+                _dictionary.TryRemove( target );
+                return;
             }
+
+            CreateAndShowPointer();
+
+            var p = _dictionary.Get( target );
+            bool shouldBeKey = isKey && sqrDist < _config.InteractionsSettings.KeyDistanceSquared;
+
+            if ( shouldBeKey ) p.HidePointShowKey();
+            else p.ShowPointHideKey();
             
             void CreateAndShowPointer()
             {
-                if ( !_dictionary.Contains( target ) )
+                if ( !_dictionary.IsShowing( target ) )
                 {
                     var pointer = _interactionPointerFactory.Create();
                     _dictionary.TryAdd( target, pointer );
-                    
                     pointer.StartLookAt( camera, target );
                     pointer.Show();
-                    if ( sqrMagnitude < _config.InteractionsSettings.KeyDistanceSquared && isKey )
-                    {
-                        pointer.HidePointShowKey();
-                    }
-                    else
-                    {
-                        pointer.ShowPointHideKey();
-                    }
                 }
             }
         }

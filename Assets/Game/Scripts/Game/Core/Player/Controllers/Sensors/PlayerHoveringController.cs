@@ -2,7 +2,6 @@ using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.UI.GameScreen;
 using System;
-using UnityEngine;
 using PointerType = Game.Core.UI.GameScreen.PointerType;
 
 namespace Game.Core.Player
@@ -12,18 +11,20 @@ namespace Game.Core.Player
         private GameScreenViewModel _gameScreenViewModel;
         private bool _isObservablesAround;
         private PointerType _pointerType;
-        private ObservableObject _visionObservable;
 
         private readonly UIRootGame _uiRootGame;
         private readonly InteractionActionController _interactionActionController;
+        private readonly PlayerInteractablesController _interactablesController;
 
         public PlayerHoveringController(
             UIRootGame uiRootGame,
-            InteractionActionController interactionActionController
+            InteractionActionController interactionActionController,
+            PlayerInteractablesController interactablesController
             )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _interactionActionController = interactionActionController ?? throw new ArgumentNullException( nameof(interactionActionController) );
+            _interactablesController = interactablesController ?? throw new ArgumentNullException( nameof(interactablesController) );
         }
 
         public void Initialize()
@@ -37,38 +38,53 @@ namespace Game.Core.Player
             _gameScreenViewModel.ModelView.TargetInformer.Enable( false );
 
             _interactionActionController.Initialize();
-            
-            // _playerVisionController.OnObservablesChanged += ObservablesChangedHandler;
-            // _playerVisionController.OnCurrentObservableChanged += CurrentObservableChangedVisionHandler;
-            // _playerAroundController.OnCurrentObservableChanged += CurrentObservableChangedAroundHandler;
-            // CurrentObservableChangedVisionHandler( _playerVisionController.CurrentObservable );
+
+            _interactablesController.OnCurrentInteractableChanged += CurrentInteractableChangedHandler;
+            _interactablesController.OnObservablesChanged += ObservablesChangedHandler;
+            CurrentInteractableChangedHandler( _interactablesController.CurrentObservable );
         }
 
         public void Dispose()
         {
-            // _playerVisionController.OnObservablesChanged -= ObservablesChangedHandler;
-            // _playerVisionController.OnCurrentObservableChanged -= CurrentObservableChangedVisionHandler;
-            // _playerAroundController.OnCurrentObservableChanged -= CurrentObservableChangedAroundHandler;
+            _interactablesController.OnCurrentInteractableChanged -= CurrentInteractableChangedHandler;
+            _interactablesController.OnObservablesChanged -= ObservablesChangedHandler;
         }
 
         private void ObservablesChangedHandler( bool trigger )
         {
-            // _isObservablesAround = trigger;
-            // SetPointer( _pointerType );
+            _isObservablesAround = trigger;
+            SetPointer( _pointerType );
         }
         
-        private void CurrentObservableChangedVisionHandler( ObservableObject observable )
+        private void CurrentInteractableChangedHandler( InteractableObject interactable )
         {
-            InteractionVision( observable );
+            if ( interactable == null )
+            {
+                SetPointer( PointerType.None );
+            }
             
-            // _playerPointsController.PointsAround( allTargets, _view.transform, _view.CameraFPS.transform );
+            if ( interactable is ItemObject item )
+            {
+                SetPointer( PointerType.Point );
+                
+                _interactionActionController.SetToItem( item );
+            }
+            else if ( interactable is OpenCloseObject dynamic )
+            {
+                SetPointer( PointerType.Hand );
+                
+                _interactionActionController.SetToDynamic( dynamic );
+            }
+            else if ( interactable is PuzzleObject puzzle )
+            {
+                SetPointer( PointerType.Point );
+                
+                _interactionActionController.SetToPuzzle( puzzle );
+            }
+
+            _interactionActionController.CurrentObservableChangedHandler( interactable );
         }
         
-        private void CurrentObservableChangedAroundHandler( ObservableObject observable )
-        {
-            InteractionAround( observable );
-        }
-
         private void SetPointer( PointerType type )
         {
             _pointerType = type;
@@ -86,50 +102,6 @@ namespace Game.Core.Player
             {
                 _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( true );
                 _gameScreenViewModel.ModelView.TargetHand.EnableTargetHand( false );
-            }
-        }
-        
-        private void InteractionVision( ObservableObject observable )
-        {
-            _visionObservable = observable;
-            
-            if ( _visionObservable == null )
-            {
-                SetPointer( PointerType.None );
-                
-                return;
-            }
-
-            if ( _visionObservable is OpenCloseObject dynamic )
-            {
-                SetPointer( PointerType.Hand );
-                
-                _interactionActionController.SetToDynamic( dynamic );
-            }
-        }
-        
-        private void InteractionAround( ObservableObject observable )
-        {
-            if ( observable is ItemObject item )
-            {
-                SetPointer( PointerType.Point );
-                
-                _interactionActionController.SetToItem( item );
-            }
-            else if ( observable is PuzzleObject puzzle )
-            {
-                SetPointer( PointerType.Point );
-                
-                _interactionActionController.SetToPuzzle( puzzle );
-            }
-
-            if ( _visionObservable != null )
-            {
-                _interactionActionController.CurrentObservableChangedHandler( _visionObservable );
-            }
-            else
-            {
-                _interactionActionController.CurrentObservableChangedHandler( observable );
             }
         }
     }
