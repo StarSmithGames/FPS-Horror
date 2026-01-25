@@ -54,15 +54,5 @@ namespace Game.Core.Player
         {
             _targetFOV = fov;
         }
-
-        public bool IsInFOV( Vector3 worldPoint )
-        {
-            Vector3 dirToTarget = ( worldPoint - _view.CameraFPS.transform.position ).normalized;
-
-            float dot = Vector3.Dot( _view.CameraFPS.transform.forward, dirToTarget );
-            float minDot = Mathf.Cos( _view.CameraFPS.fieldOfView * 0.5f * Mathf.Deg2Rad );
-
-            return dot >= minDot;
-        }
     }
 }

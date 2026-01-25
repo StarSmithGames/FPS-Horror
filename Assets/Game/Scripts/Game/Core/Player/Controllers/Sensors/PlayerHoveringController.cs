@@ -15,20 +15,14 @@ namespace Game.Core.Player
         private ObservableObject _visionObservable;
 
         private readonly UIRootGame _uiRootGame;
-        private readonly PlayerVisionController _playerVisionController;
-        private readonly PlayerAroundController _playerAroundController;
         private readonly InteractionActionController _interactionActionController;
 
         public PlayerHoveringController(
             UIRootGame uiRootGame,
-            PlayerVisionController playerVisionController,
-            PlayerAroundController playerAroundController,
             InteractionActionController interactionActionController
             )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
-            _playerVisionController = playerVisionController ?? throw new ArgumentNullException( nameof(playerVisionController) );
-            _playerAroundController = playerAroundController ?? throw new ArgumentNullException( nameof(playerAroundController) );
             _interactionActionController = interactionActionController ?? throw new ArgumentNullException( nameof(interactionActionController) );
         }
 
@@ -43,19 +37,18 @@ namespace Game.Core.Player
             _gameScreenViewModel.ModelView.TargetInformer.Enable( false );
 
             _interactionActionController.Initialize();
-            // _contextMenuActionController.Initialize( _gameScreenViewModel.ModelView.TargetInformer );
             
-            _playerVisionController.OnObservablesChanged += ObservablesChangedHandler;
-            _playerVisionController.OnCurrentObservableChanged += CurrentObservableChangedVisionHandler;
-            _playerAroundController.OnCurrentObservableChanged += CurrentObservableChangedAroundHandler;
-            CurrentObservableChangedVisionHandler( _playerVisionController.CurrentObservable );
+            // _playerVisionController.OnObservablesChanged += ObservablesChangedHandler;
+            // _playerVisionController.OnCurrentObservableChanged += CurrentObservableChangedVisionHandler;
+            // _playerAroundController.OnCurrentObservableChanged += CurrentObservableChangedAroundHandler;
+            // CurrentObservableChangedVisionHandler( _playerVisionController.CurrentObservable );
         }
 
         public void Dispose()
         {
-            _playerVisionController.OnObservablesChanged -= ObservablesChangedHandler;
-            _playerVisionController.OnCurrentObservableChanged -= CurrentObservableChangedVisionHandler;
-            _playerAroundController.OnCurrentObservableChanged -= CurrentObservableChangedAroundHandler;
+            // _playerVisionController.OnObservablesChanged -= ObservablesChangedHandler;
+            // _playerVisionController.OnCurrentObservableChanged -= CurrentObservableChangedVisionHandler;
+            // _playerAroundController.OnCurrentObservableChanged -= CurrentObservableChangedAroundHandler;
         }
 
         private void ObservablesChangedHandler( bool trigger )
@@ -67,6 +60,8 @@ namespace Game.Core.Player
         private void CurrentObservableChangedVisionHandler( ObservableObject observable )
         {
             InteractionVision( observable );
+            
+            // _playerPointsController.PointsAround( allTargets, _view.transform, _view.CameraFPS.transform );
         }
         
         private void CurrentObservableChangedAroundHandler( ObservableObject observable )
@@ -137,33 +132,5 @@ namespace Game.Core.Player
                 _interactionActionController.CurrentObservableChangedHandler( observable );
             }
         }
-
-        // private void ContextMenu( ObservableObject observable )
-        // {
-        //     if ( observable == null )
-        //     {
-        //         _pointerController.SetPointer( PointerType.None );
-        //         _contextMenuActionController.CurrentObservableChangedHandler( null );
-        //         return;
-        //     }
-        //         
-        //     if ( observable is OpenCloseObject dynamic )
-        //     {
-        //         _pointerController.SetPointer( PointerType.Hand );
-        //         _contextMenuActionController.SetToDynamic( dynamic );
-        //     }
-        //     else if( observable is ItemObject item )
-        //     {
-        //         _pointerController.SetPointer( PointerType.Point );
-        //         _contextMenuActionController.SetToItem( item );
-        //     }
-        //     else if ( observable is PuzzleObject puzzle )
-        //     {
-        //         _pointerController.SetPointer( PointerType.Point );
-        //         _contextMenuActionController.SetToPuzzle( puzzle );
-        //     }
-        //         
-        //     _contextMenuActionController.CurrentObservableChangedHandler( observable );
-        // }
     }
 }
