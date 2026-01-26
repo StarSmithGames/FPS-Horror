@@ -7,10 +7,11 @@ using UnityEngine.UI;
 
 namespace Game.Core.UI.ResourcesScreen
 {
-    public sealed class UIInventoryCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public sealed class UIInventoryCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public event Action< UIInventoryCell > OnPointerEntered;
         public event Action< UIInventoryCell > OnPointerExited;
+        public event Action< UIInventoryCell > OnPointerClicked;
         
         [ SerializeField ] private Image _icon;
         [ SerializeField ] private GameObject _equiped;
@@ -46,6 +47,11 @@ namespace Game.Core.UI.ResourcesScreen
         public void OnPointerExit( PointerEventData eventData )
         {
             OnPointerExited?.Invoke( this );
+        }
+
+        public void OnPointerClick( PointerEventData eventData )
+        {
+            OnPointerClicked?.Invoke( this );
         }
     }
 }

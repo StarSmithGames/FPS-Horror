@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace Game.Core.UI.ContextMenu
+namespace Game.Systems.InventorySystem.ContextMenu
 {
-    [ CreateAssetMenu( fileName = "Scheme", menuName = "Game/ContextMenuScheme" ) ]
-    public sealed class ContextMenuScheme : ScriptableObject
+    [ CreateAssetMenu( fileName = "Items", menuName = "Game/ContextMenuItems" ) ]
+    public sealed class ContextMenuItems : ScriptableObject
     {
         [ field: SerializeField ] public ContextMenuItem Use { get; private set; }
         [ field: SerializeField ] public ContextMenuItem Equip { get; private set; }

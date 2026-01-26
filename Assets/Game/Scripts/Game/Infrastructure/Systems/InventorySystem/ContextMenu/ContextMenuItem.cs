@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Core.UI.ContextMenu
+namespace Game.Systems.InventorySystem.ContextMenu
 {
     [ CreateAssetMenu( fileName = "Item", menuName = "Game/ContextMenuItem" ) ]
     public sealed class ContextMenuItem : ScriptableObject

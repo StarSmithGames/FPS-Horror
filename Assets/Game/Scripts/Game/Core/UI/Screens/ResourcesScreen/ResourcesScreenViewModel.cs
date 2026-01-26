@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Game.Core.World.WorldManager;
 using Game.Core.Player;
+using Game.Core.UI.ContextMenu;
 using Game.Managers.CursorManager;
 using Game.Managers.GameManager;
 using Game.Managers.InputManager;
@@ -11,6 +12,7 @@ using PuzzlescapeGames.VVM;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
 using Zenject;
 
 namespace Game.Core.UI.ResourcesScreen
@@ -21,6 +23,7 @@ namespace Game.Core.UI.ResourcesScreen
         private InputActionVoidWrap _inputActionInventory;
         private CancellationTokenSource _cancellationTokenSource;
         private List< UIInventoryCell > _cells = new();
+        private ContextMenuController _contextMenuController;
             
         private readonly DiContainer _diContainer;
         private readonly ItemDescriptor _itemDescriptor;
@@ -52,11 +55,15 @@ namespace Game.Core.UI.ResourcesScreen
             
             _inputActionInventory = new( InputManager.Inputs.System.Inventory, InventoryClickedHandler );
             _inputActionInventory.Enable();
+
+            ModelView.OnBackButtonClicked += BackButtonClickedHandler;
         }
 
         protected override void UnSubscribeView()
         {
             base.UnSubscribeView();
+            
+            ModelView.OnBackButtonClicked -= BackButtonClickedHandler;
             
             _inputActionCancel.Disable();
             _inputActionInventory.Disable();
@@ -89,6 +96,9 @@ namespace Game.Core.UI.ResourcesScreen
             }
             ModelView.MenuOptions[ 1 ].Select();
             
+            _contextMenuController = _diContainer.Instantiate< ContextMenuController >( new object[] { ModelView.ContextMenu } );
+            _contextMenuController.Initialize();
+            
             // EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
 
             _cancellationTokenSource = new();
@@ -108,6 +118,7 @@ namespace Game.Core.UI.ResourcesScreen
                 var cell = _diContainer.InstantiatePrefab( ModelView.Inventory.CellPrefab, ModelView.Inventory.Content ).GetComponent< UIInventoryCell >();
                 cell.OnPointerEntered += PointerEnteredHandler;
                 cell.OnPointerExited += PointerExitedHandler;
+                cell.OnPointerClicked += PointerClickedHandler;
                 
                 if ( i < inventory.Items.Count )
                 {
@@ -136,6 +147,17 @@ namespace Game.Core.UI.ResourcesScreen
         {
             ModelView.Inventory.Description.Enable( false );
         }
+
+        private void PointerClickedHandler( UIInventoryCell cell )
+        {
+            if ( cell.Item == null )
+            {
+                _contextMenuController.HideContextMenu();
+                return;
+            }
+
+            _contextMenuController.ShowContextMenu( cell.Item, (RectTransform)cell.transform );
+        }
         
         private void InventoryClickedHandler()
         {
@@ -145,6 +167,11 @@ namespace Game.Core.UI.ResourcesScreen
         private void CancelButtonClickedHandler()
         {
             HideViewAndDispose();
+        }
+
+        private void BackButtonClickedHandler()
+        {
+            _contextMenuController.HideContextMenu();
         }
     }
 }
