@@ -10,6 +10,8 @@ namespace Game.Core.UI.ContextMenu
 {
     public sealed class ContextMenuController
     {
+        private List< UIContextMenuItem > _items = new();
+        
         private readonly UIContextMenu _view;
         private readonly ContextMenuService _contextMenuService;
         private readonly ILocalizationSystem _localizationSystem;
@@ -25,6 +27,18 @@ namespace Game.Core.UI.ContextMenu
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
 
+        private void Clear()
+        {
+            for ( int i = 0; i < _items.Count; i++ )
+            {
+                var item = _items[ i ];
+                item.OnPointerEntered -= PointerEnteredHandler;
+                item.OnPointerExited -= PointerExitedHandler;
+                item.OnPointerClicked -= PointerClickedHandler;
+            }
+            _items.Clear();
+        }
+        
         public void Initialize()
         {
             _view.Enable( false );
@@ -32,27 +46,33 @@ namespace Game.Core.UI.ContextMenu
 
         public void ShowContextMenu( ItemModel model, RectTransform from )
         {
+            Clear();
             _view.Content.DestroyChildren();
             
             var position = (Vector2)from.position;
             position += from.sizeDelta / 2;
             _view.Root.position = position;
 
-            List< ContextMenuItem > menu = null;
+            List< MenuItemCommand > menu = null;
             if ( model.Config is WeaponConfig )
             {
-                menu = _contextMenuService.GetWeaponMenu( false );
+                menu = _contextMenuService.GetWeaponMenu( model, false );
             }
             else
             {
-                menu = _contextMenuService.GetItemMenu( true );
+                menu = _contextMenuService.GetItemMenu( model );
             }
             
             for ( int i = 0; i < menu.Count; i++ )
             {
-                var context = menu[ i ];
+                var itemCommand = menu[ i ];
                 var item = GameObject.Instantiate( _view.ItemPrefab, _view.Content );
-                item.Set( context, _localizationSystem.Translate( context.NameId ) );
+                item.Set( itemCommand, _localizationSystem.Translate( itemCommand.Item.NameId ) );
+                item.OnPointerEntered += PointerEnteredHandler;
+                item.OnPointerExited += PointerExitedHandler;
+                item.OnPointerClicked += PointerClickedHandler;
+                
+                _items.Add( item );
             }
             
             if ( !_view.IsShowing )
@@ -66,7 +86,28 @@ namespace Game.Core.UI.ContextMenu
             if ( _view.IsShowing )
             {
                 _view.Hide();
+                Clear();
             }
+        }
+
+        private void PointerEnteredHandler( UIContextMenuItem item )
+        {
+            for ( int i = 0; i < _items.Count; i++ )
+            {
+                _items[ i ].Deselect();
+            }
+            item.Select();
+        }
+        
+        private void PointerExitedHandler( UIContextMenuItem item )
+        {
+            
+        }
+        
+        private void PointerClickedHandler( UIContextMenuItem item )
+        {
+            if ( !item.ItemCommand.Command.CanExecute() ) return;
+            item.ItemCommand.Command.Execute();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Game.Systems.InventorySystem
             Container.BindInstance( _database );
             Container.Bind< ItemFactory >().AsSingle().Lazy();
             Container.Bind< ItemDescriptor >().AsSingle().Lazy();
+            Container.Bind< ItemCommander >().AsSingle().Lazy();
             
             Container.BindInstance( _contextMenuItems );
             Container.Bind< ContextMenuService >().AsSingle().Lazy();
