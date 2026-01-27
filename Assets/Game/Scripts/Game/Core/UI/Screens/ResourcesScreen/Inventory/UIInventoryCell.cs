@@ -1,4 +1,4 @@
-using Game.Systems.InventorySystem;
+using Game.Core.World.InventorySystem;
 using System;
 using TMPro;
 using UnityEngine;
@@ -20,6 +20,7 @@ namespace Game.Core.UI.ResourcesScreen
         [ SerializeField ] private GameObject _opened;
         [ SerializeField ] private GameObject _locked;
 
+        public bool IsEmpty => Item == null;
         public ItemModel Item { get; private set; }
         
         public void Set( ItemModel item )
@@ -30,8 +31,9 @@ namespace Game.Core.UI.ResourcesScreen
             _count.text = $"{item.Quantity}";
             
             _counter.SetActive( false );
-            _equiped.SetActive( false );
         }
+        
+        public void SetEquip( bool trigger ) => _equiped.SetActive( trigger );
 
         public void SetLock( bool trigger )
         {

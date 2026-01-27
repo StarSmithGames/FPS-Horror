@@ -1,3 +1,4 @@
+using Game.Core;
 using Game.Core.World.WorldManager;
 using Game.Core.UI;
 using Game.Managers.GameManager;
@@ -27,6 +28,7 @@ namespace Game
             Container.Bind< GameManager >().AsSingle().Lazy();
             Container.Bind< StoryManager >().AsSingle().Lazy();
             Container.Bind< WorldManager >().AsSingle().Lazy();
+            Container.Bind< PlayerControllersService >().AsSingle().Lazy();
             Container.BindInterfacesAndSelfTo< GameBoostrap >().AsSingle().NonLazy();
         }
     }

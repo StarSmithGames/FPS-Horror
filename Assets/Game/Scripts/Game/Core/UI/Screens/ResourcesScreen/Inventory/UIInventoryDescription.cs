@@ -1,4 +1,4 @@
-using Game.Systems.InventorySystem;
+using Game.Core.World.InventorySystem;
 using PuzzlescapeGames.Extensions;
 using UnityEngine;
 

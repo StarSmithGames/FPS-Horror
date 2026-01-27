@@ -1,5 +1,5 @@
 using Game.Core.World.InspectionSystem;
-using Game.Systems.InventorySystem;
+using Game.Core.World.InventorySystem;
 using System;
 using UnityEngine;
 

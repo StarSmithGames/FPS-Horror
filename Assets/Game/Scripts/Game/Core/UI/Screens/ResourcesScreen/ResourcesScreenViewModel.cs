@@ -6,7 +6,7 @@ using Game.Managers.CursorManager;
 using Game.Managers.GameManager;
 using Game.Managers.InputManager;
 using Game.Managers.PauseManager;
-using Game.Systems.InventorySystem;
+using Game.Core.World.InventorySystem;
 using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.VVM;
 using System;
@@ -29,21 +29,21 @@ namespace Game.Core.UI.ResourcesScreen
         private readonly ItemDescriptor _itemDescriptor;
         private readonly PauseManager _pauseManager;
         private readonly GameManager _gameManager;
-        private readonly WorldManager _worldManager;
+        private readonly PlayerControllersService _playerControllersService;
         
         public ResourcesScreenViewModel(
             DiContainer diContainer,
             ItemDescriptor itemDescriptor,
             PauseManager pauseManager,
             GameManager gameManager,
-            WorldManager worldManager
+            PlayerControllersService playerControllersService
             )
         {
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
             _itemDescriptor = itemDescriptor ?? throw new ArgumentNullException( nameof(itemDescriptor) );
             _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
             _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
-            _worldManager = worldManager ?? throw new ArgumentNullException( nameof(worldManager) );
+            _playerControllersService = playerControllersService ?? throw new ArgumentNullException( nameof(playerControllersService) );
         }
         
         protected override void SubscribeView()
@@ -57,11 +57,15 @@ namespace Game.Core.UI.ResourcesScreen
             _inputActionInventory.Enable();
 
             ModelView.OnBackButtonClicked += BackButtonClickedHandler;
+
+            _playerControllersService.GetAs< PlayerEquipmentController >().OnEquipChanged += PlayerEquipChangedHandler;
         }
 
         protected override void UnSubscribeView()
         {
             base.UnSubscribeView();
+            
+            _playerControllersService.GetAs< PlayerEquipmentController >().OnEquipChanged -= PlayerEquipChangedHandler;
             
             ModelView.OnBackButtonClicked -= BackButtonClickedHandler;
             
@@ -110,8 +114,8 @@ namespace Game.Core.UI.ResourcesScreen
             ModelView.Inventory.Content.DestroyChildren();
             _cells.Clear();
 
-            var inventoryController = _worldManager.Player.Controller.ServiceLocator.GetAs< PlayerInventoryController >();
-            var inventory = inventoryController.Inventory;
+            var inventory = _playerControllersService.GetAs< PlayerInventoryController >().Inventory;
+            var equipment = _playerControllersService.GetAs< PlayerEquipmentController >();
             
             for ( int i = 0; i < 20; i++ )
             {
@@ -123,6 +127,8 @@ namespace Game.Core.UI.ResourcesScreen
                 if ( i < inventory.Items.Count )
                 {
                     cell.Set( inventory.Items[ i ] );
+                    cell.SetEquip( equipment.IsEquipped( cell.Item ) );
+                    
                     cell.SetLock( false );
                 }
                 else
@@ -131,6 +137,19 @@ namespace Game.Core.UI.ResourcesScreen
                 }
                 
                 _cells.Add( cell );
+            }
+        }
+
+        private void PlayerEquipChangedHandler()
+        {
+            var controller = _playerControllersService.GetAs< PlayerEquipmentController >();
+            
+            for ( int i = 0; i < _cells.Count; i++ )
+            {
+                var cell = _cells[ i ];
+                if ( cell.IsEmpty ) continue;
+
+                cell.SetEquip( controller.IsEquipped( cell.Item ) );
             }
         }
         

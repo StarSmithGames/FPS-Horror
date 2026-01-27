@@ -8,11 +8,6 @@ namespace Game.Core.World.WorldManager
         public LevelObject Level { get; private set; }
         public PlayerObject Player { get; private set; }
         
-        public WorldManager()
-        {
-            
-        }
-
         public void SetLevel( LevelObject level )
         {
             Level = level;

@@ -23,7 +23,7 @@ namespace Game.Core.Player
         private readonly PlayerStates _states;
         private readonly PlayerCrouchController _crouchController;
         private readonly PlayerJumpController _jumpController;
-        private readonly PlayerInventoryController _inventoryController;
+        private readonly PlayerEquipmentController _equipmentController;
         private readonly PlayerInspectionController _inspectionController;
         private readonly UIRootGame _uiRootGame;
         private readonly DataHolder _dataHolder;
@@ -32,7 +32,7 @@ namespace Game.Core.Player
             PlayerStates states,
             PlayerCrouchController crouchController,
             PlayerJumpController jumpController,
-            PlayerInventoryController inventoryController,
+            PlayerEquipmentController equipmentController,
             PlayerInspectionController inspectionController,
             UIRootGame uiRootGame,
             DataHolder dataHolder
@@ -41,7 +41,7 @@ namespace Game.Core.Player
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
-            _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
+            _equipmentController = equipmentController ?? throw new ArgumentNullException( nameof(equipmentController) );
             _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
             _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
@@ -170,7 +170,7 @@ namespace Game.Core.Player
         {
             if ( _states.IsBlocked ) return;
             
-            _inventoryController.SelectLighter();
+            _equipmentController.SelectLighter();
         }
         
         private void InventoryClickedHandler()

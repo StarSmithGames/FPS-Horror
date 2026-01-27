@@ -1,5 +1,6 @@
-using Game.Systems.InventorySystem;
-using Game.Systems.InventorySystem.ContextMenu;
+using Game.Core.Player;
+using Game.Core.World.InventorySystem;
+using Game.Core.World.InventorySystem.ContextMenu;
 using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.Localization;
 using System;
@@ -14,16 +15,19 @@ namespace Game.Core.UI.ContextMenu
         
         private readonly UIContextMenu _view;
         private readonly ContextMenuService _contextMenuService;
+        private readonly PlayerControllersService _playerControllersService;
         private readonly ILocalizationSystem _localizationSystem;
         
         public ContextMenuController(
             UIContextMenu view,
             ContextMenuService contextMenuService,
+            PlayerControllersService playerControllersService,
             ILocalizationSystem localizationSystem
             )
         {
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _contextMenuService = contextMenuService ?? throw new ArgumentNullException( nameof(contextMenuService) );
+            _playerControllersService = playerControllersService ?? throw new ArgumentNullException( nameof(playerControllersService) );
             _localizationSystem = localizationSystem ?? throw new ArgumentNullException( nameof(localizationSystem) );
         }
 
@@ -56,7 +60,7 @@ namespace Game.Core.UI.ContextMenu
             List< MenuItemCommand > menu = null;
             if ( model.Config is WeaponConfig )
             {
-                menu = _contextMenuService.GetWeaponMenu( model, false );
+                menu = _contextMenuService.GetWeaponMenu( model, _playerControllersService.GetAs< PlayerEquipmentController >().IsEquipped( model ) );
             }
             else
             {
@@ -108,6 +112,7 @@ namespace Game.Core.UI.ContextMenu
         {
             if ( !item.ItemCommand.Command.CanExecute() ) return;
             item.ItemCommand.Command.Execute();
+            HideContextMenu();
         }
     }
 }

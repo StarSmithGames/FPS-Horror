@@ -1,6 +1,6 @@
 using Game.Core.Player;
 using Game.Core.World.InteractionSystem;
-using Game.Systems.InventorySystem;
+using Game.Core.World.InventorySystem;
 using PuzzlescapeGames.Extensions;
 using System.Collections.Generic;
 using System.Linq;
