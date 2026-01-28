@@ -39,6 +39,26 @@ namespace Game.Core.Entity
             }
         }
 
+        public override Vector3 GetInteractPointerPosition( Transform from )
+        {
+            Vector3 nearest = transform.position;
+            float minSqrDist = float.MaxValue;
+
+            foreach ( var point in InteractableSettings.Points )
+            {
+                Vector3 pos = point.GetPointerPosition( transform );
+                float sqrDist = ( pos - from.position ).sqrMagnitude;
+
+                if ( sqrDist < minSqrDist )
+                {
+                    minSqrDist = sqrDist;
+                    nearest = pos;
+                }
+            }
+
+            return nearest;
+        }
+
         protected void Changed()
         {
             OnChanged?.Invoke();

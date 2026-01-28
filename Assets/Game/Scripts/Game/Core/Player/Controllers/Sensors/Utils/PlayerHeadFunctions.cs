@@ -79,30 +79,30 @@ namespace Game.Core.Player
             return result;
         }
 
-        public InteractableObject FindNearestInteractable( List< InteractableObject > targets )
-        {
-            if ( targets.Count > 0 )
-            {
-                InteractableObject nearest = null;
-                float minSqrDistance = _config.InteractionsSettings.KeyDistanceSquared;
-
-                foreach ( var target in targets )
-                {
-                    Vector3 closestPoint = target.GetInteractPointerPosition();
-                    float sqrDist = ( closestPoint - _head.position ).sqrMagnitude;
-
-                    if ( sqrDist < minSqrDistance )
-                    {
-                        minSqrDistance = sqrDist;
-                        nearest = target;
-                    }
-                }
-
-                return nearest;
-            }
-
-            return null;
-        }
+        // public InteractableObject FindNearestInteractable( List< InteractableObject > targets )
+        // {
+        //     if ( targets.Count > 0 )
+        //     {
+        //         InteractableObject nearest = null;
+        //         float minSqrDistance = _config.InteractionsSettings.KeyDistanceSquared;
+        //
+        //         foreach ( var target in targets )
+        //         {
+        //             Vector3 closestPoint = target.GetInteractPointerPosition();
+        //             float sqrDist = ( closestPoint - _head.position ).sqrMagnitude;
+        //
+        //             if ( sqrDist < minSqrDistance )
+        //             {
+        //                 minSqrDistance = sqrDist;
+        //                 nearest = target;
+        //             }
+        //         }
+        //
+        //         return nearest;
+        //     }
+        //
+        //     return null;
+        // }
 
         public InteractableObject FindBestKeyInteractable( List< InteractableObject > targets )
         {

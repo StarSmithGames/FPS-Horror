@@ -13,12 +13,20 @@ namespace Game.Core.Entity
             
         }
 
-        public Vector3 GetInteractPointerPosition()
+        public virtual Vector3 GetInteractPointerPosition()
+        {
+            
+            Vector3 position = Vector3.zero;
+            InteractableSettings.Points.ForEach( ( point ) => position += point.GetPointerPosition( transform ) );
+            return position / InteractableSettings.Points.Count;
+        }
+
+        public virtual Vector3 GetInteractPointerPosition( Transform from )
         {
             return InteractableSettings.Points.FirstOrDefault()?.GetPointerPosition( transform ) ?? transform.position;
         }
-        
-        public Vector3 GetLastPointerPosition()
+
+        public virtual Vector3 GetLastPointerPosition()
         {
             return InteractableSettings.Points.LastOrDefault()?.GetPointerPosition( transform ) ?? transform.position;
         }

@@ -14,8 +14,12 @@ namespace Game.Core.Entity
         {
             [ field: SerializeField ] public Transform CustomInteractablePoint { get; private set; }
             [ field: SerializeField ] public Vector3 Offset { get; private set; } = Vector3.zero;
-            
-            public Vector3 GetPointerPosition( Transform from ) => CustomInteractablePoint == null ? from.position + Offset : CustomInteractablePoint.position + Offset;
+
+            public Vector3 GetPointerPosition( Transform from )
+            {
+                var t = CustomInteractablePoint != null ? CustomInteractablePoint : from;
+                return t.TransformPoint( Offset );
+            }
         }
     }
 }

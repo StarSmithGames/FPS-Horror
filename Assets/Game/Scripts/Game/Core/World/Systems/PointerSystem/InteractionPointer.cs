@@ -52,7 +52,7 @@ namespace Game.Core.World.PointerSystem
             if ( IsShowing ) return;
             IsShowing = true;
             
-            transform.position = _target.GetInteractPointerPosition();//start point
+            transform.position = _target.GetInteractPointerPosition( _lookAtTarget );//start point
             
             _tween?.Kill( true );
             _tween = DOTween.Sequence().Append( _canvasGroup.DOFade( 1f, 0.33f ) );
