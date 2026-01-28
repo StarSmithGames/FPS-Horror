@@ -58,7 +58,7 @@ namespace Game.Core.Player
         {
             if ( _lighterController == null )
             {
-                _lighterController = (LighterController)_itemFactory.Create( _itemDatabase.LighterConfig.Prefab, _playerAvatar.HandRight.Root );
+                _lighterController = (LighterController)_itemFactory.Create( _itemDatabase.LighterConfig.Prefab, _playerAvatar.HandRight.Model.Root );
                 _lighterController.View.transform.localPosition = Vector3.zero;
                 _lighterController.View.transform.localRotation = Quaternion.identity;
                 _lighterController.Initialize();
