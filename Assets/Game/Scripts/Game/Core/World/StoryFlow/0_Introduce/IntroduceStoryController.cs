@@ -37,11 +37,14 @@ namespace Game.StoryFlow.Introduce
             //2.8 sec
             View.SoundLightDown.time = 0f;
             View.SoundLightDown.Play();
-
+            
             // await UniTask.WaitForSeconds( 1.7f, cancellationToken: cancellationToken );
             await LightFlicker.FlickerAndGrowingIntensity( View.Corridor.CeilLamps, View.LightFlickerSettings );
-
             LampUtils.SetLightsEnabled( View.MainRoom.CeilLamps, false );
+            foreach ( var computer in View.Computers )
+            {
+                computer.EnableComputer( false );
+            }
             
             View.LightTrigger.Enable( false );
         }

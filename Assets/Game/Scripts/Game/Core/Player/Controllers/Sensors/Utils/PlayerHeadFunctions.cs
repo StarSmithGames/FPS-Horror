@@ -81,29 +81,23 @@ namespace Game.Core.Player
 
             return result;
         }
-        
-        private bool HasLineOfSight(InteractableObject target, Vector3 targetPoint)
+
+        private bool HasLineOfSight( InteractableObject target, Vector3 targetPoint )
         {
             var origin = _head.position;
 
-            // чуть приподнять, чтобы не упираться в свой пол/капсулу при необходимости
-            // origin += Vector3.up * 0.05f;
-
             var dir = targetPoint - origin;
             var dist = dir.magnitude;
-            if (dist <= 0.001f) return true;
+            if ( dist <= 0.001f ) return true;
             dir /= dist;
 
             // Важно: маску можно оставить All (или исключить слой игрока, если мешает)
             int mask = ~0;
-
-            if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, mask, QueryTriggerInteraction.Ignore))
+            if ( Physics.Raycast( origin, dir, out RaycastHit hit, dist, mask, QueryTriggerInteraction.Ignore ) )
             {
-                // Если первое, во что мы попали — часть этого интерактабла, значит он НЕ за стеной
-                return hit.transform.IsChildOf(target.transform);
+                return hit.transform.IsChildOf( target.transform );
             }
 
-            // Ничего не задели — значит прямая видимость есть
             return true;
         }
 

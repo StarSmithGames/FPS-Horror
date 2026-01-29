@@ -9,7 +9,6 @@ namespace Game.StoryFlow
     {
         [ field: Header( "Settings" ) ]
         [ field: SerializeField ] public SpawnPlayerPoint PlayerPoint { get; private set; }
-        [ field: SerializeField ] public List< ItemObject > Items { get; private set; } = new();
-        [ field: SerializeField ] public List< PuzzleObject > Puzzles { get; private set; } = new();
+        [ field: SerializeField ] public List< ComputerObject > Computers { get; private set; } = new();
     }
 }

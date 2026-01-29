@@ -20,11 +20,8 @@ namespace Game.StoryFlow.Introduce.Editor
 
             if ( GUILayout.Button( "Find All Entities" ) )
             {
-                _target.Items.Clear();
-                _target.Items.AddRange( FindObjectsOfType< ItemObject >( true ) );
-                
-                _target.Puzzles.Clear();
-                _target.Puzzles.AddRange( FindObjectsOfType< PuzzleObject >( true ) );
+                _target.Computers.Clear();
+                _target.Computers.AddRange( _target.GetComponentsInChildren< ComputerObject >( true ) );
                 
                 EditorUtility.SetDirty( _target );
             }
