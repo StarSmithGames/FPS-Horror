@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,8 @@ namespace Game.Core.Entity
 {
     public abstract class ObservableObject : EntityObject
     {
+        public event Action< ObservableObject > OnColliderChanged;
+        
         [ Header( "SETTINGS" ) ]
         [ SerializeField ] protected List< Collider > _colliders = new();
 
@@ -28,6 +31,8 @@ namespace Game.Core.Entity
             }
 
             IsCollidersEnabled = trigger;
+            
+            OnColliderChanged?.Invoke( this );
         }
         
 #if UNITY_EDITOR

@@ -15,7 +15,6 @@ namespace Game.Core.Entity
 
         public virtual Vector3 GetInteractPointerPosition()
         {
-            
             Vector3 position = Vector3.zero;
             InteractableSettings.Points.ForEach( ( point ) => position += point.GetPointerPosition( transform ) );
             return position / InteractableSettings.Points.Count;

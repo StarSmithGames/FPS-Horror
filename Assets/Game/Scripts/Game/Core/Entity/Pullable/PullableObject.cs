@@ -45,16 +45,24 @@ namespace Game.Core.Entity
         {
             if ( IsOpen ) return;
             IsOpen = true;
+            
+            EnableCollider( false );
 
             await AnimateAsync( true );
+            
+            EnableCollider( true );
         }
 
         private async UniTask CloseAsync()
         {
             if ( !IsOpen ) return;
             IsOpen = false;
+            
+            EnableCollider( false );
 
             await AnimateAsync( false );
+            
+            EnableCollider( true );
         }
 
         private async UniTask AnimateAsync( bool opening )

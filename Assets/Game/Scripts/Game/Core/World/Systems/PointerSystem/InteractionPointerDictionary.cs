@@ -6,6 +6,7 @@ namespace Game.Core.World.PointerSystem
 {
     public sealed class InteractionPointerDictionary
     {
+        public Dictionary< InteractableObject, InteractionPointer > Pointers => _pointers;
         private readonly Dictionary< InteractableObject, InteractionPointer > _pointers = new();
 
         public void Clear()
@@ -14,23 +15,24 @@ namespace Game.Core.World.PointerSystem
             
             foreach ( var pointer in _pointers )
             {
-                var p = Get( pointer.Key );
-
-                if ( !p.IsShowing ) return;
-
-                p.Enable( false );
-                p.StopLookAt();
+                pointer.Key.OnColliderChanged -= InteractableColliderChangedHandler;
+                if ( Contains( pointer.Key ) )
+                {
+                    HidePointer( pointer.Key );
+                }
             }
             _pointers.Clear();
         }
         
         public void TryAdd( InteractableObject target, InteractionPointer pointer )
         {
+            target.OnColliderChanged += InteractableColliderChangedHandler;
             _pointers.TryAdd( target, pointer );
         }
 
         public void TryRemove( InteractableObject target )
         {
+            target.OnColliderChanged -= InteractableColliderChangedHandler;
             if ( Contains( target ) )
             {
                 HidePointer( target );
@@ -76,6 +78,14 @@ namespace Game.Core.World.PointerSystem
             if ( !pointer.IsShowing ) return;
             
             pointer.Hide( pointer.StopLookAt );
+        }
+        
+        private void InteractableColliderChangedHandler( ObservableObject target )
+        {
+            if ( target.IsCollidersEnabled ) return;
+            
+            target.OnColliderChanged -= InteractableColliderChangedHandler;
+            TryRemove( (InteractableObject)target );
         }
     }
 }

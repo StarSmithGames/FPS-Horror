@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Core.Entity;
-using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.IoC;
 using System;
 using System.Threading;

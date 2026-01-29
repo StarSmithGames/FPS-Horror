@@ -95,6 +95,8 @@ namespace Game.Core.Entity
             if ( IsOpen ) return;
             IsOpen = true;
 
+            EnableCollider( false );
+            
             AudioSource sound = null;
             if ( _settings.OpenSounds.Count > 0 )
             {
@@ -105,6 +107,8 @@ namespace Game.Core.Entity
                 await AnimateHandleAsync();
             }
             await AnimateDoorAsync( _settings.IsFlipped ? false : true );
+            
+            EnableCollider( true );
         }
 
         private async UniTask CloseDoorAsync()
@@ -112,7 +116,11 @@ namespace Game.Core.Entity
             if ( !IsOpen ) return;
             IsOpen = false;
             
+            EnableCollider( false );
+            
             await AnimateDoorAsync( _settings.IsFlipped ? true :false );
+            
+            EnableCollider( true );
         }
 
         private async UniTask AnimateHandleAsync()
