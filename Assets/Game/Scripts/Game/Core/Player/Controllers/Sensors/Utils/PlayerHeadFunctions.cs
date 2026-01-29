@@ -71,13 +71,42 @@ namespace Game.Core.Player
                 var interactable = collider.GetComponentInParent< InteractableObject >();
                 if ( interactable == null) continue;
                 if ( !interactable.IsCollidersEnabled ) continue;
-                if ( !IsInFOV( interactable.GetInteractPointerPosition() ) ) continue;
+                
+                var p = interactable.GetInteractPointerPosition();
+                if ( !IsInFOV( p ) ) continue;
+                if ( !HasLineOfSight( interactable, p ) ) continue;
                 
                 result.Add( interactable );
             }
 
             return result;
         }
+        
+        private bool HasLineOfSight(InteractableObject target, Vector3 targetPoint)
+        {
+            var origin = _head.position;
+
+            // чуть приподнять, чтобы не упираться в свой пол/капсулу при необходимости
+            // origin += Vector3.up * 0.05f;
+
+            var dir = targetPoint - origin;
+            var dist = dir.magnitude;
+            if (dist <= 0.001f) return true;
+            dir /= dist;
+
+            // Важно: маску можно оставить All (или исключить слой игрока, если мешает)
+            int mask = ~0;
+
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, mask, QueryTriggerInteraction.Ignore))
+            {
+                // Если первое, во что мы попали — часть этого интерактабла, значит он НЕ за стеной
+                return hit.transform.IsChildOf(target.transform);
+            }
+
+            // Ничего не задели — значит прямая видимость есть
+            return true;
+        }
+
 
         // public InteractableObject FindNearestInteractable( List< InteractableObject > targets )
         // {
