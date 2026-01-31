@@ -23,11 +23,10 @@ namespace Game.Core.Player
             BindLocomotion();
             Container.Bind< PlayerFOVController >().AsSingle().Lazy();
 
-            Container.Bind< InteractionActionController >().AsSingle().Lazy();
-            Container.Bind< InteractionActionFactory >().AsSingle().Lazy();
             // Container.Bind< ContextMenuActionController >().AsSingle().Lazy();
             // Container.Bind< ContextMenuActionFactory >().AsSingle().Lazy();
 
+            Container.Bind< InteractionActionFactory >().AsSingle().Lazy();
             Container.Bind< PlayerHeadFunctions >().AsSingle().Lazy();
             Container.Bind< PlayerInteractablesController >().AsSingle().Lazy();
             Container.Bind< PlayerHoveringController >().AsSingle().Lazy();

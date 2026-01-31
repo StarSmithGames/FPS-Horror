@@ -11,20 +11,21 @@ namespace Game.Core.Player
         private GameScreenViewModel _gameScreenViewModel;
         private bool _isObservablesAround;
         private PointerType _pointerType;
-
+        private ActionHandler _actionHandler;
+        
         private readonly UIRootGame _uiRootGame;
-        private readonly InteractionActionController _interactionActionController;
         private readonly PlayerInteractablesController _interactablesController;
+        private readonly InteractionActionFactory _interactionActionFactory;
 
         public PlayerHoveringController(
             UIRootGame uiRootGame,
-            InteractionActionController interactionActionController,
-            PlayerInteractablesController interactablesController
+            PlayerInteractablesController interactablesController,
+            InteractionActionFactory interactionActionFactory
             )
         {
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
-            _interactionActionController = interactionActionController ?? throw new ArgumentNullException( nameof(interactionActionController) );
             _interactablesController = interactablesController ?? throw new ArgumentNullException( nameof(interactablesController) );
+            _interactionActionFactory = interactionActionFactory ?? throw new ArgumentNullException( nameof(interactionActionFactory) );
         }
 
         public void Initialize()
@@ -36,8 +37,6 @@ namespace Game.Core.Player
             _gameScreenViewModel.ModelView.TargetHolder.Disable();
             
             _gameScreenViewModel.ModelView.TargetInformer.Enable( false );
-
-            _interactionActionController.Initialize();
 
             _interactablesController.OnCurrentInteractableChanged += CurrentInteractableChangedHandler;
             _interactablesController.OnObservablesChanged += ObservablesChangedHandler;
@@ -67,22 +66,22 @@ namespace Game.Core.Player
             {
                 SetPointer( PointerType.Point );
                 
-                _interactionActionController.SetToItem( item );
+                SetToItem( item );
             }
             else if ( interactable is OpenCloseObject dynamic )
             {
                 SetPointer( PointerType.Hand );
                 
-                _interactionActionController.SetToDynamic( dynamic );
+                SetToDynamic( dynamic );
             }
             else if ( interactable is PuzzleObject puzzle )
             {
                 SetPointer( PointerType.Point );
                 
-                _interactionActionController.SetToPuzzle( puzzle );
+                SetToPuzzle( puzzle );
             }
 
-            _interactionActionController.CurrentObservableChangedHandler( interactable );
+            CurrentObservableChangedHandler( interactable );
         }
         
         private void SetPointer( PointerType type )
@@ -103,6 +102,36 @@ namespace Game.Core.Player
                 _gameScreenViewModel.ModelView.TargetPoint.EnableTargetPoint( true );
                 _gameScreenViewModel.ModelView.TargetHand.EnableTargetHand( false );
             }
+        }
+        
+        private void SetToDynamic( OpenCloseObject dynamic )
+        {
+            _actionHandler?.Dispose();
+            _actionHandler = _interactionActionFactory.GetOrCreateOpenCloseHandler( dynamic );
+        }
+
+        private void SetToItem( ItemObject item )
+        {
+            _actionHandler?.Dispose();
+            _actionHandler = _interactionActionFactory.GetOrCreateItemHandler( item );
+        }
+
+        private void SetToPuzzle( PuzzleObject puzzle )
+        {
+            _actionHandler?.Dispose();
+            _actionHandler = _interactionActionFactory.GetOrCreatePuzzleHandler( puzzle );
+        }
+        
+        private void CurrentObservableChangedHandler( ObservableObject observable )
+        {
+            if ( observable == null )
+            { 
+                _actionHandler?.Dispose();
+                _actionHandler = null;
+                return;
+            }
+
+            _actionHandler?.Enable();
         }
     }
 }

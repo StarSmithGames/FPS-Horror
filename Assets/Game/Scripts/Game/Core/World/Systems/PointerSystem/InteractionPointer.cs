@@ -17,7 +17,10 @@ namespace Game.Core.World.PointerSystem
         [ SerializeField ] private Image _frame;
         [ SerializeField ] private Image _center;
         [ SerializeField ] private TextMeshProUGUI _key;
-
+        [ Space ]
+        [ SerializeField ] private GameObject _holder;
+        [ SerializeField ] private Image _bar;
+        
         public bool IsShowing { get; private set; }
         public bool IsPointShowing { get; private set; }
         public bool IsKeyShowing { get; private set; }
@@ -45,6 +48,13 @@ namespace Game.Core.World.PointerSystem
                 DespawnIt();
             }
         }
+
+        public void EnableHolder( bool trigger )
+        {
+            _holder.SetActive( trigger );
+        }
+        
+        public void SetHolderBar( float value ) => _bar.fillAmount = value;
         
         public void Show()
         {
