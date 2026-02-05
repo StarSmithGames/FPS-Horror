@@ -40,7 +40,11 @@ namespace Game.Core.World.PointerSystem
             _pointers.Remove( target );
         }
 
-        public InteractionPointer Get( InteractableObject target ) => _pointers[ target ];
+        public InteractionPointer TryGet( InteractableObject target )
+        {
+            if ( !Contains( target ) ) return null;
+            return _pointers[ target ];
+        }
 
         public void TryRemoveSubtractions( List< InteractableObject > targets )
         {
@@ -65,7 +69,7 @@ namespace Game.Core.World.PointerSystem
         {
             if ( Contains( target ) )
             {
-                return Get( target ).IsShowing;
+                return TryGet( target ).IsShowing;
             }
 
             return false;
@@ -73,7 +77,7 @@ namespace Game.Core.World.PointerSystem
 
         public void HidePointer( InteractableObject target )
         {
-            var pointer = Get( target );
+            var pointer = TryGet( target );
 
             if ( !pointer.IsShowing ) return;
             

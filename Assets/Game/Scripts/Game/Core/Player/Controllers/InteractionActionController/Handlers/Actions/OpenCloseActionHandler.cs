@@ -1,7 +1,6 @@
 using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Managers.InputManager;
-using UnityEngine;
 
 namespace Game.Core.Player
 {

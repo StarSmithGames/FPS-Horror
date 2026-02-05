@@ -17,7 +17,7 @@ namespace Game.Core.Player
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
         }
         
-        public ActionHandler GetOrCreateItemHandler( ItemObject item )
+        public InspectActionHandler GetOrCreateItemHandler( ItemObject item )
         {
             if ( _inspect == null )
             {
@@ -28,7 +28,7 @@ namespace Game.Core.Player
             return _inspect;
         }
         
-        public ActionHandler GetOrCreateOpenCloseHandler( OpenCloseObject dynamic )
+        public OpenCloseActionHandler GetOrCreateOpenCloseHandler( OpenCloseObject dynamic )
         {
             if ( _openClose == null )
             {
@@ -39,7 +39,7 @@ namespace Game.Core.Player
             return _openClose;
         }
 
-        public ActionHandler GetOrCreatePuzzleHandler( InteractableObject interactable )
+        public InteractActionHandler GetOrCreatePuzzleHandler( InteractableObject interactable )
         {
             if ( _interact == null )
             {

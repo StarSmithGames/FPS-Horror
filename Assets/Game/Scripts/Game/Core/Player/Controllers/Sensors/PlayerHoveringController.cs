@@ -1,7 +1,10 @@
 using Game.Core.Entity;
 using Game.Core.UI;
 using Game.Core.UI.GameScreen;
+using Game.Core.World.PointerSystem;
 using System;
+using System.Dynamic;
+using UnityEngine;
 using PointerType = Game.Core.UI.GameScreen.PointerType;
 
 namespace Game.Core.Player
@@ -11,6 +14,7 @@ namespace Game.Core.Player
         private GameScreenViewModel _gameScreenViewModel;
         private bool _isObservablesAround;
         private PointerType _pointerType;
+        private InteractionPointer _lastPointer;
         private ActionHandler _actionHandler;
         
         private readonly UIRootGame _uiRootGame;
@@ -57,6 +61,17 @@ namespace Game.Core.Player
         
         private void CurrentInteractableChangedHandler( InteractableObject interactable )
         {
+            if ( _actionHandler != null )
+            {
+                _actionHandler.OnStarted -= DynamicProgressStartedHandler;
+                _actionHandler.OnFinished -= DynamicProgressFinishedHandler;
+                _actionHandler.OnProgressChanged -= DynamicProgressChangedHandler;
+            }
+            
+            _lastPointer?.SetHolderBar( 0 );
+            _lastPointer = _interactablesController.GetPointer( interactable );
+            _lastPointer?.SetHolderBar( 0 );
+            
             if ( interactable == null )
             {
                 SetPointer( PointerType.None );
@@ -81,7 +96,20 @@ namespace Game.Core.Player
                 SetToPuzzle( puzzle );
             }
 
-            CurrentObservableChangedHandler( interactable );
+            if ( interactable == null )
+            {
+                if ( _actionHandler != null )
+                {
+                    _actionHandler.OnStarted -= DynamicProgressStartedHandler;
+                    _actionHandler.OnFinished -= DynamicProgressFinishedHandler;
+                    _actionHandler.OnProgressChanged -= DynamicProgressChangedHandler;
+                    _actionHandler.Dispose();
+                }
+                _actionHandler = null;
+                _lastPointer = null;
+                return;
+            }
+            _actionHandler?.Enable();
         }
         
         private void SetPointer( PointerType type )
@@ -108,6 +136,10 @@ namespace Game.Core.Player
         {
             _actionHandler?.Dispose();
             _actionHandler = _interactionActionFactory.GetOrCreateOpenCloseHandler( dynamic );
+            
+            _actionHandler.OnStarted += DynamicProgressStartedHandler;
+            _actionHandler.OnFinished += DynamicProgressFinishedHandler;
+            _actionHandler.OnProgressChanged += DynamicProgressChangedHandler;
         }
 
         private void SetToItem( ItemObject item )
@@ -122,16 +154,20 @@ namespace Game.Core.Player
             _actionHandler = _interactionActionFactory.GetOrCreatePuzzleHandler( puzzle );
         }
         
-        private void CurrentObservableChangedHandler( ObservableObject observable )
+        private void DynamicProgressStartedHandler()
         {
-            if ( observable == null )
-            { 
-                _actionHandler?.Dispose();
-                _actionHandler = null;
-                return;
-            }
-
-            _actionHandler?.Enable();
+            _lastPointer.SetHolderBar( 0 );
+        }
+        
+        private void DynamicProgressFinishedHandler()
+        {
+            _lastPointer.SetHolderBar( 0 );
+            _lastPointer = null;
+        }
+        
+        private void DynamicProgressChangedHandler( float progress )
+        {
+            _lastPointer.SetHolderBar( progress );
         }
     }
 }

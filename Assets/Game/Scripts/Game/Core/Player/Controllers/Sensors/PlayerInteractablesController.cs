@@ -70,6 +70,12 @@ namespace Game.Core.Player
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
         }
+        
+        public InteractionPointer GetPointer( InteractableObject interactable )
+        {
+            if ( interactable == null ) return null;
+            return _dictionary.TryGet( interactable );
+        }
 
         private async UniTask Tick( CancellationToken cancellationToken = default )
         {
@@ -85,10 +91,12 @@ namespace Game.Core.Player
                 else
                 {
                     var targetsAround = _headFunctions.GetTargetsAround();
-                    CurrentObservable = _headFunctions.FindBestKeyInteractable( targetsAround );
+                    var current = _headFunctions.FindBestKeyInteractable( targetsAround );
                     
                     PointsAround( targetsAround, CurrentObservable );
-
+                    
+                    CurrentObservable = current;
+                    
                     OnObservablesChanged?.Invoke( _headFunctions.CastInFrontRay( out RaycastHit _ ) );
                 }
 
@@ -129,7 +137,7 @@ namespace Game.Core.Player
 
             CreateAndShowPointer();
 
-            var p = _dictionary.Get( target );
+            var p = _dictionary.TryGet( target );
             bool shouldBeKey = isKey && sqrDist < _config.InteractionsSettings.KeyDistanceSquared;
 
             if ( shouldBeKey ) p.HidePointShowKey();

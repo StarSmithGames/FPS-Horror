@@ -49,13 +49,12 @@ namespace Game.Core.World.PointerSystem
             }
         }
 
-        public void EnableHolder( bool trigger )
+        public void SetHolderBar( float value )
         {
-            _holder.SetActive( trigger );
+            _holder.SetActive( value > 0 );
+            _bar.fillAmount = value;
         }
-        
-        public void SetHolderBar( float value ) => _bar.fillAmount = value;
-        
+
         public void Show()
         {
             if ( IsShowing ) return;

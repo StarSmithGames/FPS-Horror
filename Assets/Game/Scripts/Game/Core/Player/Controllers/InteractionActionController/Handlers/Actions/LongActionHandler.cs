@@ -39,19 +39,5 @@ namespace Game.Core.Player
             
             IsEnable = false;
         }
-
-        protected virtual void InteractStarted() {}
-        
-        protected virtual void InteractProgress( float value )
-        {
-            _gameScreenViewModel.ModelView.TargetHolder.SetProgress( value );
-        }
-
-        protected virtual void InteractFinished( bool result )
-        {
-            if ( !IsEnable ) return;
-            
-            _gameScreenViewModel.ModelView.TargetHolder.SetProgress( 0 );
-        }
     }
 }
