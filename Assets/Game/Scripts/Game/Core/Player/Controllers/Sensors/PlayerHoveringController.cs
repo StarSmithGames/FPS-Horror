@@ -162,7 +162,6 @@ namespace Game.Core.Player
         private void DynamicProgressFinishedHandler()
         {
             _lastPointer.SetHolderBar( 0 );
-            _lastPointer = null;
         }
         
         private void DynamicProgressChangedHandler( float progress )

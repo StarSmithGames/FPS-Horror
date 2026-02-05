@@ -19,10 +19,12 @@ namespace Game.Core.UI.ResourcesScreen
 {
     public sealed class ResourcesScreenViewModel : ViewModel< UIResourcesScreen >
     {
+        private int _currentTabIndex = -1;
         private InputActionVoidWrap _inputActionCancel;
         private InputActionVoidWrap _inputActionInventory;
-        private CancellationTokenSource _cancellationTokenSource;
-        private List< UIInventoryCell > _cells = new();
+        private CancellationTokenSource _cancellationInventorySource;
+        private List< UIInventoryCell > _inventoryCells = new();
+        private CancellationTokenSource _cancellationLibrarySource;
         private ContextMenuController _contextMenuController;
             
         private readonly DiContainer _diContainer;
@@ -56,6 +58,10 @@ namespace Game.Core.UI.ResourcesScreen
             _inputActionInventory = new( InputManager.Inputs.System.Inventory, InventoryClickedHandler );
             _inputActionInventory.Enable();
 
+            for ( int i = 0; i < ModelView.MenuOptions.Count; i++ )
+            {
+                ModelView.MenuOptions[ i ].OnButtonClicked += MenuOptionClickedHandler;
+            }
             ModelView.OnBackButtonClicked += BackButtonClickedHandler;
 
             _playerControllersService.GetAs< PlayerEquipmentController >().OnEquipChanged += PlayerEquipChangedHandler;
@@ -67,6 +73,10 @@ namespace Game.Core.UI.ResourcesScreen
             
             _playerControllersService.GetAs< PlayerEquipmentController >().OnEquipChanged -= PlayerEquipChangedHandler;
             
+            for ( int i = 0; i < ModelView.MenuOptions.Count; i++ )
+            {
+                ModelView.MenuOptions[ i ].OnButtonClicked -= MenuOptionClickedHandler;
+            }
             ModelView.OnBackButtonClicked -= BackButtonClickedHandler;
             
             _inputActionCancel.Disable();
@@ -79,9 +89,13 @@ namespace Game.Core.UI.ResourcesScreen
         {
             if ( !ModelView.IsShowing )
             {
-                _cancellationTokenSource?.Cancel();
-                _cancellationTokenSource?.Dispose();
-                _cancellationTokenSource = null;
+                _cancellationInventorySource?.Cancel();
+                _cancellationInventorySource?.Dispose();
+                _cancellationInventorySource = null;
+                
+                _cancellationLibrarySource?.Cancel();
+                _cancellationLibrarySource?.Dispose();
+                _cancellationLibrarySource = null;
                 
                 CursorManager.Disable();
                 _pauseManager.UnPause();
@@ -91,28 +105,51 @@ namespace Game.Core.UI.ResourcesScreen
             CursorManager.Enable();
             _pauseManager.Pause();
             _gameManager.SetState( GameState.Menu );
-
-            ModelView.Inventory.Description.Enable( false );
-            
-            for ( int i = 0; i < ModelView.MenuOptions.Count; i++ )
-            {
-                ModelView.MenuOptions[ i ].Deselect();
-            }
-            ModelView.MenuOptions[ 1 ].Select();
             
             _contextMenuController = _diContainer.Instantiate< ContextMenuController >( new object[] { ModelView.ContextMenu } );
             _contextMenuController.Initialize();
             
             // EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
-
-            _cancellationTokenSource = new();
-            LoadItems( _cancellationTokenSource.Token ).Forget();
+            SelectTab( 1 );
         }
 
-        private async UniTask LoadItems( CancellationToken cancellationToken = default )
+        private void SelectTab( int index )
+        {
+            _currentTabIndex = index;
+
+            for ( int i = 0; i < ModelView.MenuOptions.Count; i++ )
+            {
+                ModelView.MenuOptions[ i ].Deselect();
+            }
+            ModelView.MenuOptions[ index ].Select();
+
+            if ( index == 0 )
+            {
+                
+            }
+            else if ( index == 1 )
+            {
+                ModelView.Inventory.gameObject.SetActive( true );
+                ModelView.Inventory.Description.Enable( false );
+                ModelView.Library.gameObject.SetActive( false );
+
+                _cancellationInventorySource = new();
+                LoadInventoryItems( _cancellationInventorySource.Token ).Forget();
+            }
+            else if ( index == 2 )
+            {
+                ModelView.Inventory.gameObject.SetActive( false );
+                ModelView.Library.gameObject.SetActive( true );
+
+                _cancellationLibrarySource = new();
+                LoadLibraryItems( _cancellationLibrarySource.Token ).Forget();
+            }
+        }
+        
+        private async UniTask LoadInventoryItems( CancellationToken cancellationToken = default )
         {
             ModelView.Inventory.Content.DestroyChildren();
-            _cells.Clear();
+            _inventoryCells.Clear();
 
             var inventory = _playerControllersService.GetAs< PlayerInventoryController >().Inventory;
             var equipment = _playerControllersService.GetAs< PlayerEquipmentController >();
@@ -136,17 +173,29 @@ namespace Game.Core.UI.ResourcesScreen
                     cell.SetLock( true );
                 }
                 
-                _cells.Add( cell );
+                _inventoryCells.Add( cell );
             }
         }
 
+        private async UniTask LoadLibraryItems( CancellationToken cancellationToken = default )
+        {
+            ModelView.Library.Content.DestroyChildren();
+            ModelView.Library.MainText.text = string.Empty;
+        }
+        
+        private void MenuOptionClickedHandler( UIOption uiOption )
+        {
+            var index = ModelView.MenuOptions.IndexOf( (UIOptionMenuButton)uiOption );
+            SelectTab( index );
+        }
+        
         private void PlayerEquipChangedHandler()
         {
             var controller = _playerControllersService.GetAs< PlayerEquipmentController >();
             
-            for ( int i = 0; i < _cells.Count; i++ )
+            for ( int i = 0; i < _inventoryCells.Count; i++ )
             {
-                var cell = _cells[ i ];
+                var cell = _inventoryCells[ i ];
                 if ( cell.IsEmpty ) continue;
 
                 cell.SetEquip( controller.IsEquipped( cell.Item ) );

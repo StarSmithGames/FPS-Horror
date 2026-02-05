@@ -12,6 +12,7 @@ namespace Game.Core.UI.ResourcesScreen
         
         [ field: SerializeField ] public List< UIOptionMenuButton > MenuOptions = new();
         [ field: SerializeField ] public UIInventory Inventory { get; private set; }
+        [ field: SerializeField ] public UILibrary Library { get; private set; }
         [ field: SerializeField ] public UIContextMenu ContextMenu { get; private set; }
 
         public void OnBackButtonClick()
