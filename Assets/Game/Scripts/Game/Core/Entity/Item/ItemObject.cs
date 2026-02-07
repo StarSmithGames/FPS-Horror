@@ -8,8 +8,6 @@ namespace Game.Core.Entity
     public abstract class ItemObject : InteractableObject
     {
         [ field: Header( "INFO" ) ]
-        [ field: SerializeField ] public string NameId { get; private set; }
-        [ field: SerializeField ] public string TextId { get; private set; }
         [ field: SerializeField ] public ItemConfig Config { get; private set; }
         [ field: Header( "INSPECT" ) ]
         [ field: SerializeField ] public GameObject Root { get; private set; }

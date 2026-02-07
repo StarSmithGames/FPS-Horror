@@ -25,6 +25,7 @@ namespace Game.Core.UI.ResourcesScreen
         private CancellationTokenSource _cancellationInventorySource;
         private List< UIInventoryCell > _inventoryCells = new();
         private CancellationTokenSource _cancellationLibrarySource;
+        private List< UILibraryOption > _libraryOptions = new();
         private ContextMenuController _contextMenuController;
             
         private readonly DiContainer _diContainer;
@@ -179,8 +180,19 @@ namespace Game.Core.UI.ResourcesScreen
 
         private async UniTask LoadLibraryItems( CancellationToken cancellationToken = default )
         {
+            var library = _playerControllersService.GetAs< PlayerLibraryController >();
+            
             ModelView.Library.Content.DestroyChildren();
             ModelView.Library.MainText.text = string.Empty;
+            _libraryOptions.Clear();
+
+            for ( int i = 0; i < library.Library.Items.Count; i++ )
+            {
+                var item = GameObject.Instantiate( ModelView.Library.OptionPrefab, ModelView.Library.Content );
+                item.SetText( library.GetItemName( library.Library.Items[ i ] ) );
+                
+                _libraryOptions.Add( item );
+            }
         }
         
         private void MenuOptionClickedHandler( UIOption uiOption )

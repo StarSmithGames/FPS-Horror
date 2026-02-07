@@ -8,7 +8,7 @@ namespace Game.Core.World.InventorySystem
     {
         [ field: SerializeField ] public string UID { get; private set; }
         [ field: SerializeField ] public string NameId { get; private set; }
-        [ field: TextArea ]
+        // [ field: TextArea ]
         [ field: SerializeField ] public string DescriptionId { get; private set; }
         [ field: SerializeField ] public Sprite Icon { get; private set; }
         [ field: SerializeField ] public int MaxStack { get; private set; } = 99;

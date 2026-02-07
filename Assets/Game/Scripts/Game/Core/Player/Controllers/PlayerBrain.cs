@@ -29,6 +29,7 @@ namespace Game.Core.Player
         private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerInventoryController _inventoryController;
         private readonly PlayerEquipmentController _equipmentController;
+        private readonly PlayerLibraryController _libraryController;
         private readonly PlayerInspectionController _inspectionController;
         private readonly PlayerSoundController _soundController;
         private readonly PauseManager _pauseManager;
@@ -48,6 +49,7 @@ namespace Game.Core.Player
             PlayerInputActionsController inputActionsController,
             PlayerInventoryController inventoryController,
             PlayerEquipmentController equipmentController,
+            PlayerLibraryController libraryController,
             PlayerInspectionController inspectionController,
             PlayerSoundController soundController,
             
@@ -67,6 +69,7 @@ namespace Game.Core.Player
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
             _equipmentController = equipmentController ?? throw new ArgumentNullException( nameof(equipmentController) );
+            _libraryController = libraryController ?? throw new ArgumentNullException( nameof(libraryController) );
             _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
             _soundController = soundController ?? throw new ArgumentNullException( nameof(soundController) );
             _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
@@ -82,6 +85,7 @@ namespace Game.Core.Player
             ServiceLocator.Register( _inputActionsController );
             ServiceLocator.Register( _inventoryController );
             ServiceLocator.Register( _equipmentController );
+            ServiceLocator.Register( _libraryController );
             ServiceLocator.Register( _inspectionController );
             ServiceLocator.Register( _soundController );
         }

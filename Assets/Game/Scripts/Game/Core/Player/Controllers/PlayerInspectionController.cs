@@ -18,18 +18,21 @@ namespace Game.Core.Player
         private readonly PlayerStates _states;
         private readonly PlayerObject _view;
         private readonly PlayerInventoryController _playerInventoryController;
+        private readonly PlayerLibraryController _playerLibraryController;
         private readonly UIRootGame _uiRootGame;
 
         public PlayerInspectionController(
             PlayerStates states,
             PlayerObject view,
             PlayerInventoryController playerInventoryController,
+            PlayerLibraryController playerLibraryController,
             UIRootGame uiRootGame
             )
         {
             _states = states ?? throw new ArgumentNullException( nameof(states) );
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _playerInventoryController = playerInventoryController ?? throw new ArgumentNullException( nameof(playerInventoryController) );
+            _playerLibraryController = playerLibraryController ?? throw new ArgumentNullException( nameof(playerLibraryController) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
         }
 
@@ -44,6 +47,8 @@ namespace Game.Core.Player
             _inspectDialogViewModel.OnActionButtonClicked += ItemTakenHandler;
             _inspectDialogViewModel.OnCancelButtonClicked += InspectCompletedHandler;
             _inspectDialogViewModel.ShowView();
+            
+            _playerLibraryController.Add( _item );
             
             OnInspectStarted?.Invoke();
         }

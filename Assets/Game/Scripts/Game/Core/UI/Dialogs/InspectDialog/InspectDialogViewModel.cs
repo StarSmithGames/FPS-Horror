@@ -99,13 +99,13 @@ namespace Game.Core.UI.InspectDialog
             ModelView.ExamineName.text = string.Empty;
             ModelView.ExamineText.text = string.Empty;
 
-            if ( !_item.NameId.IsEmpty() )
+            if ( !_item.Config.NameId.IsEmpty() )
             {
-                ModelView.ExamineName.text = _localizationSystem.Translate( _item.NameId );
+                ModelView.ExamineName.text = _localizationSystem.Translate( _item.Config.NameId );
             }
-            if ( !_item.TextId.IsEmpty() )
+            if ( !_item.Config.DescriptionId.IsEmpty() )
             {
-                ModelView.ExamineText.text = _localizationSystem.Translate( _item.TextId );
+                ModelView.ExamineText.text = _localizationSystem.Translate( _item.Config.DescriptionId );
             }
             
             _item.SetLayer( LayersParams.ABOVE );
