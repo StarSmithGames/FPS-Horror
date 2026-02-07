@@ -16,11 +16,11 @@ namespace Game.Core.UI.ResourcesScreen
             _canvasGroup.Enable( trigger );
         }
         
-        public void Set( ItemConfig config, ItemDescriptor descriptor )
+        public void Set( string name, string description, string type )
         {
-            _itemName.text = descriptor.GetName( config );
-            _itemType.text = descriptor.GetType( config );
-            _itemDescription.text = descriptor.GetDescription( config );
+            _itemName.text = name;
+            _itemType.text = type;
+            _itemDescription.text = description;
         }
     }
 }
