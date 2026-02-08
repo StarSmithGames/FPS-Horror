@@ -152,6 +152,10 @@ namespace Game.Core.UI.InspectDialog
             
             _inspectionSystem.StopInspection();
             _item.ResetLayer();
+            if ( _item is Note )
+            {
+                _item.EnableCollider( false );
+            }
             
             OnCancelButtonClicked?.Invoke();
             

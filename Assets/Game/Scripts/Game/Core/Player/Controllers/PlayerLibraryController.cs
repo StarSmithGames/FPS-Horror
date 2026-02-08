@@ -3,6 +3,7 @@ using Game.Core.World.InventorySystem;
 using Game.Core.World.LibrarySystem;
 using PuzzlescapeGames.Localization;
 using System;
+using UnityEngine;
 
 namespace Game.Core.Player
 {

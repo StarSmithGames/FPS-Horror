@@ -94,6 +94,11 @@ namespace Game.Core.UI.ResourcesScreen
         {
             _selectedOption = (UILibraryOption)option;
             _selectedOption.Select();
+            for ( int i = 0; i < _libraryOptions.Count; i++ )
+            {
+                if ( _libraryOptions[ i ] == _selectedOption ) continue;
+                _libraryOptions[ i ].Deselect();
+            }
 
             RefreshSelection();
         }
