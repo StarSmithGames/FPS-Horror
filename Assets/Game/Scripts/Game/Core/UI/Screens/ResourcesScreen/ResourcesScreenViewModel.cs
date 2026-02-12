@@ -99,6 +99,8 @@ namespace Game.Core.UI.ResourcesScreen
             _contextMenuController = _diContainer.Instantiate< ContextMenuController >( new object[] { ModelView.ContextMenu } );
             _contextMenuController.Initialize();
 
+            _playerControllersService.GetAs< PlayerJournalController >().GetCurrentObjective();
+            
             // EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
             SelectTab( 1 );
         }

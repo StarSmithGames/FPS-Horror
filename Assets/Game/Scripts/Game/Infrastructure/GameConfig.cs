@@ -1,4 +1,5 @@
 using Game.Core.Player;
+using Game.Core.World.JournalSystem;
 using Game.StoryFlow;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Game
     public sealed class GameConfig : ScriptableObject
     {
         [ field: SerializeField ] public PlayerInstaller PlayerPrefab { get; private set; }
+        [ field: SerializeField ] public JournalConfig Journal { get; private set; }
         [ field: Space ]
         [ field: SerializeField ] public LevelObject LevelPrefab { get; private set; }
     }
