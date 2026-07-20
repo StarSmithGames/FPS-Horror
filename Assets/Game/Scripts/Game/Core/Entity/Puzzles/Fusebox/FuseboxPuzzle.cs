@@ -39,6 +39,7 @@ namespace Game.Core.Entity
             if ( interactor is not PlayerController player ) return;
 
             var controller = player.ServiceLocator.GetAs< PlayerInventoryController >();
+            
             if ( controller.Inventory.ContainsItem( ItemDatabase.FUSE ) )
             {
                 controller.Inventory.RemoveItem( ItemDatabase.FUSE );

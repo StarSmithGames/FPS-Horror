@@ -13,7 +13,7 @@ namespace Game.Core.World.InventorySystem
         [ field: Space ]
         [ field: SerializeField ] public ItemConfig LighterConfig { get; private set; }
 
-        public const string FUSE = "fuse";
+        public const string FUSE = "item.fuse";
         
         public ItemConfig GetItem( string uid )
         {
