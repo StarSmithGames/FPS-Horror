@@ -32,6 +32,15 @@ namespace Game.StoryFlow.Introduce
             LightDown().Forget();
         }
 
+        public void LightUp()
+        {
+            LampUtils.SetLightsEnabled( View.MainRoom.CeilLamps, true );
+            foreach ( var computer in View.Computers )
+            {
+                computer.EnableComputer( true );
+            }
+        }
+
         private async UniTask LightDown( CancellationToken cancellationToken = default )
         {
             //2.8 sec

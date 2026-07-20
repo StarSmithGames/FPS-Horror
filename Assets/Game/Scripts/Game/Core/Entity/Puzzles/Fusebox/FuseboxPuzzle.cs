@@ -1,10 +1,13 @@
 using Game.Core.Player;
 using Game.Core.World.InteractionSystem;
 using Game.Core.World.InventorySystem;
+using Game.StoryFlow;
+using Game.StoryFlow.Introduce;
 using PuzzlescapeGames.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Core.Entity
 {
@@ -19,6 +22,14 @@ namespace Game.Core.Entity
 
         public bool IsFusesConnected => Slots.All( ( x ) => x.IsInserted );
 
+        private StoryManager _storyManager;
+        
+        [ Inject ]
+        private void Construct( StoryManager storyManager )
+        {
+            _storyManager = storyManager;
+        }
+        
         private void Start()
         {
             RefreshSlots();
@@ -36,6 +47,8 @@ namespace Game.Core.Entity
 
         public override void Interact( IInteractor interactor )
         {
+            if ( Slots.All( ( x ) => x.IsInserted ) ) return;
+            
             if ( interactor is not PlayerController player ) return;
 
             var controller = player.ServiceLocator.GetAs< PlayerInventoryController >();
@@ -49,6 +62,8 @@ namespace Game.Core.Entity
                     Slots[ i ].IsInserted = true;
                 }
                 RefreshSlots();
+
+                ( (IntroduceStoryController)_storyManager.CurrentStory ).LightUp();
             }
             
             EnableCollider( _door.IsOpen && !IsFusesConnected );
