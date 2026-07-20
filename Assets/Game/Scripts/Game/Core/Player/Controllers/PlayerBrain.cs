@@ -28,6 +28,7 @@ namespace Game.Core.Player
         private readonly PlayerHoveringController _hoveringController;
         private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerInventoryController _inventoryController;
+        private readonly PlayerJournalController _journalController;
         private readonly PlayerEquipmentController _equipmentController;
         private readonly PlayerLibraryController _libraryController;
         private readonly PlayerInspectionController _inspectionController;
@@ -48,6 +49,7 @@ namespace Game.Core.Player
             PlayerHoveringController hoveringController,
             PlayerInputActionsController inputActionsController,
             PlayerInventoryController inventoryController,
+            PlayerJournalController journalController,
             PlayerEquipmentController equipmentController,
             PlayerLibraryController libraryController,
             PlayerInspectionController inspectionController,
@@ -68,6 +70,7 @@ namespace Game.Core.Player
             _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
+            _journalController = journalController ?? throw new ArgumentNullException( nameof(journalController) );
             _equipmentController = equipmentController ?? throw new ArgumentNullException( nameof(equipmentController) );
             _libraryController = libraryController ?? throw new ArgumentNullException( nameof(libraryController) );
             _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
@@ -84,6 +87,7 @@ namespace Game.Core.Player
             ServiceLocator.Register( _hoveringController );
             ServiceLocator.Register( _inputActionsController );
             ServiceLocator.Register( _inventoryController );
+            ServiceLocator.Register( _journalController );
             ServiceLocator.Register( _equipmentController );
             ServiceLocator.Register( _libraryController );
             ServiceLocator.Register( _inspectionController );
