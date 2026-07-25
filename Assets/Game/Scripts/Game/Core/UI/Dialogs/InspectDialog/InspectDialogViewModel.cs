@@ -20,6 +20,7 @@ namespace Game.Core.UI.InspectDialog
         private InspectionSystem _inspectionSystem;
         private ItemObject _item;
         private bool _isExamine;
+        private bool _isFromWorld;
 
         private readonly InputActionVoidWrap _inputAction;
         private readonly InputActionVoidWrap _inputActionCancel;
@@ -38,10 +39,11 @@ namespace Game.Core.UI.InspectDialog
             _inputActionCancel = InputActionManager.CreateInputActionWrap( InputManager.Inputs.UI.Cancel, CancelButtonClickedHandler );
         }
         
-        public void Set( ItemObject item, Camera camera )
+        public void Set( ItemObject item, Camera camera, bool isFromWorld )
         {
             _item = item ?? throw new ArgumentNullException( nameof(item) );
             _inspectionSystem = new( camera );
+            _isFromWorld = isFromWorld;
         }
 
         protected override void SubscribeView()

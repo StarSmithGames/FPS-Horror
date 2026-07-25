@@ -1,3 +1,4 @@
+using Game.Core.Entity;
 using System;
 
 namespace Game.Core.World.InventorySystem
@@ -8,6 +9,7 @@ namespace Game.Core.World.InventorySystem
 
         public string UID => Config.UID;
 
+        public ItemObject View { get; private set; }
         public ItemConfig Config { get; }
         public ItemState State { get; }
         
@@ -35,6 +37,11 @@ namespace Game.Core.World.InventorySystem
             State.OnChanged += NotifyChanged;
         }
 
+        public void SetView( ItemObject view )
+        {
+            View = view;
+        }
+        
         public void NotifyChanged()
         {
             OnChanged?.Invoke( this );

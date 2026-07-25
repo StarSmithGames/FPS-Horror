@@ -26,7 +26,8 @@ namespace Game.Core.World.InventorySystem
 
         public void Examine( ItemModel item )
         {
-            Debug.LogError( "Examine" );
+            var inspectionController = _playerControllersService.GetAs< PlayerInspectionController >();
+            inspectionController.InspectItemFromContextMenu( item );
         }
         
         public void Drop( ItemModel item )

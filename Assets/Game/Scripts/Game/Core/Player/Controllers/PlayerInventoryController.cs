@@ -10,6 +10,8 @@ namespace Game.Core.Player
         public void PickUpItem( ItemObject item )
         {
             Inventory.AddItem( item.Config );
+            var model = Inventory.GetItem( item.Config );
+            model.SetView( item );
             item.gameObject.SetActive( false );
         }
     }
