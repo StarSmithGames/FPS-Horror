@@ -11,17 +11,17 @@ namespace Game.Core.World.InspectionSystem
 {
     public sealed class InspectionSystem
     {
-        private const float _mouseRotationSensitivity = 0.2f;
-        private const float _gamepadRotationSpeed = 120f;
-        private const float _gamepadDeadZone = 0.1f;
-        private const float _rotationSmoothness = 18f;
-        private const float _positionSmoothness = 12f;
-        private bool _isBlocked;
-
+        private const float MOUSE_ROTATION_SENSITIVITY = 0.2f;
+        private const float GAMEPAD_ROTATION_SPEED = 120f;
+        private const float GAMEPAD_DEAD_ZONE = 0.1f;
+        private const float ROTATION_SMOOTHNESS = 18f;
+        private const float POSITION_SMOOTHNESS = 12f;
+        
         private ItemObject _inspectableItem;
         private CancellationTokenSource _cancellationTokenSource;
         private Vector3 _originalPosition;
         private Quaternion _originalRotation;
+        private bool _isBlocked;
         
         private readonly Camera _camera;
 
@@ -90,7 +90,7 @@ namespace Game.Core.World.InspectionSystem
 
                 Vector3 localOffset = _camera.transform.TransformDirection( settings.PositionOffset );
                 Vector3 targetPosition = _camera.transform.position + _camera.transform.forward * 0.5f + localOffset;
-                float positionLerp = 1f - Mathf.Exp( -_positionSmoothness * deltaTime );
+                float positionLerp = 1f - Mathf.Exp( -POSITION_SMOOTHNESS * deltaTime );
                 itemTransform.position = Vector3.Lerp( itemTransform.position, targetPosition, positionLerp );
 
                 Quaternion userRotation = Quaternion.identity;
@@ -111,21 +111,21 @@ namespace Game.Core.World.InspectionSystem
 
                         float yDirection = settings.IsInverseY ? -1f : 1f;
 
-                        if ( gamepadInput.sqrMagnitude >= _gamepadDeadZone * _gamepadDeadZone )
+                        if ( gamepadInput.sqrMagnitude >= GAMEPAD_DEAD_ZONE * GAMEPAD_DEAD_ZONE )
                         {
                             // Стик задаёт скорость поворота, поэтому здесь нужен deltaTime.
                             gamepadInput.y *= yDirection;
-                            targetRotation += gamepadInput * _gamepadRotationSpeed * deltaTime;
+                            targetRotation += gamepadInput * GAMEPAD_ROTATION_SPEED * deltaTime;
                         }
                         else if ( InputManager.Inputs.UI.Click.IsPressed() )
                         {
                             // Mouse delta уже является смещением за кадр — deltaTime здесь не нужен.
                             actionInput.y *= yDirection;
-                            targetRotation += actionInput * _mouseRotationSensitivity;
+                            targetRotation += actionInput * MOUSE_ROTATION_SENSITIVITY;
                         }
                     }
 
-                    float rotationLerp = 1f - Mathf.Exp( -_rotationSmoothness * deltaTime );
+                    float rotationLerp = 1f - Mathf.Exp( -ROTATION_SMOOTHNESS * deltaTime );
                     currentRotation = Vector2.Lerp( currentRotation, targetRotation, rotationLerp );
                     userRotation = Quaternion.Euler( -currentRotation.y, -currentRotation.x, 0f );
                 }

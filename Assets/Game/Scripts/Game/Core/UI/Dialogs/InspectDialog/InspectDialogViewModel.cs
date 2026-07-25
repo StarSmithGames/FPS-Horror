@@ -74,10 +74,8 @@ namespace Game.Core.UI.InspectDialog
             if ( !ModelView.IsShowing )
             {
                 CursorManager.Disable();
-                
                 return;
             }
-            
             CursorManager.Enable();
             
             _isExamine = false;
@@ -162,7 +160,7 @@ namespace Game.Core.UI.InspectDialog
             
             OnCancelButtonClicked?.Invoke();
             
-            HideViewAndDispose();
+            HideView();
         }
     }
 }

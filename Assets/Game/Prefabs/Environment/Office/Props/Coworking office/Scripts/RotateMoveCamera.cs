@@ -21,8 +21,8 @@ public class RotateMoveCamera : MonoBehaviour
 
     void Update()
     {
-		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
+		// Cursor.lockState = CursorLockMode.Locked;
+		// Cursor.visible = false;
         var x = Input.GetAxis("Mouse X");
         var y = Input.GetAxis("Mouse Y");
         if (x != MouseX || y != MouseY)
