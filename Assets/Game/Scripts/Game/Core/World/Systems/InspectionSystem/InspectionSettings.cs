@@ -6,6 +6,7 @@ namespace Game.Core.World.InspectionSystem
     public sealed class InspectionSettings
     {
         [ field: SerializeField ] public bool IsRotatable { get; private set; } = true;
+        [ field: SerializeField ] public bool IsInverseY { get; private set; }
         [ field: SerializeField ] public Vector3 PositionOffset { get; private set; }
         [ field: SerializeField ] public Vector3 RotationOffset { get; private set; }
         

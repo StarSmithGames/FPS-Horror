@@ -48,8 +48,6 @@ namespace Game.Core.UI.InspectDialog
         {
             base.SubscribeView();
             
-            CursorManager.Enable();
-            
             ModelView.ActionButton.OnButtonClicked += ActionButtonClickedHandler;
             ModelView.CancelButton1.OnButtonClicked += CancelButtonClickedHandler;
             ModelView.CancelButton2.OnButtonClicked += CancelButtonClickedHandler;
@@ -69,13 +67,18 @@ namespace Game.Core.UI.InspectDialog
             _inputActionCancel.Disable();
             InputActionManager.RemoveInputActionWrap( _inputAction );
             InputActionManager.RemoveInputActionWrap( _inputActionCancel );
-            
-            CursorManager.Disable();
         }
 
         protected override void OnViewShowingChanged()
         {
-            if ( !ModelView.IsShowing ) return;
+            if ( !ModelView.IsShowing )
+            {
+                CursorManager.Disable();
+                
+                return;
+            }
+            
+            CursorManager.Enable();
             
             _isExamine = false;
             
