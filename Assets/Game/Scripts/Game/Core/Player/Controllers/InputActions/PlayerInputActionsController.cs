@@ -1,14 +1,5 @@
-using Game.Core.Entity;
-using Game.Core.UI;
-using Game.Core.UI.InspectDialog;
-using Game.Core.UI.PauseScreen;
-using Game.Core.UI.ResourcesScreen;
-using Game.Managers.CursorManager;
-using Game.Managers.GameManager;
 using Game.Managers.InputManager;
-using Game.Managers.PauseManager;
 using Game.Systems.StorageSystem;
-using PuzzlescapeGames.VVM;
 using System;
 using UnityEngine;
 
@@ -16,21 +7,15 @@ namespace Game.Core.Player
 {
     public sealed class PlayerInputActionsController
     {
-        private InputActionVoidWrap _inputActionMenu;
         private InputActionVoidWrap _inputActionSprint;
         private InputActionVoidWrap _inputActionCrouch;
         private InputActionVoidWrap _inputActionJump;
         private InputActionVoidWrap _inputActionLighter;
-        private InputActionVoidWrap _inputActionInventory;
         
         private readonly PlayerStates _states;
         private readonly PlayerCrouchController _crouchController;
         private readonly PlayerJumpController _jumpController;
         private readonly PlayerEquipmentController _equipmentController;
-        private readonly PlayerInspectionController _inspectionController;
-        private readonly UIRootGame _uiRootGame;
-        private readonly PauseManager _pauseManager;
-        private readonly GameManager _gameManager;
         private readonly DataHolder _dataHolder;
         
         public PlayerInputActionsController(
@@ -38,10 +23,6 @@ namespace Game.Core.Player
             PlayerCrouchController crouchController,
             PlayerJumpController jumpController,
             PlayerEquipmentController equipmentController,
-            PlayerInspectionController inspectionController,
-            UIRootGame uiRootGame,
-            PauseManager pauseManager,
-            GameManager gameManager,
             DataHolder dataHolder
             )
         {
@@ -49,32 +30,25 @@ namespace Game.Core.Player
             _crouchController = crouchController ?? throw new ArgumentNullException( nameof(crouchController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
             _equipmentController = equipmentController ?? throw new ArgumentNullException( nameof(equipmentController) );
-            _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
-            _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
-            _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
-            _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
+
             _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
         }
 
         public void Initialize()
         {
-            _inputActionMenu = new( InputManager.Inputs.System.Menu, MenuClickedHandler );
             _inputActionSprint = new( InputManager.Inputs.Player.Sprint, SpringStartHandler, SpringStopHandler );
             _inputActionCrouch = new( InputManager.Inputs.Player.Crouch, CrouchStartHandler, CrouchStopHandler );
             _inputActionJump = new( InputManager.Inputs.Player.Jump, JumpClickedHandler );
             _inputActionLighter = new( InputManager.Inputs.System.Lighter, LighterClickedHandler );
-            _inputActionInventory = new( InputManager.Inputs.System.Inventory, InventoryClickedHandler );
         }
         
         public void Enable()
         {
-            _inputActionMenu.Enable();
             EnablePlayer();
         }
 
         public void Disable()
         {
-            _inputActionMenu.Disable();
             DisablePlayer();
         }
 
@@ -84,7 +58,6 @@ namespace Game.Core.Player
             _inputActionCrouch.Enable();
             _inputActionJump.Enable();
             _inputActionLighter.Enable();
-            _inputActionInventory.Enable();
         }
 
         public void DisablePlayer()
@@ -93,19 +66,6 @@ namespace Game.Core.Player
             _inputActionCrouch.Disable();
             _inputActionJump.Disable();
             _inputActionLighter.Disable();
-            _inputActionInventory.Disable();
-        }
-
-
-        private void MenuClickedHandler()
-        {
-            if ( _inspectionController.IsInspecting ) return;
-            
-            _inputActionMenu.Disable();
-            
-            var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< PauseScreenViewModel >();
-            screen.OnShowingChanged += ScreenShowingChangedHandler;
-            screen.ShowView();
         }
 
         #region Player
@@ -179,35 +139,6 @@ namespace Game.Core.Player
             if ( _states.IsBlocked ) return;
             
             _equipmentController.SelectLighter();
-        }
-        
-        private void InventoryClickedHandler()
-        {
-            if ( _inspectionController.IsInspecting ) return;
-            
-            _pauseManager.Pause();
-            _gameManager.SetState( GameState.Menu );
-            CursorManager.Enable();
-            _states.IsBlocked = true;
-            
-            var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< ResourcesScreenViewModel >();
-            screen.OnShowingChanged += ScreenShowingChangedHandler;
-            screen.ShowView();
-            
-            _inputActionMenu.Disable();
-        }
-
-        private void ScreenShowingChangedHandler( IViewModel viewModel )
-        {
-            if ( viewModel.IsShowing ) return;
-            viewModel.OnShowingChanged -= ScreenShowingChangedHandler;
-            
-            _inputActionMenu.Enable();
-            
-            _pauseManager.UnPause();
-            _gameManager.SetState( GameState.Game );
-            CursorManager.Disable();
-            _states.IsBlocked = false;
         }
     }
 }

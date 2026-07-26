@@ -155,10 +155,6 @@ namespace Game.Core.UI.InspectDialog
             {
                 _item.EnableCollider( false );
             }
-            if ( !_isFromWorld )
-            {
-                _item.EnableView( false );
-            }
             
             OnCancelButtonClicked?.Invoke();
             

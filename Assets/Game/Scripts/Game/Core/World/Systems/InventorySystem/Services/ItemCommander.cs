@@ -26,8 +26,7 @@ namespace Game.Core.World.InventorySystem
 
         public void Examine( InventoryItem inventoryItem )
         {
-            var inspectionController = _playerControllersService.GetAs< PlayerInspectionController >();
-            inspectionController.InspectItemFromContextMenu( inventoryItem );
+            _playerControllersService.GetAs< PlayerMenuTransitionController >().TransitToInspection( inventoryItem );
         }
         
         public void Drop( InventoryItem inventoryItem )

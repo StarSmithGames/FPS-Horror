@@ -32,6 +32,7 @@ namespace Game.Core.Player
             Container.Bind< PlayerHoveringController >().AsSingle().Lazy();
             
             Container.Bind< PlayerInputActionsController >().AsSingle().Lazy();
+            Container.Bind< PlayerMenuTransitionController >().AsSingle().Lazy();
             Container.Bind< PlayerInventoryController >().AsSingle().Lazy();
             Container.Bind< PlayerEquipmentController >().AsSingle().Lazy();
             Container.Bind< PlayerLibraryController >().AsSingle().Lazy();

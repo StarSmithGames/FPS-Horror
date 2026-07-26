@@ -28,6 +28,7 @@ namespace Game.Core.Player
         private readonly PlayerHoveringController _hoveringController;
         private readonly PlayerInputActionsController _inputActionsController;
         private readonly PlayerInventoryController _inventoryController;
+        private readonly PlayerMenuTransitionController _menuTransitionController;
         private readonly PlayerJournalController _journalController;
         private readonly PlayerEquipmentController _equipmentController;
         private readonly PlayerLibraryController _libraryController;
@@ -48,6 +49,7 @@ namespace Game.Core.Player
             PlayerFOVController playerFOVController,
             PlayerHoveringController hoveringController,
             PlayerInputActionsController inputActionsController,
+            PlayerMenuTransitionController menuTransitionController,
             PlayerInventoryController inventoryController,
             PlayerJournalController journalController,
             PlayerEquipmentController equipmentController,
@@ -69,6 +71,7 @@ namespace Game.Core.Player
             _playerFOVController = playerFOVController ?? throw new ArgumentNullException( nameof(playerFOVController) );
             _hoveringController = hoveringController ?? throw new ArgumentNullException( nameof(hoveringController) );
             _inputActionsController = inputActionsController ?? throw new ArgumentNullException( nameof(inputActionsController) );
+            _menuTransitionController = menuTransitionController ?? throw new ArgumentNullException( nameof(menuTransitionController) );
             _inventoryController = inventoryController ?? throw new ArgumentNullException( nameof(inventoryController) );
             _journalController = journalController ?? throw new ArgumentNullException( nameof(journalController) );
             _equipmentController = equipmentController ?? throw new ArgumentNullException( nameof(equipmentController) );
@@ -86,6 +89,7 @@ namespace Game.Core.Player
             ServiceLocator.Register( _playerFOVController );
             ServiceLocator.Register( _hoveringController );
             ServiceLocator.Register( _inputActionsController );
+            ServiceLocator.Register( _menuTransitionController );
             ServiceLocator.Register( _inventoryController );
             ServiceLocator.Register( _journalController );
             ServiceLocator.Register( _equipmentController );
@@ -103,12 +107,14 @@ namespace Game.Core.Player
             _playerFOVController.Initialize();
             _hoveringController.Initialize();
             _inputActionsController.Initialize();
+            _menuTransitionController.Initialize();
 
             _cancellationTokenSource = new();
             Tick( _cancellationTokenSource.Token ).Forget();
             FixedTick( _cancellationTokenSource.Token ).Forget();
 
             _inputActionsController.Enable();
+            _menuTransitionController.Enable();
             
             _pauseManager.AddObserver( this );
         }
@@ -122,6 +128,7 @@ namespace Game.Core.Player
             _cancellationTokenSource = null;
             
             _inputActionsController.Disable();
+            _menuTransitionController.Disable();
             
             _playerFOVController.Dispose();
             _hoveringController.Dispose();

@@ -34,7 +34,7 @@ namespace Game.Core.Player
         {
             if ( !IsEnable ) return;
 
-            _playerController.ServiceLocator.GetAs< PlayerInspectionController >().InspectItemFromWorld( _item );
+            _playerController.ServiceLocator.GetAs< PlayerMenuTransitionController >().TransitToInspection( _item );
             
             base.Completed();
         }

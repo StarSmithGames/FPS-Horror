@@ -23,18 +23,10 @@ namespace Game.Core.UI.PauseScreen
 
         private UIOption _lastOption;
         
-        private readonly GameManager _gameManager;
-        private readonly PauseManager _pauseManager;
         private readonly UIRootGame _uiRootGame;
         
-        public PauseScreenViewModel(
-            GameManager gameManager,
-            PauseManager pauseManager,
-            UIRootGame uiRootGame
-            )
+        public PauseScreenViewModel( UIRootGame uiRootGame )
         {
-            _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
-            _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
         }
 
@@ -80,16 +72,7 @@ namespace Game.Core.UI.PauseScreen
 
         protected override void OnViewShowingChanged()
         {
-            if ( !ModelView.IsShowing )
-            {
-                CursorManager.Disable();
-                _pauseManager.UnPause();
-                _gameManager.SetState( GameState.Game );
-                return;
-            }
-            CursorManager.Enable();
-            _pauseManager.Pause();
-            _gameManager.SetState( GameState.Menu );
+            if ( !ModelView.IsShowing ) return;
             
             EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
          
