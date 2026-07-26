@@ -19,6 +19,7 @@ namespace Game.Core.Player
         private readonly PlayerObject _view;
         private readonly PlayerConfig _config;
         private readonly PlayerStates _states;
+        private readonly PlayerAvatar _avatar;
         private readonly PlayerLookController _lookController;
         private readonly PlayerMoveController _moveController;
         private readonly PlayerJumpController _jumpController;
@@ -40,6 +41,7 @@ namespace Game.Core.Player
             PlayerObject view,
             PlayerConfig config,
             PlayerStates states,
+            PlayerAvatar avatar,
             PlayerLookController lookController,
             PlayerMoveController moveController,
             PlayerJumpController jumpController,
@@ -63,6 +65,7 @@ namespace Game.Core.Player
             _view = view ?? throw new ArgumentNullException( nameof(view) );
             _config = config ?? throw new ArgumentNullException( nameof(config) );
             _states = states ?? throw new ArgumentNullException( nameof(states) );
+            _avatar = avatar ?? throw new ArgumentNullException( nameof(avatar) );
             _lookController = lookController ?? throw new ArgumentNullException( nameof(lookController) );
             _moveController = moveController ?? throw new ArgumentNullException( nameof(moveController) );
             _jumpController = jumpController ?? throw new ArgumentNullException( nameof(jumpController) );
@@ -218,13 +221,15 @@ namespace Game.Core.Player
         public void Pause()
         {
             _states.IsBlocked = true;
-            _inputActionsController.DisablePlayer();
+            _inputActionsController.Disable();
+            _avatar.Disable();
         }
 
         public void UnPause()
         {
             _states.IsBlocked = false;
-            _inputActionsController.EnablePlayer();
+            _inputActionsController.Enable();
+            _avatar.Enable();
         }
     }
 }

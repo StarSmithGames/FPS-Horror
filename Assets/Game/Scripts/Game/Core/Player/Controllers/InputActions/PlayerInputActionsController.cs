@@ -44,23 +44,13 @@ namespace Game.Core.Player
         
         public void Enable()
         {
-            EnablePlayer();
-        }
-
-        public void Disable()
-        {
-            DisablePlayer();
-        }
-
-        public void EnablePlayer()
-        {
             _inputActionSprint.Enable();
             _inputActionCrouch.Enable();
             _inputActionJump.Enable();
             _inputActionLighter.Enable();
         }
 
-        public void DisablePlayer()
+        public void Disable()
         {
             _inputActionSprint.Disable();
             _inputActionCrouch.Disable();

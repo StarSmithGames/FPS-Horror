@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Game.Core.Entity;
 using Game.Core.Player.Animations;
+using Game.Managers.InputManager;
 using PuzzlescapeGames.Extensions;
 using System;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace Game.Core.Player
         public RightHandModel Model { get; private set; }
         
         private Sequence _showHideTween;
+        private InputActionVoidWrap _inputActionMenu;
 
         public void Start()
         {
@@ -35,13 +37,25 @@ namespace Game.Core.Player
             Model.BaseRot = _root.localRotation;
             _idleAnimation.Initialize( Model );
             _aimAnimation.Initialize( Model );
+            
+            _inputActionMenu = new( InputManager.Inputs.Player.Aim, _aimAnimation.StartAim, _aimAnimation.StopAim );
+        }
+
+        public void Enable()
+        {
+            _inputActionMenu?.Enable();
+        }
+
+        public void Disable()
+        {
+            _inputActionMenu?.Disable();
         }
 
         private void OnItemShowed()
         {
             _idleAnimation.PlayIdle();
             
-            _aimAnimation.Enable();
+            _inputActionMenu.Enable();
         }
 
         private void OnItemHided()
@@ -57,7 +71,7 @@ namespace Game.Core.Player
             Model.Root.localPosition = Model.BasePos;
             Model.Root.localRotation = Model.BaseRot;
             
-            _aimAnimation.Disable();
+            _inputActionMenu.Disable();
         }
 
         #region Show Hide

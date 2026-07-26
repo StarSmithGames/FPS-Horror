@@ -8,8 +8,6 @@ namespace Game.Core.Player.Animations
     public sealed class AimAnimation
     {
         [ SerializeField ] private IdleAnimator _idleAnimator;
-        
-        private InputActionVoidWrap _inputActionMenu;
 
         private Sequence _tween;
         
@@ -20,20 +18,9 @@ namespace Game.Core.Player.Animations
             _model = model;
          
             _idleAnimator.Initialize( _model.Center );
-            _inputActionMenu = new( InputManager.Inputs.Player.Aim, AimStartedHandler, AimStoppedHandler );
-        }
-
-        public void Enable()
-        {
-            _inputActionMenu.Enable();
-        }
-
-        public void Disable()
-        {
-            _inputActionMenu.Disable();
         }
         
-        private void AimStartedHandler()
+        public void StartAim()
         {
             _model.CurrentItem.transform.SetParent( _model.Center );
             _tween?.Kill();
@@ -46,7 +33,7 @@ namespace Game.Core.Player.Animations
             } );
         }
 
-        private void AimStoppedHandler()
+        public void StopAim()
         {
             _idleAnimator.Stop();
             
