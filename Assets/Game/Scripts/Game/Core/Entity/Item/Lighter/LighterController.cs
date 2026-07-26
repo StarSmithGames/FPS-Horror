@@ -13,10 +13,10 @@ namespace Game.Core.Entity
         private readonly int Close = Animator.StringToHash( "Close" );
 
         public bool IsOpened { get; private set; }
+        public bool IsInProcess { get; private set; }
         public bool IsHasFlame { get; private set; }
 
         private float _cachedLightIntensity;
-        private bool _isInProcess;
         
         private readonly Lighter _view;
         private readonly AudioManager _audioManager;
@@ -33,26 +33,29 @@ namespace Game.Core.Entity
         public void Initialize()
         {
             _view.Light.enabled = false;
+            _view.EnableCollider( false );
             _cachedLightIntensity = _view.Light.intensity;
         }
         
         public void Show()
         {
-            if ( _isInProcess ) return;
+            if ( IsInProcess ) return;
             
             OpenLighter().Forget();
         }
 
         public void Hide()
         {
-            if ( _isInProcess ) return;
+            if ( IsInProcess ) return;
             
             CloseLighter().Forget();
         }
 
         private async UniTask OpenLighter()
         {
-            _isInProcess = true;
+            IsInProcess = true;
+            
+            _view.gameObject.SetActive( true );
 
             if ( !IsOpened )
             {
@@ -69,28 +72,25 @@ namespace Game.Core.Entity
             {
                 _audioManager.PlaySound( _view.SoundIgnite );
 
-                if ( Random.value < 0.5f )
-                {
-                    await UniTask.WaitForSeconds( 0.08f );
-                    _view.Flame.transform.localScale = Vector3.zero;
-                    _view.Flame.transform.DOScale( 1f, 0.16f );
-                    _view.Flame.Play();
-                    _view.Light.intensity = 0f;
-                    _view.Light.DOIntensity( _cachedLightIntensity, 0.16f );
-                    _view.Light.enabled = true;
+                await UniTask.WaitForSeconds( 0.08f );
+                _view.Flame.transform.localScale = Vector3.zero;
+                _view.Flame.transform.DOScale( 1f, 0.16f );
+                _view.Flame.Play();
+                _view.Light.intensity = 0f;
+                _view.Light.DOIntensity( _cachedLightIntensity, 0.16f );
+                _view.Light.enabled = true;
                 
-                    IsHasFlame = true;
-                }
+                IsHasFlame = true;
                 
                 await UniTask.WaitForSeconds( 0.16f );
             }
             
-            _isInProcess = false;
+            IsInProcess = false;
         }
 
         private async UniTask CloseLighter()
         {
-            _isInProcess = true;
+            IsInProcess = true;
             
             _view.Animator.SetTrigger( Close );
             _view.Flame.transform.DOScale( 0f, 0.16f );
@@ -110,7 +110,11 @@ namespace Game.Core.Entity
                 IsHasFlame = false;
             }
             
-            _isInProcess = false;
+            await UniTask.WaitForSeconds( 0.16f );
+            
+            _view.gameObject.SetActive( false );
+            
+            IsInProcess = false;
         }
     }
 }

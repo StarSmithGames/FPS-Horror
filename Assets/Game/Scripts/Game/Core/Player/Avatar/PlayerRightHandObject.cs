@@ -37,15 +37,6 @@ namespace Game.Core.Player
             _aimAnimation.Initialize( Model );
         }
 
-        public void ClearAndReset()
-        {
-            Model.Root.DestroyChildren();
-            _idleAnimation.Reset();
-            
-            Model.Root.localPosition = Model.BasePos;
-            Model.Root.localRotation = Model.BaseRot;
-        }
-
         private void OnItemShowed()
         {
             _idleAnimation.PlayIdle();
@@ -55,7 +46,16 @@ namespace Game.Core.Player
 
         private void OnItemHided()
         {
-            ClearAndReset();
+            Model.CurrentItem.EnableView( false );
+            Model.CurrentItem.EnableCollider( true );
+            
+            Model.CurrentItem.transform.SetParent( null );
+            Model.CurrentItem = null;
+            // Model.Root.DestroyChildren();
+            _idleAnimation.Reset();
+            
+            Model.Root.localPosition = Model.BasePos;
+            Model.Root.localRotation = Model.BaseRot;
             
             _aimAnimation.Disable();
         }
@@ -77,7 +77,9 @@ namespace Game.Core.Player
                         Model.CurrentItem.transform.SetParent( Model.Root );
                         Model.CurrentItem.transform.localPosition = Vector3.zero;
                         Model.CurrentItem.transform.localRotation = Quaternion.identity;
-
+                        Model.CurrentItem.EnableView( true );
+                        Model.CurrentItem.EnableCollider( false );
+                        
                         Show( 0.33f, OnItemShowed );
                     }
                     else
@@ -92,7 +94,9 @@ namespace Game.Core.Player
             Model.CurrentItem.transform.SetParent( Model.Root );
             Model.CurrentItem.transform.localPosition = Vector3.zero;
             Model.CurrentItem.transform.localRotation = Quaternion.identity;
-
+            Model.CurrentItem.EnableView( true );
+            Model.CurrentItem.EnableCollider( false );
+            
             Show( callback: OnItemShowed );
         }
 
