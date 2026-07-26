@@ -80,6 +80,21 @@ namespace Game.Core.UI.ResourcesScreen
             // EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
             SelectTab( 1 );
         }
+
+        public void Hide( bool trigger )
+        {
+            if ( trigger )
+            {
+                _inputActionCancel.Disable();
+                _inputActionInventory.Disable();
+            }
+            else
+            {
+                _inputActionCancel.Enable();
+                _inputActionInventory.Enable();
+            }
+            ModelView.gameObject.SetActive( !trigger );
+        }
         
         private void SelectTab( int index )
         {

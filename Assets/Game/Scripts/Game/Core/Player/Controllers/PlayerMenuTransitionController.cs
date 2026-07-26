@@ -82,7 +82,7 @@ namespace Game.Core.Player
         public void TransitToInspection( InventoryItem item )
         {
             var screen = _uiRootGame.ScreenAggregator.GetAs< ResourcesScreenViewModel >();
-            screen.ModelView.gameObject.SetActive( false );
+            screen.Hide( true );
             
             if ( item.View == null )
             {
@@ -101,6 +101,7 @@ namespace Game.Core.Player
         {
             SetStateToMenu();
             _inputActionMenu.Disable();
+            _inputActionInventory.Disable();
             
             _inspectionController.OnInspectEnded += InspectFromWorldEndedHandler;
             _inspectionController.InspectItemFromWorld( item );
@@ -111,7 +112,7 @@ namespace Game.Core.Player
             _inspectionController.OnInspectEnded -= InspectFromUIEndedHandler;
             
             var screen = _uiRootGame.ScreenAggregator.GetAs< ResourcesScreenViewModel >();
-            screen.ModelView.gameObject.SetActive( true );
+            screen.Hide( false );
             
             _cachedInspectItem.EnableView( false );
         }
@@ -121,6 +122,8 @@ namespace Game.Core.Player
             _inspectionController.OnInspectEnded -= InspectFromWorldEndedHandler;
 
             SetStateToGame();
+            _inputActionMenu.Enable();
+            _inputActionInventory.Enable();
         }
         #endregion
         
@@ -130,6 +133,7 @@ namespace Game.Core.Player
 
             SetStateToMenu();
             _inputActionMenu.Disable();
+            _inputActionInventory.Disable();
             
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< PauseScreenViewModel >();
             screen.OnShowingChanged += ScreenShowingChangedHandler;
@@ -142,6 +146,7 @@ namespace Game.Core.Player
             
             SetStateToMenu();
             _inputActionMenu.Disable();
+            _inputActionInventory.Disable();
             
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< ResourcesScreenViewModel >();
             screen.OnShowingChanged += ScreenShowingChangedHandler;
@@ -153,8 +158,9 @@ namespace Game.Core.Player
             if ( viewModel.IsShowing ) return;
             viewModel.OnShowingChanged -= ScreenShowingChangedHandler;
             
-            _inputActionMenu.Enable();
             SetStateToGame();
+            _inputActionMenu.Enable();
+            _inputActionInventory.Enable();
         }
     }
 }
