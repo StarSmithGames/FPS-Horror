@@ -31,7 +31,8 @@ namespace Game.Core.World.InventorySystem
         
         public void Drop( InventoryItem inventoryItem )
         {
-            Debug.LogError( "Drop" );
+            var inventoryController = _playerControllersService.GetAs< PlayerInventoryController >();
+            inventoryController.Inventory.RemoveItem( inventoryItem.Config );
         }
     }
 }

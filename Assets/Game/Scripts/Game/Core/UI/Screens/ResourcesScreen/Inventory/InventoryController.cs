@@ -13,6 +13,9 @@ namespace Game.Core.UI.ResourcesScreen
 {
     public sealed class InventoryController
     {
+        private PlayerInventoryController _inventoryController;
+        private PlayerEquipmentController _equipmentController;
+        
         private List< UIInventoryCell > _inventoryCells = new();
         private CancellationTokenSource _cancellationTokenSource;
         
@@ -36,12 +39,17 @@ namespace Game.Core.UI.ResourcesScreen
 
         public void Initialize()
         {
-            _playerControllersService.GetAs< PlayerEquipmentController >().OnEquipChanged += PlayerEquipChangedHandler;
+            _inventoryController = _playerControllersService.GetAs< PlayerInventoryController >();
+            _inventoryController.Inventory.OnChanged += PlayerInventoryChangedHandler;
+            
+            _equipmentController = _playerControllersService.GetAs< PlayerEquipmentController >();
+            _equipmentController.OnEquipChanged += PlayerEquipChangedHandler;
         }
 
         public void Dispose()
         {
-            _playerControllersService.GetAs< PlayerEquipmentController >().OnEquipChanged -= PlayerEquipChangedHandler;
+            _inventoryController.Inventory.OnChanged -= PlayerInventoryChangedHandler;
+            _equipmentController.OnEquipChanged -= PlayerEquipChangedHandler;
             
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
@@ -59,9 +67,6 @@ namespace Game.Core.UI.ResourcesScreen
             _view.Content.DestroyChildren();
             _inventoryCells.Clear();
 
-            var inventory = _playerControllersService.GetAs< PlayerInventoryController >().Inventory;
-            var equipment = _playerControllersService.GetAs< PlayerEquipmentController >();
-            
             for ( int i = 0; i < 20; i++ )
             {
                 // var cell = _diContainer.InstantiatePrefab( ModelView.Inventory.CellPrefab, ModelView.Inventory.Content ).GetComponent< UIInventoryCell >();
@@ -70,10 +75,11 @@ namespace Game.Core.UI.ResourcesScreen
                 cell.OnPointerExited += PointerExitedHandler;
                 cell.OnPointerClicked += PointerClickedHandler;
                 
+                var inventory = _inventoryController.Inventory;
                 if ( i < inventory.Items.Count )
                 {
                     cell.Set( inventory.Items[ i ] );
-                    cell.SetEquip( equipment.IsEquipped( cell.InventoryItem ) );
+                    cell.SetEquip( _equipmentController.IsEquipped( cell.InventoryItem ) );
                     
                     cell.SetLock( false );
                 }
@@ -113,17 +119,35 @@ namespace Game.Core.UI.ResourcesScreen
 
             _contextMenuController.ShowContextMenu( cell.InventoryItem, (RectTransform)cell.transform );
         }
+
+        private void PlayerInventoryChangedHandler()
+        {
+            var inventory = _inventoryController.Inventory;
+            for ( int i = 0; i < _inventoryCells.Count; i++ )
+            {
+                var cell = _inventoryCells[ i ];
+                if ( i < inventory.Items.Count )
+                {
+                    cell.Set( inventory.Items[ i ] );
+                    cell.SetEquip( _equipmentController.IsEquipped( cell.InventoryItem ) );
+                    
+                    cell.SetLock( false );
+                }
+                else
+                {
+                    cell.SetLock( true );
+                }
+            }
+        }
         
         private void PlayerEquipChangedHandler()
         {
-            var controller = _playerControllersService.GetAs< PlayerEquipmentController >();
-            
             for ( int i = 0; i < _inventoryCells.Count; i++ )
             {
                 var cell = _inventoryCells[ i ];
                 if ( cell.IsEmpty ) continue;
 
-                cell.SetEquip( controller.IsEquipped( cell.InventoryItem ) );
+                cell.SetEquip( _equipmentController.IsEquipped( cell.InventoryItem ) );
             }
         }
     }

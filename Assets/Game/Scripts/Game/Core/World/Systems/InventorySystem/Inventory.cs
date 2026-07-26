@@ -6,6 +6,8 @@ namespace Game.Core.World.InventorySystem
 {
     public sealed class Inventory
     {
+        public event Action OnChanged;
+        
         public List< InventoryItem > Items { get; } = new();
 
         public void AddItem( ItemConfig config )
@@ -19,6 +21,8 @@ namespace Game.Core.World.InventorySystem
             {
                 item.Quantity++;
             }
+            
+            OnChanged?.Invoke();
         }
 
         public void RemoveItem( ItemConfig config ) => RemoveItem( config.UID );
@@ -28,6 +32,8 @@ namespace Game.Core.World.InventorySystem
             if ( item != null )
             {
                 Items.Remove( item );
+                
+                OnChanged?.Invoke();
             }
         }
 
