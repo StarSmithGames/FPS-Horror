@@ -3,7 +3,10 @@ using Game.Core.UI;
 using Game.Core.UI.InspectDialog;
 using Game.Core.UI.PauseScreen;
 using Game.Core.UI.ResourcesScreen;
+using Game.Managers.CursorManager;
+using Game.Managers.GameManager;
 using Game.Managers.InputManager;
+using Game.Managers.PauseManager;
 using Game.Systems.StorageSystem;
 using PuzzlescapeGames.VVM;
 using System;
@@ -26,6 +29,8 @@ namespace Game.Core.Player
         private readonly PlayerEquipmentController _equipmentController;
         private readonly PlayerInspectionController _inspectionController;
         private readonly UIRootGame _uiRootGame;
+        private readonly PauseManager _pauseManager;
+        private readonly GameManager _gameManager;
         private readonly DataHolder _dataHolder;
         
         public PlayerInputActionsController(
@@ -35,6 +40,8 @@ namespace Game.Core.Player
             PlayerEquipmentController equipmentController,
             PlayerInspectionController inspectionController,
             UIRootGame uiRootGame,
+            PauseManager pauseManager,
+            GameManager gameManager,
             DataHolder dataHolder
             )
         {
@@ -44,6 +51,8 @@ namespace Game.Core.Player
             _equipmentController = equipmentController ?? throw new ArgumentNullException( nameof(equipmentController) );
             _inspectionController = inspectionController ?? throw new ArgumentNullException( nameof(inspectionController) );
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
+            _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
+            _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
             _dataHolder = dataHolder ?? throw new ArgumentNullException( nameof(dataHolder) );
         }
 
@@ -55,7 +64,6 @@ namespace Game.Core.Player
             _inputActionJump = new( InputManager.Inputs.Player.Jump, JumpClickedHandler );
             _inputActionLighter = new( InputManager.Inputs.System.Lighter, LighterClickedHandler );
             _inputActionInventory = new( InputManager.Inputs.System.Inventory, InventoryClickedHandler );
-
         }
         
         public void Enable()
@@ -177,6 +185,11 @@ namespace Game.Core.Player
         {
             if ( _inspectionController.IsInspecting ) return;
             
+            _pauseManager.Pause();
+            _gameManager.SetState( GameState.Menu );
+            CursorManager.Enable();
+            _states.IsBlocked = true;
+            
             var screen = _uiRootGame.ScreenAggregator.GetOrCreateIfNotExist< ResourcesScreenViewModel >();
             screen.OnShowingChanged += ScreenShowingChangedHandler;
             screen.ShowView();
@@ -190,6 +203,11 @@ namespace Game.Core.Player
             viewModel.OnShowingChanged -= ScreenShowingChangedHandler;
             
             _inputActionMenu.Enable();
+            
+            _pauseManager.UnPause();
+            _gameManager.SetState( GameState.Game );
+            CursorManager.Disable();
+            _states.IsBlocked = false;
         }
     }
 }

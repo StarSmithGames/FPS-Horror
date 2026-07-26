@@ -16,11 +16,18 @@ namespace Game.Core.Entity
         public virtual Type ControllerType { get; }
         public ItemController Controller { get; private set; }
 
+        public bool IsViewEnabled => gameObject.activeSelf;
+        
         private int _oldLayer;
         
         public void SetController( ItemController controller )
         {
             Controller = controller;
+        }
+
+        public void EnableView( bool trigger )
+        {
+            gameObject.SetActive( trigger );
         }
 
         public void SetLayer( string layer )

@@ -48,7 +48,7 @@ namespace Game.Core.UI.ContextMenu
             _view.Enable( false );
         }
 
-        public void ShowContextMenu( ItemModel model, RectTransform from )
+        public void ShowContextMenu( InventoryItem model, RectTransform from )
         {
             Clear();
             _view.Content.DestroyChildren();

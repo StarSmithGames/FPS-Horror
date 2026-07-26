@@ -6,7 +6,7 @@ namespace Game.Core.World.InventorySystem
 {
     public sealed class Inventory
     {
-        public List< ItemModel > Items { get; } = new();
+        public List< InventoryItem > Items { get; } = new();
 
         public void AddItem( ItemConfig config )
         {
@@ -34,8 +34,8 @@ namespace Game.Core.World.InventorySystem
         public bool ContainsItem( ItemConfig config ) => ContainsItem( config.UID );
         public bool ContainsItem( string uid ) => GetItem( uid ) != null;
 
-        public ItemModel GetItem( ItemConfig config ) => GetItem( config.UID );
-        public ItemModel GetItem( string uid )
+        public InventoryItem GetItem( ItemConfig config ) => GetItem( config.UID );
+        public InventoryItem GetItem( string uid )
         {
             return Items.Find( ( x ) => string.Equals( x.UID, uid, StringComparison.InvariantCultureIgnoreCase ) );
         }

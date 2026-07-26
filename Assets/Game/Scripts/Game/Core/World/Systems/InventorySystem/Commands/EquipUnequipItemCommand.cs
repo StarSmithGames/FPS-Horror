@@ -4,11 +4,11 @@ namespace Game.Core.World.InventorySystem.Commands
     {
         public EquipUnequipItemCommand(
             ItemCommander itemCommander,
-            ItemModel item
-            ) : base( itemCommander, item )
+            InventoryItem inventoryItem
+            ) : base( itemCommander, inventoryItem )
         {
         }
 
-        public override void Execute() => _itemCommander.EquipUnequip( _item );
+        public override void Execute() => _itemCommander.EquipUnequip( InventoryItem );
     }
 }

@@ -3,9 +3,9 @@ using System;
 
 namespace Game.Core.World.InventorySystem
 {
-    public sealed class ItemModel
+    public sealed class InventoryItem
     {
-        public event Action< ItemModel > OnChanged;
+        public event Action< InventoryItem > OnChanged;
 
         public string UID => Config.UID;
 
@@ -27,7 +27,7 @@ namespace Game.Core.World.InventorySystem
         }
         private int _quantity; //сколько таких предметов лежит в этом слоте
 
-        public ItemModel( ItemConfig config, int quantity = 1 )
+        public InventoryItem( ItemConfig config, int quantity = 1 )
         {
             Config = config;
             State = new ItemState();

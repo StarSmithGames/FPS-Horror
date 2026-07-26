@@ -73,7 +73,7 @@ namespace Game.Core.UI.ResourcesScreen
                 if ( i < inventory.Items.Count )
                 {
                     cell.Set( inventory.Items[ i ] );
-                    cell.SetEquip( equipment.IsEquipped( cell.Item ) );
+                    cell.SetEquip( equipment.IsEquipped( cell.InventoryItem ) );
                     
                     cell.SetLock( false );
                 }
@@ -88,11 +88,11 @@ namespace Game.Core.UI.ResourcesScreen
         
         private void PointerEnteredHandler( UIInventoryCell cell )
         {
-            if ( cell.Item == null ) return;
+            if ( cell.InventoryItem == null ) return;
 
             _view.Description.Set(
-                cell.Item.Config.NameId,//_localizationSystem.Translate( cell.Item.Config.NameId ),
-                cell.Item.Config.DescriptionId,//_localizationSystem.Translate( cell.Item.Config.DescriptionId ),
+                cell.InventoryItem.Config.NameId,//_localizationSystem.Translate( cell.Item.Config.NameId ),
+                cell.InventoryItem.Config.DescriptionId,//_localizationSystem.Translate( cell.Item.Config.DescriptionId ),
                 "Common"
                 );
             _view.Description.Enable( true );
@@ -105,13 +105,13 @@ namespace Game.Core.UI.ResourcesScreen
 
         private void PointerClickedHandler( UIInventoryCell cell )
         {
-            if ( cell.Item == null )
+            if ( cell.InventoryItem == null )
             {
                 _contextMenuController.HideContextMenu();
                 return;
             }
 
-            _contextMenuController.ShowContextMenu( cell.Item, (RectTransform)cell.transform );
+            _contextMenuController.ShowContextMenu( cell.InventoryItem, (RectTransform)cell.transform );
         }
         
         private void PlayerEquipChangedHandler()
@@ -123,7 +123,7 @@ namespace Game.Core.UI.ResourcesScreen
                 var cell = _inventoryCells[ i ];
                 if ( cell.IsEmpty ) continue;
 
-                cell.SetEquip( controller.IsEquipped( cell.Item ) );
+                cell.SetEquip( controller.IsEquipped( cell.InventoryItem ) );
             }
         }
     }

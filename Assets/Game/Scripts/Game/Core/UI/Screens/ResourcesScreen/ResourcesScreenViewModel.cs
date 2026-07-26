@@ -1,18 +1,8 @@
-using Cysharp.Threading.Tasks;
-using Game.Core.World.WorldManager;
 using Game.Core.Player;
 using Game.Core.UI.ContextMenu;
-using Game.Managers.CursorManager;
-using Game.Managers.GameManager;
 using Game.Managers.InputManager;
-using Game.Managers.PauseManager;
-using Game.Core.World.InventorySystem;
-using PuzzlescapeGames.Extensions;
 using PuzzlescapeGames.VVM;
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using UnityEngine;
 using Zenject;
 
 namespace Game.Core.UI.ResourcesScreen
@@ -27,20 +17,14 @@ namespace Game.Core.UI.ResourcesScreen
         private ContextMenuController _contextMenuController;
             
         private readonly DiContainer _diContainer;
-        private readonly PauseManager _pauseManager;
-        private readonly GameManager _gameManager;
         private readonly PlayerControllersService _playerControllersService;
         
         public ResourcesScreenViewModel(
             DiContainer diContainer,
-            PauseManager pauseManager,
-            GameManager gameManager,
             PlayerControllersService playerControllersService
             )
         {
             _diContainer = diContainer ?? throw new ArgumentNullException( nameof(diContainer) );
-            _pauseManager = pauseManager ?? throw new ArgumentNullException( nameof(pauseManager) );
-            _gameManager = gameManager ?? throw new ArgumentNullException( nameof(gameManager) );
             _playerControllersService = playerControllersService ?? throw new ArgumentNullException( nameof(playerControllersService) );
         }
         
@@ -86,16 +70,8 @@ namespace Game.Core.UI.ResourcesScreen
                 
                 _libraryController?.Dispose();
                 _libraryController = null;
-                
-                CursorManager.Disable();
-                _pauseManager.UnPause();
-                _gameManager.SetState( GameState.Game );
                 return;
             }
-            CursorManager.Enable();
-            _pauseManager.Pause();
-            _gameManager.SetState( GameState.Menu );
-            
             _contextMenuController = _diContainer.Instantiate< ContextMenuController >( new object[] { ModelView.ContextMenu } );
             _contextMenuController.Initialize();
 
@@ -104,7 +80,7 @@ namespace Game.Core.UI.ResourcesScreen
             // EventSystem.current.SetSelectedGameObject( ModelView.ContinueButton.gameObject );
             SelectTab( 1 );
         }
-
+        
         private void SelectTab( int index )
         {
             _currentTabIndex = index;

@@ -4,12 +4,12 @@ namespace Game.Core.World.InventorySystem.Commands
     {
         public UseItemCommand(
             ItemCommander itemCommander,
-            ItemModel item
-            ) : base( itemCommander, item )
+            InventoryItem inventoryItem
+            ) : base( itemCommander, inventoryItem )
         {
             
         }
 
-        public override void Execute() => _itemCommander.Use( _item );
+        public override void Execute() => _itemCommander.Use( InventoryItem );
     }
 }

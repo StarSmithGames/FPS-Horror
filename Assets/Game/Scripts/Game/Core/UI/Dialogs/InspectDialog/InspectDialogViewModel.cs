@@ -73,13 +73,7 @@ namespace Game.Core.UI.InspectDialog
 
         protected override void OnViewShowingChanged()
         {
-            if ( !ModelView.IsShowing )
-            {
-                CursorManager.Disable();
-                return;
-            }
-            CursorManager.Enable();
-            
+            if ( !ModelView.IsShowing ) return;
             _isExamine = false;
             
             ModelView.ControlButtons.SetActive( true );
@@ -96,6 +90,7 @@ namespace Game.Core.UI.InspectDialog
                 ModelView.ActionButton.gameObject.SetActive( true );
                 ModelView.ActionButton.Set( _inputKeyActionsSettings.InteractAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_TAKE ) );
             }
+            ModelView.ActionButton.gameObject.SetActive( _isFromWorld );
             ModelView.CancelButton1.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_BACK ) );
             ModelView.CancelButton2.Set( _inputKeyActionsSettings.BackAction.GetDisplayKey(), _localizationSystem.Translate( LocalizationIds.UI_CONTROL_BACK ) );
 
@@ -112,11 +107,12 @@ namespace Game.Core.UI.InspectDialog
             }
             
             _item.SetLayer( LayersParams.ABOVE );
-            _inspectionSystem.StartInspection( _item );
+            _inspectionSystem.StartInspection( _item, _isFromWorld );
         }
 
         private void ActionButtonClickedHandler()
         {
+            if ( !_isFromWorld ) return;
             if ( _item is Note )
             {
                 _isExamine = true;
@@ -159,10 +155,14 @@ namespace Game.Core.UI.InspectDialog
             {
                 _item.EnableCollider( false );
             }
+            if ( !_isFromWorld )
+            {
+                _item.EnableView( false );
+            }
             
             OnCancelButtonClicked?.Invoke();
             
-            HideView();
+            HideViewAndDispose();
         }
     }
 }

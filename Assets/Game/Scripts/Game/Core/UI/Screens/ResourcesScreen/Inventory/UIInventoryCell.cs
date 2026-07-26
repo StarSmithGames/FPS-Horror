@@ -20,15 +20,15 @@ namespace Game.Core.UI.ResourcesScreen
         [ SerializeField ] private GameObject _opened;
         [ SerializeField ] private GameObject _locked;
 
-        public bool IsEmpty => Item == null;
-        public ItemModel Item { get; private set; }
+        public bool IsEmpty => InventoryItem == null;
+        public InventoryItem InventoryItem { get; private set; }
         
-        public void Set( ItemModel item )
+        public void Set( InventoryItem inventoryItem )
         {
-            Item = item;
+            InventoryItem = inventoryItem;
             
-            _icon.sprite = item.Config.Icon;
-            _count.text = $"{item.Quantity}";
+            _icon.sprite = inventoryItem.Config.Icon;
+            _count.text = $"{inventoryItem.Quantity}";
             
             _counter.SetActive( false );
         }

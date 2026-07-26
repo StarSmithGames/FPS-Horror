@@ -22,6 +22,7 @@ namespace Game.Core.World.InspectionSystem
         private Vector3 _originalPosition;
         private Quaternion _originalRotation;
         private bool _isBlocked;
+        private bool _isFromWorld;
         
         private readonly Camera _camera;
 
@@ -35,8 +36,10 @@ namespace Game.Core.World.InspectionSystem
             _isBlocked = trigger;
         }
 
-        public void StartInspection( ItemObject item )
+        public void StartInspection( ItemObject item, bool isFromWorld )
         {
+            _isFromWorld = isFromWorld;
+            
             StopInspection();
             _inspectableItem = item;
             var itemTransform = _inspectableItem.TransformInspection;
@@ -68,7 +71,10 @@ namespace Game.Core.World.InspectionSystem
             InputManager.Inputs.UI.Click.Disable();
 
             _inspectableItem.TransformInspection.DOKill();
-            AnimateOut().Forget();
+            if ( _isFromWorld )
+            {
+                AnimateOut().Forget();
+            }
             
             _inspectableItem = null;
         }
@@ -76,8 +82,15 @@ namespace Game.Core.World.InspectionSystem
         private async UniTask Tick( CancellationToken cancellationToken )
         {
             Quaternion alignedRotation = CalculateAlignedRotation( _inspectableItem );
-            
-            await AnimateIn( alignedRotation, cancellationToken );
+
+            if ( _isFromWorld )
+            {
+                await AnimateIn( alignedRotation, cancellationToken ); 
+            }
+            else
+            {
+                SetIn( alignedRotation );
+            }
 
             Vector2 currentRotation = Vector2.zero;
             Vector2 targetRotation = Vector2.zero;
@@ -158,14 +171,27 @@ namespace Game.Core.World.InspectionSystem
 
             itemTransform.DOKill();
 
-            Vector3 localOffset = _camera.transform.TransformDirection( settings.PositionOffset );
-            Vector3 finalPosition = _camera.transform.position + _camera.transform.forward * 0.5f + localOffset;
+            Vector3 finalPosition = _camera.transform.position + _camera.transform.forward * 0.5f + _camera.transform.TransformDirection( settings.PositionOffset );
             Quaternion finalRotation = alignedRotation * Quaternion.Euler( settings.RotationOffset );
 
             UniTask moveTask = itemTransform.DOMove( finalPosition, 0.33f ).SetEase( Ease.OutCubic ).SetUpdate( true ).ToUniTask( cancellationToken: cancellationToken );
             UniTask rotateTask = itemTransform.DORotateQuaternion( finalRotation, 0.33f ).SetEase( Ease.OutCubic ).SetUpdate( true ).ToUniTask( cancellationToken: cancellationToken );
 
             await UniTask.WhenAll( moveTask, rotateTask );
+        }
+
+        private void SetIn( Quaternion alignedRotation )
+        {
+            var itemTransform = _inspectableItem.TransformInspection;
+            var settings = _inspectableItem.InspectionSettings;
+
+            itemTransform.DOKill();
+            
+            Vector3 finalPosition = _camera.transform.position + _camera.transform.forward * 0.5f + _camera.transform.TransformDirection( settings.PositionOffset );
+            Quaternion finalRotation = alignedRotation * Quaternion.Euler( settings.RotationOffset );
+            
+            itemTransform.position = finalPosition;
+            itemTransform.rotation = finalRotation;
         }
 
         private async UniTask AnimateOut()

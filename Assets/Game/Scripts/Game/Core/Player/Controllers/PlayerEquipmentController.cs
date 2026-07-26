@@ -31,11 +31,11 @@ namespace Game.Core.Player
             _playerAvatar = playerAvatar ?? throw new ArgumentNullException( nameof(playerAvatar) );
         }
 
-        public bool IsEquipped( ItemModel item ) => Equipment.EquippedItem != null && Equipment.EquippedItem == item;
+        public bool IsEquipped( InventoryItem inventoryItem ) => Equipment.EquippedItem != null && Equipment.EquippedItem == inventoryItem;
 
-        public void Equip( ItemModel item )
+        public void Equip( InventoryItem inventoryItem )
         {
-            if ( IsEquipped( item ) )
+            if ( IsEquipped( inventoryItem ) )
             {
                 Equipment.EquippedItem = null;
                 _playerAvatar.HandRight.DoRemoveItem();
@@ -44,9 +44,9 @@ namespace Game.Core.Player
                 OnEquipChanged?.Invoke();
                 return;
             }
-            Equipment.EquippedItem = item;
+            Equipment.EquippedItem = inventoryItem;
 
-            _weaponController = (WeaponController)_itemFactory.Create( item.Config.Prefab );
+            _weaponController = (WeaponController)_itemFactory.Create( inventoryItem.Config.Prefab );
             _weaponController.Initialize();
 
             _playerAvatar.HandRight.DoAddItem( _weaponController.View );

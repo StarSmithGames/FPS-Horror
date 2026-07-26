@@ -13,24 +13,24 @@ namespace Game.Core.World.InventorySystem
             _playerControllersService = playerControllersService ?? throw new ArgumentNullException( nameof(playerControllersService) );
         }
 
-        public void Use( ItemModel item )
+        public void Use( InventoryItem inventoryItem )
         {
             Debug.LogError( "Use" );
         }
 
-        public void EquipUnequip( ItemModel item )
+        public void EquipUnequip( InventoryItem inventoryItem )
         {
             var equipmentController = _playerControllersService.GetAs< PlayerEquipmentController >();
-            equipmentController.Equip( item );
+            equipmentController.Equip( inventoryItem );
         }
 
-        public void Examine( ItemModel item )
+        public void Examine( InventoryItem inventoryItem )
         {
             var inspectionController = _playerControllersService.GetAs< PlayerInspectionController >();
-            inspectionController.InspectItemFromContextMenu( item );
+            inspectionController.InspectItemFromContextMenu( inventoryItem );
         }
         
-        public void Drop( ItemModel item )
+        public void Drop( InventoryItem inventoryItem )
         {
             Debug.LogError( "Drop" );
         }

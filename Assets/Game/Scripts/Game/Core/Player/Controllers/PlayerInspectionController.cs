@@ -3,6 +3,7 @@ using Game.Core.UI;
 using Game.Core.UI.InspectDialog;
 using Game.Core.UI.ResourcesScreen;
 using Game.Core.World.InventorySystem;
+using Game.Managers.CursorManager;
 using System;
 using UnityEngine;
 
@@ -43,23 +44,23 @@ namespace Game.Core.Player
             _uiRootGame = uiRootGame ?? throw new ArgumentNullException( nameof(uiRootGame) );
         }
 
-        public void InspectItemFromContextMenu( ItemModel item )
+        public void InspectItemFromContextMenu( InventoryItem inventoryItem )
         {
             _isFromWorld = false;
             
             var screen = _uiRootGame.ScreenAggregator.GetAs< ResourcesScreenViewModel >();
-            screen.HideView();
+            screen.ModelView.gameObject.SetActive( false );
             
-            if ( item.View != null )
+            if ( inventoryItem.View != null )
             {
-                item.View.gameObject.SetActive( true );
-                InspectItem( item.View );
+                inventoryItem.View.EnableView( true );
+                InspectItem( inventoryItem.View );
             }
             else
             {
-                var controller = _itemFactory.Create( item.Config.Prefab );
-                item.View.gameObject.SetActive( true );
-                item.SetView( controller.View );
+                var controller = _itemFactory.Create( inventoryItem.Config.Prefab );
+                inventoryItem.View.EnableView( true );
+                inventoryItem.SetView( controller.View );
                 InspectItem( controller.View );
             }
         }
@@ -67,14 +68,15 @@ namespace Game.Core.Player
         public void InspectItemFromWorld( ItemObject item )
         {
             _isFromWorld = true;
+         
+            _states.IsBlocked = true;
+            CursorManager.Enable();
             
             InspectItem( item );
         }
         
         private void InspectItem( ItemObject item )
         {
-            _states.IsBlocked = true;
-
             _item = item;
             
             _inspectDialogViewModel = _uiRootGame.DialogAggregator.GetOrCreateIfNotExist< InspectDialogViewModel >();
@@ -88,27 +90,39 @@ namespace Game.Core.Player
             OnInspectStarted?.Invoke();
         }
 
+        //Only World items
         private void ItemTakenHandler()
         {
-            _inspectDialogViewModel.OnActionButtonClicked -= ItemTakenHandler;
-            _inspectDialogViewModel = null;
-
-            if ( _isFromWorld )
+            if ( _inspectDialogViewModel != null )
             {
-                _playerInventoryController.PickUpItem( _item );
+                _inspectDialogViewModel.OnActionButtonClicked -= ItemTakenHandler;
             }
+            _inspectDialogViewModel = null;
             
+            _playerInventoryController.PickUpItem( _item );
+            
+            CursorManager.Disable();
             _states.IsBlocked = false;
             
             OnInspectEnded?.Invoke();
         }
 
+        //UI and World items
         private void InspectCompletedHandler()
         {
             _inspectDialogViewModel.OnCancelButtonClicked -= InspectCompletedHandler;
             _inspectDialogViewModel = null;
-            
-            _states.IsBlocked = false;
+
+            if ( _isFromWorld )
+            {
+                CursorManager.Disable();
+                _states.IsBlocked = false;
+            }
+            else
+            {
+                var screen = _uiRootGame.ScreenAggregator.GetAs< ResourcesScreenViewModel >();
+                screen.ModelView.gameObject.SetActive( true );
+            }
             
             OnInspectEnded?.Invoke();
         }

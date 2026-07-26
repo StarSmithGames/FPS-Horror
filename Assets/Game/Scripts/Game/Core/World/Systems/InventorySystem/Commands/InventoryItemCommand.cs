@@ -5,12 +5,12 @@ namespace Game.Core.World.InventorySystem.Commands
     public abstract class InventoryItemCommand : ICommand
     {
         protected readonly ItemCommander _itemCommander;
-        protected readonly ItemModel _item;
+        protected readonly InventoryItem InventoryItem;
         
-        public InventoryItemCommand( ItemCommander itemCommander, ItemModel item )
+        public InventoryItemCommand( ItemCommander itemCommander, InventoryItem inventoryItem )
         {
             _itemCommander = itemCommander ?? throw new ArgumentNullException( nameof(itemCommander) );
-            _item = item ?? throw new ArgumentNullException( nameof(item) );
+            InventoryItem = inventoryItem ?? throw new ArgumentNullException( nameof(inventoryItem) );
         }
 
         public virtual bool CanExecute() => true;
